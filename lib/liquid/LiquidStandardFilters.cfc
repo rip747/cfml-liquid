@@ -1,5 +1,9 @@
 <cfcomponent output="false" hint="A selection of standard filters">
 
+	<cffunction name="init">
+		<cfreturn this>
+	</cffunction>
+
 	<cffunction name="size" hint="Return the size of an array or of an string">
 		<cfargument name="input" type="any" required="true">
 		<cfset var ret = arguments.input>
@@ -11,7 +15,7 @@
 		<cfelseif isStruct(arguments.input)>
 			<cfset ret = StructCount(arguments.input)>
 		<cfelseif isObject(arguments.input)>
-			<cfif StructKeyExists(arguments.input, "size")
+			<cfif StructKeyExists(arguments.input, "size")>
 				<cfinvoke component="#arguments.input#" method="size" returnvariable="ret">
 			</cfif>
 		</cfif>
@@ -51,7 +55,7 @@
 		<cfreturn arguments.input>
 	</cffunction>
 
-	<cffunction name="init" hint="Replace each newline (\n) with html break">
+	<cffunction name="newline_to_br" hint="Replace each newline (\n) with html break">
 		<cfargument name="input" type="any" required="true">
 		<cfif isSimpleValue(arguments.input)>
 			<cfreturn ReReplace(arguments.input, "\n|\r", "<br/>", "all")>
@@ -125,7 +129,7 @@
 		<cfargument name="format" type="any" required="true">
 		<cfif IsSimpleValue(arguments.input) AND IsSimpleValue(arguments.format)>
 			<cfif ListLen(arguments.input, " ") eq 2>
-				<cfreturn date_format(GetToken(arguments.input, 1, " "), GetToken(arguments.format, 1, " ")) & " " time_format(GetToken(arguments.input, 2, " "), GetToken(arguments.format, 2, " "))>
+				<cfreturn date_format(GetToken(arguments.input, 1, " "), GetToken(arguments.format, 1, " ")) & " " & time_format(GetToken(arguments.input, 2, " "), GetToken(arguments.format, 2, " "))>
 			<cfelse>
 				<cfreturn date_format(GetToken(arguments.input, 1, " "), GetToken(arguments.format, 1, " "))>
 			</cfif>

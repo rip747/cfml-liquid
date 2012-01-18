@@ -39,12 +39,7 @@
 	<cffunction name="match" hint="Matches the given string. Only matches once.">
 		<cfargument name="str" type="string" required="true">
 		<cfset var loc = {}>
-		<cfset loc.m = ReMatchNoCase(this.pattern, arguments.str)>
-		<cfif !ArrayIsEmpty(loc.m)>
-			<cfset loc.t = loc.m[1]>
-			<cfset this.matches = [loc.t]>
-			<cfset loc.ret = true>
-		</cfif>
+		<cfset this.matches = preg_match(this.pattern, arguments.str)>
 		<cfreturn not ArrayIsEmpty(this.matches)>
 	</cffunction>
 

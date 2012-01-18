@@ -120,7 +120,8 @@ function array_shift(arr){
 	
 	if(!ArrayIsEmpty(arguments.arr)){
 		ret.value = arguments.arr[1];
-		ret.arr = ArrayDeleteAt(arguments.arr, 1);
+		ArrayDeleteAt(arguments.arr, 1);
+		ret.arr = arguments.arr;
 	}
 	return ret;
 }

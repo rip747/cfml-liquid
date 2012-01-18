@@ -6,7 +6,8 @@
 
 		<cfset this.file_system = arguments.file_system>
 		<cfset this.parse(arguments.tokens)>
-		
+
+		<cfreturn this>
 	</cffunction>
 
 	<cffunction name="checkIncludes" hint="check for cached includes">

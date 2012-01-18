@@ -1,7 +1,7 @@
 <cfcomponent output="false" hint="The filter bank is where all registered filters are stored, and where filter invocation is handled it supports a variety of different filter types; objects, class, and simple methods">
 
 	<!--- The registerd filter objects --->
-	<cfset this.filters = "">
+	<cfset this.filters = {}>
 
 	<!--- A map of all filters and the class that contain them (in the case of methods) --->
 	<cfset this.method_map = {}>
@@ -11,9 +11,9 @@
 
 	<cffunction name="init">
 		<cfargument name="context" type="any" required="true">
-
+		<cfset var standardFilters = createObject("component", "LiquidStandardFilters").init()>
 		<cfset this.context = arguments.context>
-		<cfset this.add_filter('LiquidStandardFilters')>
+		<cfset this.add_filter(standardFilters)>
 		
 		<cfreturn this>
 	</cffunction>
@@ -21,37 +21,30 @@
 	<cffunction name="add_filter" hint="Adds a filter to the bank" returntype="boolean">
 		<cfargument name="filter" type="any" required="true" hint="Can either be an object, the name of a class (in which case the filters will be called statically) or the name of a function">
 		<cfset var loc = {}>
-
+		
 		<!--- if the passed filter was an object, store the object for future reference. --->
 		<cfif isObject(arguments.filter)>
 			
 			<cfset arguments.filter.context = this.context>
 			<cfset loc.name = getMetaData(arguments.filter).name>
 			<cfset this.filters[loc.name] = arguments.filter>
+			
+			<cfloop collection="#arguments.filter#" item="loc.method">
+				<cfset this.method_map[loc.method] = loc.name>
+			</cfloop>
+			
 			<cfset arguments.filter = loc.name>
+			<cfreturn true>
 			
 		</cfif>
-		
+
 		<!--- if it wasn't an object an isn't a string either, it's a bad parameter --->
-		<cfif !isSimpleValue(arguments.filter) AND !IsObject(arguments.filter)>
-			<cfthrow type="LiquidError" message="Parameter passed to add_filter must be an object or a string">
-		</cfif>
-		
-		<!--- if the filter is a class, register all its methods --->
-		<cfif IsObject(arguments.filter)>
-			<cfloop collection="#arguments.filter#" item="loc.method">
-				<cfset this.method_map[loc.method] = arguments.filter>
-			</cfloop>
-			<cfreturn true>
-		</cfif>
-		
-		<!--- if it's a function register it simply --->
-		<cfif isDefined(arguments.filter)>
+		<cfif isSimpleValue(arguments.filter) AND IsCustomFunction(arguments.filter)>
 			<cfset this.method_map[arguments.filter] = false>
 			<cfreturn true>
 		</cfif>
-
-		<cfthrow type="LiquidError" message="Parameter passed to add_filter must a class or a function">
+		
+		<cfthrow type="LiquidError" message="Parameter passed to add_filter must be an object or a the name of a method">
 	</cffunction>
 
 	<cffunction name="invokeMethod" hint="Invokes the filter with the given name">

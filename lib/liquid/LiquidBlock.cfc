@@ -12,18 +12,18 @@
 		<cfset loc.start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_TAG_START#')>
 		<cfset loc.tag_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_TAG_START#\s*(\w+)\s*(.*)?#application.LiquidConfig.LIQUID_TAG_END#$')>
 		<cfset loc.variable_start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_VARIABLE_START#')>
-		<cfset var loc = {}>
 		
 		<cfset this._nodelist = []>
 		
 		<cfif !IsArray(arguments.tokens)>
 			<cfreturn>
 		</cfif>
-		
-		<cfset loc.tags = createObject("component", "LiquidTemplate").init(application.Liquid).getTags()>
-		
+
+		<cfset loc.tags = createObject("component", "LiquidTemplate").init(application.LiquidConfig.LIQUID_PATH).getTags()>
+
 		<cfloop array="#arguments.tokens#" index="loc.token">
 			<cfif loc.start_regexp.match(loc.token)>
+				
 				<cfif loc.tag_regexp.match(loc.token)>
 					<!--- if we found the proper block delimitor just end parsing here and let the outer block proceed  --->
 					<cfif loc.tag_regexp.matches[1] eq this.block_delimiter()>
@@ -46,6 +46,7 @@
 				<cfelse>
 					<cfset createobject("component", "LiquidException").init("Tag $token was not properly terminated")>
 				</cfif>
+				
 			<cfelseif loc.variable_start_regexp.match(loc.token)>
 				<cfset loc.temp = this.create_variable(loc.token)>
 				<cfset arrayAppend(this._nodelist, loc.temp)>
@@ -53,7 +54,6 @@
 				<cfset arrayAppend(this._nodelist, loc.token)>
 			</cfif>
 		</cfloop>
-		
 		<cfset this.assert_missing_delimitation()>
 		<cfreturn this>
 	</cffunction>
@@ -89,11 +89,12 @@
 	</cffunction>
 
 	<cffunction name="create_variable" hint="Create a variable for the given token">
-		<cfargument name="token" type="stirng" required="true">
+		<cfargument name="token" type="string" required="true">
 		<cfset var loc = {}>
 		<cfset loc.variable_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_VARIABLE_START#(.*)#application.LiquidConfig.LIQUID_VARIABLE_END#$')>
 		<cfif loc.variable_regexp.match(arguments.token)>
-			<cfreturn createObject("component", "LiquidVariable").init(loc.variable_regexp.matches[1])>
+			<cfset loc.ret = createObject("component", "LiquidVariable").init(loc.variable_regexp.matches[2])>
+			<cfreturn loc.ret>
 		</cfif>
 		<cfset createobject("component", "LiquidException").init("Variable $token was not properly terminated")>
 	</cffunction>
@@ -121,7 +122,7 @@
 			</cfif>
 		</cfloop>
 
-		<cfreturn locresult>
+		<cfreturn loc.result>
 	</cffunction>
 	
 </cfcomponent>

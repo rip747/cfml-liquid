@@ -20,7 +20,7 @@
 		<cfset var loc = {}>
 		
 		<cfset loc.pathArr = ListToArray(arguments.template_path, "/")>
-		<cfset loc.pathArr[ArrayLen(loc.path)] = "#application.LiquidConfig.LIQUID_INCLUDE_PREFIX##loc.pathArr[ArrayLen(loc.pathArr)]#.#application.LiquidConfig.LIQUID_INCLUDE_SUFFIX##">
+		<cfset loc.pathArr[ArrayLen(loc.path)] = "#application.LiquidConfig.LIQUID_INCLUDE_PREFIX##loc.pathArr[ArrayLen(loc.pathArr)]#.#application.LiquidConfig.LIQUID_INCLUDE_SUFFIX#">
 		
 		<cfset arrayAppend(loc.pathArr, this._root)>
 		

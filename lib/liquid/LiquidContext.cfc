@@ -3,11 +3,11 @@
 	<cfinclude template="utils.cfm">
 
 	<cffunction name="init">
-		<cfargument name="registers" type="array" required="true">
-		<cfargument name="assigns" type="any" required="false" default="#ArrayNew(1)#">
+		<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
+		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
 
 		<cfset this.registers = arguments.registers>
-		<cfset this.assigns = [arguments.assigns]>
+		<cfset this.assigns = arguments.assigns>
 		<cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)>
 		<cfset this.environments = {}>
 
@@ -96,7 +96,7 @@
 			<cfreturn loc.temp[2]>
 		</cfif>
 		
-		<cfreturn this.variable(arguments.key)>		
+		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
 	<cffunction name="fetch" hint="Fetches the current key in all the scopes">
@@ -108,18 +108,18 @@
 				<cfreturn loc.environment[arguments.key]>
 			</cfif>
 		</cfloop>
-		
-		<cfloop array="#this.assigns#" index="loc.scope">
-			<cfif StructKeyExists(loc.scope, arguments.key)>
-				<cfset loc.obj = loc.scope[arguments.key]>
-				
-				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
-					<cfset loc.obj.setContext(this)>
-				</cfif>
-				
-				<cfreturn loc.obj>
+
+		<cfif StructKeyExists(this.assigns, arguments.key)>
+			<cfset loc.obj = this.assigns[arguments.key]>
+			
+			<cfif IsInstanceof(loc.obj, "LiquidDrop")>
+				<cfset loc.obj.setContext(this)>
 			</cfif>
-		</cfloop>
+			
+			<cfreturn loc.obj>
+		</cfif>
+			
+		<cfreturn "">
 	</cffunction>
 
 	<cffunction name="parse" returntype="any" hint="Resolved the namespaced queries gracefully.">
@@ -127,15 +127,17 @@
 		<cfset var loc = {}>
 
 		<!--- Support [0] style array indicies --->
-		<cfif preg_match("|\[[0-9]+\]|", arguments.key)>
-			<cfset arguments.key = ReReplace(arguments.key, "|\[([0-9]+)\]|", ".$1")>
+		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
+		<cfif !ArrayIsEmpty(loc.matches)>
+			<cfset arguments.key = ReReplace(arguments.key, "|\[([0-9]+)\]|", "\1", "all")>
 		</cfif>
 
 		<cfset loc.parts = ListToArray(arguments.key, application.LiquidConfig.LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR)>
-
+<!--- <Cfdump var="#loc.parts#"> --->
 		<cfset loc.temp = array_shift(loc.parts)>
+<!--- <Cfdump var="#loc.temp#"><Cfabort> --->
 		<cfset loc.parts = loc.temp.arr>
-		<cfset loc.object = loc.temp.value>
+		<cfset loc.object = this.fetch(loc.temp.value)>
 		
 		<cfif isObject(loc.object)>
 			<cfif !StructKeyExists(loc.object, "toLiquid")>
@@ -145,7 +147,8 @@
 		</cfif>
 		
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
-			<cfloop condition="#!ArrayIsEmpty(loc.parts)#">
+			<!--- <Cfdump var="#loc.parts#"><Cfabort> --->
+			<cfloop condition="not ArrayIsEmpty(loc.parts)">
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					<cfset loc.object.setContext(this)>
 				</cfif>
@@ -207,6 +210,7 @@
 		<cfelse>
 			<cfreturn "">
 		</cfif>
+
 	</cffunction>
 	
 </cfcomponent>

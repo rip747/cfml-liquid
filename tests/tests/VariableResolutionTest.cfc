@@ -7,14 +7,15 @@
 	
 	<cffunction name="test_simple_variable">
 
-		<cfset loc.a = [{test = 'worked'}]>
+		<cfset loc.a = {test = 'worked'}>
 		<cfset loc.e = "worked">
-		<cfset loc.r = loc.template.parse("{{test}}").render(loc.a)>
+		<cfset loc.template.parse("{{test}}")>
+		<cfset loc.r = loc.template.render(loc.a)>
 		<cfset assert('loc.e eq loc.r')>
 		
 	</cffunction>
 	
-	<cffunction name="test_simple_with_whitespaces">
+	<cffunction name="_test_simple_with_whitespaces">
 		<cfset fail()>
 		$template = new LiquidTemplate();
 
@@ -23,7 +24,7 @@
 		$this->assertEqual('  worked wonderfully  ', $template->render(array('test' => 'worked wonderfully')));		
 	</cffunction>
 	
-	<cffunction name="test_ignore_unknown">
+	<cffunction name="_test_ignore_unknown">
 		<cfset fail()>
 		$template = new LiquidTemplate();
 		
@@ -31,7 +32,7 @@
 		$this->assertEqual('', $template->render());		
 	</cffunction>
 	
-	<cffunction name="test_array_scoping">
+	<cffunction name="_test_array_scoping">
 		<cfset fail()>
 		$template = new LiquidTemplate();
 		
