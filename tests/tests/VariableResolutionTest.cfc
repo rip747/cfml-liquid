@@ -15,33 +15,39 @@
 		
 	</cffunction>
 	
-	<cffunction name="_test_simple_with_whitespaces">
-		<cfset fail()>
-		$template = new LiquidTemplate();
+	<cffunction name="test_simple_with_whitespaces">
 
-	    $template->parse('  {{ test }}  ');
-		$this->assertEqual('  worked  ', $template->render(array('test' => 'worked')));
-		$this->assertEqual('  worked wonderfully  ', $template->render(array('test' => 'worked wonderfully')));		
+		<cfset loc.a = {test = '  worked  '}>
+		<cfset loc.e = 'worked'>
+		<cfset loc.template.parse('  {{ test }}  ')>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset assert('loc.e eq loc.r')>
+		
+		<cfset loc.a = {test = '  worked wonderfully  '}>
+		<cfset loc.e = 'worked wonderfully'>
+		<cfset loc.template.parse('  {{ test }}  ')>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset assert('loc.e eq loc.r')>
+
 	</cffunction>
 	
-	<cffunction name="_test_ignore_unknown">
-		<cfset fail()>
-		$template = new LiquidTemplate();
-		
-		$template->parse('{{ test }}');
-		$this->assertEqual('', $template->render());		
+	<cffunction name="test_ignore_unknown">
+
+		<cfset loc.e = ''>
+		<cfset loc.template.parse('{{ test }}')>
+		<cfset loc.r = loc.template.render()>
+		<cfset assert('loc.e eq loc.r')>
+	
 	</cffunction>
 	
-	<cffunction name="_test_array_scoping">
-		<cfset fail()>
-		$template = new LiquidTemplate();
-		
-		$template->parse('{{ test.test }}');
-		$this->assertEqual('worked', $template->render(array('test'=>array('test'=>'worked'))));
-		
-		// this wasn't working properly in if tests, test seperately
-		$template->parse('{{ foo.bar }}');
-		$this->dump($template->render(array('foo' => array())));		
+	<cffunction name="test_array_scoping">
+
+		<cfset loc.a = {test = {test = 'worked'}}>
+		<cfset loc.e = 'worked'>
+		<cfset loc.template.parse('{{ test.test }}')>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset assert('loc.e eq loc.r')>
+
 	</cffunction>
 	
 </cfcomponent>

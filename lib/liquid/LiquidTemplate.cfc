@@ -103,7 +103,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
 		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
 		<cfset var loc = {}>
-
+<cfdump var="#arguments#" label="template::render()">
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
 
 		<cfif !isSimpleValue(arguments.filters) OR len(arguments.filters)>		

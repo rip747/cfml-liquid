@@ -43,3 +43,21 @@
 	<cfset var ret = [arguments.value]>
 	<cfreturn ret>
 </cffunction>
+
+<cffunction name="assert_template_result">
+	<cfargument name="expected" type="string" required="true">
+	<cfargument name="template" type="string" required="true">
+	<cfargument name="templateObj" type="any" required="true">
+	<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="message" type="string" required="false" default="">
+	<cfargument name="debug" type="boolean" required="false" default="false">
+
+		<cfset loc.e = arguments.expected>
+		<cfset loc.r = arguments.templateObj.parse(arguments.template)>
+
+		<cfif arguments.debug>
+			<cfset this.debug('loc.result')>
+		</cfif>
+
+		<cfset this.assert('loc.e eq loc.r')>
+</cffunction>

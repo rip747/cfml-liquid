@@ -6,7 +6,10 @@
 <body>
 	<cfset test = createObject("component", "Test")>
 	<cfset test.runTestPackage("cfml-liquid.tests.tests")>
-	<cfset test.runTestPackage("cfml-liquid.tests.tests.convert")>
+	<!--- <cfset test = createObject("component", "cfml-liquid.tests.tests.VariableResolutionTest")>
+	
+	<cfset test.runTest("test", "test_array_scoping")>
+	 --->
 	<cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
 </body>
 </html>

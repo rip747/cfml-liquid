@@ -14,7 +14,7 @@
 		<cfset loc.variable_start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_VARIABLE_START#')>
 		
 		<cfset this._nodelist = []>
-		
+
 		<cfif !IsArray(arguments.tokens)>
 			<cfreturn>
 		</cfif>
@@ -41,7 +41,7 @@
 						<cfset loc.temp = createObject("component", "tags/#loc.tag_name#").init(this.file_system)>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 					<cfelse>
-						<cfset this.unknown_tag(loc.tag_regexp.matches[1], loc.tag_regexp.matches[2], loc.tokens)>
+						<cfset this.unknown_tag(loc.tag_regexp.matches[1], loc.tag_regexp.matches[2], loc.token)>
 					</cfif>
 				<cfelse>
 					<cfset createobject("component", "LiquidException").init("Tag $token was not properly terminated")>
@@ -63,8 +63,8 @@
 
 	<cffunction name="unknown_tag" hint="Handler for unknown tags">
 		<cfargument name="tag" type="string" required="true">
-		<cfargument name="params" type="array" required="true">
-		<cfargument name="tokens" type="array" required="true">
+		<cfargument name="params" type="any" required="true">
+		<cfargument name="tokens" type="any" required="true">
 		<cfset var loc = {}>
 		
 		<cfswitch expression="#arguments.tag#">
@@ -101,6 +101,7 @@
 
 	<cffunction name="render" hint="Render the block.">
 		<cfargument name="context" type="any" required="true">
+		<cfdump var="#arguments.context.assigns#" label="context::assigns">
 		<cfreturn this.render_all(this._nodelist, arguments.context)>
 	</cffunction>
 
@@ -113,7 +114,7 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 		<cfset loc.result = "">
-		
+
 		<cfloop array="#arguments.list#" index="loc.token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
 				<cfset loc.result &= loc.token.render(arguments.context)>
@@ -122,7 +123,7 @@
 			</cfif>
 		</cfloop>
 
-		<cfreturn loc.result>
+		<cfreturn trim(loc.result)>
 	</cffunction>
 	
 </cfcomponent>

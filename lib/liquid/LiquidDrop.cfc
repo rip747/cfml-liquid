@@ -39,9 +39,13 @@ Your drop can either implement the methods sans any parameters or implement the 
 		<cfargument name="method" type="string" required="true">
 		<cfset var loc = {}>
 		
+		<cfif this.hasKey(arguments.method)>
+			<cfreturn "">
+		</cfif>
+		
 		<cfset loc.ret = this.beforeMethod(arguments.method)>
 
-		<cfif !StructKeyExists(loc, "ret") AND StructKeyExists(this, arguments.method)>
+		<cfif !StructKeyExists(loc, "ret")>
 			<cfinvoke component="#this#" method="#arguments.method#" returnvariable="loc.ret">
 		</cfif>
 		
@@ -50,7 +54,7 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="hasKey" hint="Returns true if the drop supports the given method">
 		<cfargument name="name" type="string" required="true">
-		<cfreturn true>
+		<cfreturn StructKeyExists(this, arguments.name)>
 	</cffunction>
 
 	<cffunction name="toLiquid" hint="return this drop instance">

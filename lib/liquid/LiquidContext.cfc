@@ -29,6 +29,7 @@
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
 		<cfargument name="new_assigns" type="array" required="true">
 		<cfset this.assigns.addAll(arguments.new_assigns)>
+		<cfdump var="#this.assigns#"><cfabort>
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
@@ -46,6 +47,7 @@
 
 	<cffunction name="get" hint="Replaces []">
 		<cfargument name="key" type="string" required="true">
+		<cfdump var="context::get - #arguments.key#">
 		<cfreturn this.resolve(arguments.key)>
 	</cffunction>
 
@@ -102,24 +104,32 @@
 	<cffunction name="fetch" hint="Fetches the current key in all the scopes">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
-		
+<cfdump var="fetch: #arguments.key#">
 		<cfloop collection="#this.environments#" item="loc.environment">
 			<cfif StructKeyExists(loc.environment, arguments.key)>
+				<cfdump var="here1">
 				<cfreturn loc.environment[arguments.key]>
 			</cfif>
 		</cfloop>
-
+			
 		<cfif StructKeyExists(this.assigns, arguments.key)>
+
 			<cfset loc.obj = this.assigns[arguments.key]>
 			
 			<cfif IsInstanceof(loc.obj, "LiquidDrop")>
 				<cfset loc.obj.setContext(this)>
 			</cfif>
-			
+
 			<cfreturn loc.obj>
 		</cfif>
-			
+		
 		<cfreturn "">
+	</cffunction>
+	
+	<cffunction name="fetch_recursions">
+		<cfargument name="key" type="string" required="true">
+	
+	
 	</cffunction>
 
 	<cffunction name="parse" returntype="any" hint="Resolved the namespaced queries gracefully.">
@@ -133,12 +143,10 @@
 		</cfif>
 
 		<cfset loc.parts = ListToArray(arguments.key, application.LiquidConfig.LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR)>
-<!--- <Cfdump var="#loc.parts#"> --->
 		<cfset loc.temp = array_shift(loc.parts)>
-<!--- <Cfdump var="#loc.temp#"><Cfabort> --->
 		<cfset loc.parts = loc.temp.arr>
 		<cfset loc.object = this.fetch(loc.temp.value)>
-		
+	
 		<cfif isObject(loc.object)>
 			<cfif !StructKeyExists(loc.object, "toLiquid")>
 				<cfthrow type="LiquidError" message="Method 'toLiquid' not exists!">
@@ -147,68 +155,58 @@
 		</cfif>
 		
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
-			<!--- <Cfdump var="#loc.parts#"><Cfabort> --->
-			<cfloop condition="not ArrayIsEmpty(loc.parts)">
+
+			<cfloop array="#loc.parts#" index="loc.part">
+				
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					<cfset loc.object.setContext(this)>
 				</cfif>
 				
-				<cfset loc.temp = array_shift(loc.parts)>
-				<cfset loc.parts = loc.temp.arr>
-				<cfset loc.next_part_name = loc.temp.value>
+				<cfif loc.part eq "size">
 				
-				<cfif isArray(loc.object)>
-				
-					<cfset loc.temp = ArrayToList(loc.object, chr(7))>
-				
-					<!--- if the last part of the context variable is .size we just return the count --->
-					<cfif loc.next_part_name eq 'size' AND ArrayLen(loc.parts) eq 0 AND !ListFindNoCase(loc.object, "size", chr(7))>
-						<cfreturn ArrayLen(loc.object)>
-					</cfif>				
-					
-					<cfif ListFindNoCase(loc.object, loc.next_part_name, chr(7))>
-						<cfset loc.object = loc.object[ListFindNoCase(loc.object, loc.next_part_name, chr(7))]>
-					<cfelse>
-						<cfreturn "">
+					<cfif IsStruct(loc.object)>
+						<cfset loc.object = StructCount(loc.object)>
 					</cfif>
-					
+				
+				<cfelseif IsStruct(loc.object) AND StructKeyExists(loc.object, loc.part)>
+				
+					<cfset loc.object = loc.object[loc.part]>
+				
 				<cfelseif isObject(loc.object)>
+				
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					
-						<!--- if the object is a drop, make sure it supports the given method --->
-						<cfif !loc.object.hasKey(loc.next_part_name)>
-							<cfreturn "">
-						</cfif>
-
-						<cfset loc.object = loc.object.invokeDrop(loc.next_part_name)>
+						<cfset loc.object = loc.object.invokeDrop(loc.part)>
 						
-					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD)>
+					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD) AND IsCustomFunction(loc.part)>
 						
-<!--- 						<cfif if(!call_user_method(application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD, $object, $next_part_name))
-						{
-							return null;
-						} --->
-						
-						<cfinvoke component="#loc.object#" method="#application.LiquidConfig.LIQUID_GET_PROPERTY_METHOD#" returnvariable="loc.object">
+						<cfset loc.args = {method = loc.part}>
+						<cfinvoke component="#loc.object#" method="#application.LiquidConfig.LIQUID_GET_PROPERTY_METHOD#" argumentcollection="#loc.args#" returnvariable="loc.object">
 
 					<cfelse>
+					
 						<!--- if it's just a regular object, attempt to access a property --->
 						<cfif !StructKeyExists(loc.object, loc.next_part_name)>
 							<cfreturn "">	
 						</cfif>
-						
-						<cfinvoke component="#loc.object#" method="#loc.next_part_name#" returnvariable="loc.object">
+						<cfset loc.object = evaluate("#loc.object#.#loc.part#()")>
+
 					</cfif>
+					
 				</cfif>
 
 				<cfif isObject(loc.object) AND StructKeyExists(loc.object, "toLiquid")>
 					<cfset loc.object = loc.object.toLiquid()>
 				</cfif>
+				
 			</cfloop>
 
 			<cfreturn loc.object>
+			
 		<cfelse>
+		
 			<cfreturn "">
+			
 		</cfif>
 
 	</cffunction>
