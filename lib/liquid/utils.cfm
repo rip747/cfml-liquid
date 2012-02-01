@@ -71,8 +71,8 @@ function preg_match(regex,str) {
 	var results = arraynew(1);
 	var match = "";
 	var x = 1;
-	if (REFind(regex, str, 1)) { 
-		match = REFind(regex, str, 1, TRUE); 
+	if (REFindNoCase(regex, str, 1)) { 
+		match = REFindNoCase(regex, str, 1, TRUE); 
 		for (x = 1; x lte arrayLen(match.pos); x = x + 1) {
 			if(match.len[x])
 				results[x] = mid(str, match.pos[x], match.len[x]);
@@ -99,8 +99,8 @@ function preg_match_all(regex,str) {
     var match = "";
     var x= 1;
     
-    while (REFind(regex, str, pos)) { 
-        match = REFind(regex, str, pos, TRUE); 
+    while (REFindNoCase(regex, str, pos)) { 
+        match = REFindNoCase(regex, str, pos, TRUE); 
         for (x = 1; x lte arrayLen(match.pos); x = x + 1) {
             if(match.len[x])
                 results[x][loop] = mid(str, match.pos[x], match.len[x]);

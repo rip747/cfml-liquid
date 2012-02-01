@@ -1,19 +1,22 @@
 <cfcomponent output="false" hint="Base class for tags">
+	
+	<!--- The markup for the tag --->
+	<cfset variables.markup = "">
+	
+	<!--- Filesystem object is used to load included template files --->
+	<cfset variables.file_system = "">
+	
+	<!--- Additional attributes --->
+	<cfset variables.attributes = {}>
 
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
 		<cfargument name="tokens" type="array" required="true">
 		<cfargument name="file_system" type="any" required="true">
-		
-		<!--- The markup for the tag --->
+
 		<cfset variables.markup = arguments.markup>
-		
-		<!--- Filesystem object is used to load included template files --->
 		<cfset variables.file_system = arguments.file_system>
-		
-		<!--- Additional attributes --->
-		<cfset variables.attributes = {}>
-		
+<cfdump var="#arguments#" label="liquidtag parse tokens">
 		<cfreturn this.parse(arguments.tokens)>
 	</cffunction>
 
@@ -29,7 +32,7 @@
 		
 		<cfset loc.matches = attribute_regexp.scan(arguments.markup)>
 		
-		<cfset structAppend(variables.attributes, loc.matches, true)>
+		<cfset structAppend(this.attributes, loc.matches, true)>
 	</cffunction>
 
 	<cffunction name="name" hint="Returns the name of the tag">

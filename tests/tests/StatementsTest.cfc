@@ -6,9 +6,9 @@
 	</cffunction>
 
 	<cffunction name="test_true_eql_true">
-		<cfset loc.text = " {% if true == true %} true {% else %} false {% endif %} ">
+		<cfset loc.tpl = " {% if true == true %} true {% else %} false {% endif %} ">
 		<cfset loc.expected = "  true  ">
-		<cfset assert_template_result(loc.expected, loc.text, loc.template)>
+		<cfset assert_template_result(loc.expected, loc.tpl, loc.template)>
 	</cffunction>
 <!--- 
 	function  test_true_not_eql_true()

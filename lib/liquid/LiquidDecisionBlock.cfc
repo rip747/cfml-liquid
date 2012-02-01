@@ -1,10 +1,10 @@
 <cfcomponent output="false" extends="LiquidBlock">
 
 	<!--- The current left variable to compare --->
-	<cfset variables._left>
+	<cfset variables._left = "">
 
 	<!--- The current right variable to compare --->
-	<cfset variables._right>
+	<cfset variables._right = "">
 	
 	<cffunction name="string_value" hint="Returns a string value of an array for comparisons">
 		<cfargument name="value" type="any" required="true">
@@ -44,7 +44,7 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 
-		<cfif !StructKeyExists(arguments.op)>
+		<cfif !StructKeyExists(arguments, "op")>
 			<cfset loc.value = this.string_value(arguments.context.get(arguments.left))>
 			<cfreturn loc.value>
 		</cfif>

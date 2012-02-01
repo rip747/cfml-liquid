@@ -23,13 +23,13 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 
 	<cffunction name="init">
 		<cfargument name="path" type="string" required="false" default="">
-		
+
 		<cfif len(arguments.path) AND directoryExists(arguments.path)>
 			<cfset this._fileSystem = createObject("component", "LiquidLocalFileSystem").init(arguments.path)>
 		<cfelse>
-			<cfset this._fileSystem = createObject("component", "LiquidBlankFileSystem").read_template_file>
+			<cfset this._fileSystem = createObject("component", "LiquidBlankFileSystem").init()>
 		</cfif>
-		
+<cfdump var="#this._fileSystem#" label="fiesystem = LiquidTemplate::Init">
 		<!--- cache --->
 		<cfset this._cache = startCache()>
 		
@@ -66,12 +66,20 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 
 	<cffunction name="tokenize" hint="Tokenizes the given source string">
 		<cfargument name="source" type="string" required="true">
-		<!--- <cfset arguments.source = trim(arguments.source)> --->
+		<cfset var loc = {}>
+		
+		<!--- use a java array list since we need to pass the parsed token by reference. THIS IS THE KEY TO ALL OF THIS! --->
+		<cfset loc.arr = CreateObject("java","java.util.ArrayList").Init()>
 		<cfif !len(arguments.source)>
-			<cfreturn arrayNew(1)>
+			<cfreturn loc.arr>
 		</cfif>
+		<!--- need to put the values from the returning array into our reference array --->
 		<cfset arguments.source = pregSplit(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, arguments.source)>
-		<cfreturn arguments.source>
+		<cfloop array="#arguments.source#" index="loc.i">
+			<cfset ArrayAppend(loc.arr, loc.i)>
+		</cfloop>
+
+		<cfreturn loc.arr>
 	</cffunction>
 
 	<cffunction name="parse" hint="Parses the given source string">
@@ -90,10 +98,13 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 				<cfset this._cache[loc.key] = this._root>
 			</cfif>
 		<cfelse>
+<cfdump var="#this.tokenize(arguments.source)#" label="Tokenized Source">
+<cfdump var="#this._fileSystem#" label="File System">
 			<cfset this._root = createObject("component", "LiquidDocument").init(
 					this.tokenize(arguments.source)
 					,this._fileSystem
 				)>
+<cfdump var="#this._root#" label="Document Root">
 		</cfif>
 		<cfreturn this>
 	</cffunction>
@@ -105,7 +116,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfset var loc = {}>
 <cfdump var="#arguments#" label="template::render()">
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
-
+<cfdump var="#this._root#" label="template::render()">
 		<cfif !isSimpleValue(arguments.filters) OR len(arguments.filters)>		
 			<cfif isArray(arguments.filters)>
 				<cfset this._filters.addAll(arguments.filters)>

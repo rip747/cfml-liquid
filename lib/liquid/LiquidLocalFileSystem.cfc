@@ -3,6 +3,7 @@
 	<cffunction name="init">
 		<cfargument name="root" type="string" required="true">
 		<cfset this._root = arguments.root>
+		<cfreturn this>
 	</cffunction>
 
 	<cffunction name="read_template_file" hint="Retrieve a template file">

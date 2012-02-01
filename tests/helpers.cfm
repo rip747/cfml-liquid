@@ -1,3 +1,5 @@
+<Cfset this.filters = "">
+
 <cffunction name="arrayCompare" returntype="boolean">
 	<cfargument name="LeftArray" type="array" required="true">
 	<cfargument name="RightArray" type="array" required="true">
@@ -53,11 +55,15 @@
 	<cfargument name="debug" type="boolean" required="false" default="false">
 
 		<cfset loc.e = arguments.expected>
-		<cfset loc.r = arguments.templateObj.parse(arguments.template)>
-
+		<cfset arguments.templateObj.parse(arguments.template)>
+<cfdump var="in testing">
+<cfdump var="#arguments.templateObj#">
+<cfdump var="#loc.e#">
 		<cfif arguments.debug>
-			<cfset this.debug('loc.result')>
+			<cfset this.debug('arguments.templateObj')>
 		</cfif>
+		
+		<cfset loc.r = arguments.templateObj.render(arguments.assigns, this.filters)>
 
 		<cfset this.assert('loc.e eq loc.r')>
 </cffunction>
