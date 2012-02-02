@@ -45,7 +45,7 @@
 
 					<!--- if we found the proper block delimitor just end parsing here and let the outer block proceed  --->
 					<cfif loc.tag_regexp.matches[2] eq this.block_delimiter()>
-<!--- <cfdump var="#this.end_tag()#"><cfabort> --->
+
 						<cfreturn this.end_tag()>
 					</cfif>
 
@@ -55,7 +55,7 @@
 						<!--- search for a defined class of the right name, instead of searching in an array --->
 						<cfset loc.tag_name = 'LiquidTag' & loc.tag_regexp.matches[2]>
 <cfdump var="#loc.tag_name#">
-<!--- <cfabort> --->
+
 					</cfif>
 
 					<cfset loc.tag_name_fullPath = "/liquiddir/#loc.tag_name#.cfc">
@@ -67,10 +67,10 @@
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 <cfdump var="#this._nodelist#" label="after tag_name call">
-<!--- <cfabort> --->
+
 					<cfelse>
 <cfdump var="unknown tag: #loc.tag_name#">
-<!--- <cfabort> --->
+
 						<cfset this.unknown_tag(loc.tag_regexp.matches[2], loc.tag_regexp.matches[3], arguments.tokens)>
 					</cfif>
 				
@@ -94,7 +94,7 @@
 	</cffunction>
 
 	<cffunction name="end_tag" hint="An action to execute when the end tag is reached">
-<cfdump var="#this#"><cfabort>
+<cfdump var="#this#">
 		<cfreturn this>
 	</cffunction>
 
@@ -150,16 +150,18 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 		<cfset loc.result = "">
-
+<cfdump var="#arguments#" label="liquidblock::render_all()">
 		<cfloop array="#arguments.list#" index="loc.token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
+				<cfdump var="liquidblock::render_all()::object" label="liquidblock::render_all()">
 				<cfset loc.result &= loc.token.render(arguments.context)>
 			<cfelse>
+				<cfdump var="liquidblock::render_all()::string" label="liquidblock::render_all()">
 				<cfset loc.result &= loc.token>
 			</cfif>
 		</cfloop>
 
-		<cfreturn trim(loc.result)>
+		<cfreturn loc.result>
 	</cffunction>
 	
 </cfcomponent>

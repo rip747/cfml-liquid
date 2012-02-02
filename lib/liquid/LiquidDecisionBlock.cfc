@@ -44,11 +44,11 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 
-		<cfif !StructKeyExists(arguments, "op")>
+		<cfif !len(arguments.op)>
+
 			<cfset loc.value = this.string_value(arguments.context.get(arguments.left))>
 			<cfreturn loc.value>
 		</cfif>
-
 		<!--- values of 'empty' have a special meaning in array comparisons --->
 		<cfif arguments.right eq "empty" AND isArray(arguments.context.get(arguments.left))>
 			<cfset arguments.left = ArrayLen(arguments.context.get(arguments.left))>
@@ -63,23 +63,23 @@
 			<cfset arguments.left = this.string_value(arguments.left)>
 			<cfset arguments.right = this.string_value(arguments.right)>
 		</cfif>
-		
+
 		<!--- special rules for null values --->
 		<cfif !len(arguments.left) OR !len(arguments.right)>
 			<!--- null == null returns true --->
-			<cfif arguments.$op eq "==">
+			<cfif arguments.op eq "==">
 				<cfreturn true>
 			</cfif>
 			
 			<!--- null != anything other than null return true --->
-			<cfif $op eq "!=" AND (len(arguments.left) OR len(arguments.right))>
+			<cfif arguments.op eq "!=" AND (len(arguments.left) OR len(arguments.right))>
 				<cfreturn true>
 			</cfif>
 			
 			<!--- everything else, return false; --->
 			<cfreturn false>
 		</cfif>
-		
+		<cfdump var="#arguments#" label="decisionblock::interpret_condition">
 		<!--- regular rules --->
 		<cfswitch expression="#arguments.op#">
 			<cfcase value="==">

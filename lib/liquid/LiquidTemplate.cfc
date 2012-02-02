@@ -110,13 +110,14 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 	</cffunction>
 
 	<cffunction name="render" hint="Renders the current template">
-		<cfargument name="assigns" type="struct" required="false" default="#StructNew()#" hint="A struct of values for the template">
+		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#" hint="A struct of values for the template">
 		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
 		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
 		<cfset var loc = {}>
-<cfdump var="#arguments#" label="template::render()">
+<cfdump var="#arguments#" label="template::render()::arguments">
+<cfdump var="here1">
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
-<cfdump var="#this._root#" label="template::render()">
+<cfdump var="#this._root#" label="template::render()::root">
 		<cfif !isSimpleValue(arguments.filters) OR len(arguments.filters)>		
 			<cfif isArray(arguments.filters)>
 				<cfset this._filters.addAll(arguments.filters)>

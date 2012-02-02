@@ -3,12 +3,12 @@
 	<cfinclude template="utils.cfm">
 
 	<cffunction name="init">
-		<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
+		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#">
 		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
 
 		<cfset this.registers = arguments.registers>
 		<cfset this.assigns = arguments.assigns>
-		<cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)>
+		<!--- <cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)> --->
 		<cfset this.environments = {}>
 
 		<cfreturn this>
@@ -29,19 +29,23 @@
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
 		<cfargument name="new_assigns" type="array" required="true">
 		<cfset this.assigns.addAll(arguments.new_assigns)>
-		<cfdump var="#this.assigns#"><cfabort>
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
-		<cfset arrayAppend(this.assign, ArrayNew(1))>
+		<cfdump var="#this.assigns#" label="context::push">
+		<cfif StructIsEmpty(this.assigns)>
+			<cfreturn false>
+		</cfif>
+		<cfset this.assigns.put(Createobject('java', 'java.util.LinkedHashMap').init())>
 		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="pop" hint="Pops the current scope from the stack.">
-		<cfif ArrayLen(this.assigns) eq 1>
-			<cfthrow type="LiquidError" message="No elements to pop">
+		<cfdump var="#this.assigns#" label="context::pop">
+		<cfif StructIsEmpty(this.assigns)>
+			<cfreturn false>
 		</cfif>
-		<cfset ArrayDeleteAt(this.assigns, 1)>
+		<cfset this.assigns.remove()>
 		<cfreturn true>
 	</cffunction>
 
@@ -54,7 +58,7 @@
 	<cffunction name="set" hint="Replaces []=">
 		<cfargument name="key" type="string" required="true">
 		<cfargument name="value" type="any" required="true">
-		<cfset this.assign[0][arguments.key] = arguments.value>
+		<cfset this.assign[arguments.key] = arguments.value>
 	</cffunction>
 
 	<cffunction name="has_key" returntype="boolean" hint="Returns true if the given key will properly resolve">
@@ -209,6 +213,10 @@
 			
 		</cfif>
 
+	</cffunction>
+	
+	<cffunction name="inspect">
+		<cfreturn this>
 	</cffunction>
 	
 </cfcomponent>

@@ -50,7 +50,7 @@
 	<cfargument name="expected" type="string" required="true">
 	<cfargument name="template" type="string" required="true">
 	<cfargument name="templateObj" type="any" required="true">
-	<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#">
 	<cfargument name="message" type="string" required="false" default="">
 	<cfargument name="debug" type="boolean" required="false" default="false">
 

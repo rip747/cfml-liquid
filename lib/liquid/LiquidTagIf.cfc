@@ -13,7 +13,7 @@ YES
 		<cfargument name="file_system" type="any" required="true">
 		<cfset var loc = {}>
 <cfdump var="#arguments#" label="Arguments = LiquidTagIf::Init">
-<!--- <cfabort> --->
+
 		<cfif !ArrayIsEmpty(this._blocks)>
 			<cfset this._nodelist = this._nodelistHolders[ArrayLen(this._blocks)]>
 		</cfif>
@@ -26,7 +26,7 @@ YES
 <cfdump var="#this._blocks#" label="blocks  = LiquidTagIf::Init">
 <cfdump var="#arguments.tokens#" label="tokens = LiquidTagIf::Init">
 		<cfset super.init(arguments.markup, arguments.tokens, arguments.file_system)>
-
+		<cfreturn this>
 	</cffunction>
 
 	<cffunction name="unknown_tag" hint="Handler for unknown tags, handle else tags">
@@ -69,15 +69,19 @@ YES
 	<cffunction name="render" hint="Render the tag">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-<Cfdump var="in redering"><cfabort>
+
+
 		<cfset arguments.context.push()>
+		
+		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
+		<cfset loc.conditionalRegex = createObject("component", "LiquidRegexp").init('(#application["LiquidConfig"]["LIQUID_QUOTED_FRAGMENT"]#)\s*([=!<>a-z_]+)?\s*(#application["LiquidConfig"]["LIQUID_QUOTED_FRAGMENT"]#)?')>
 
 		<cfset loc.result = "">
 
 		<cfloop array="#this._blocks#" index="loc.block">
 
 			<cfif loc.block[1] eq "else">
-				<cfset loc.result = this.render_all(loc.block[1], arguments.context)>
+				<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 				<cfbreak>
 			</cfif>
 
@@ -99,19 +103,19 @@ YES
 					<cfif loc.conditionalRegex.match(loc.condition)>
 					
 						<cfset loc.t = {}>
-						
+						<cfdump var="#loc.conditionalRegex.matches#" label="conditions">
 						<cfset loc.t.left = "">
-						<cfif ArrayLen(loc.conditionalRegex.matches eq 2)>
+						<cfif ArrayLen(loc.conditionalRegex.matches) gte 2>
 							<cfset loc.t.left = loc.conditionalRegex.matches[2]>
 						</cfif>
 
 						<cfset loc.t.operator = "">
-						<cfif ArrayLen(loc.conditionalRegex.matches eq 3)>
+						<cfif ArrayLen(loc.conditionalRegex.matches) gte 3>
 							<cfset loc.t.operator = loc.conditionalRegex.matches[3]>
 						</cfif>
 						
 						<cfset loc.t.right = "">
-						<cfif ArrayLen(loc.conditionalRegex.matches eq 4)>
+						<cfif ArrayLen(loc.conditionalRegex.matches) gte 4>
 							<cfset loc.t.right = loc.conditionalRegex.matches[4]>
 						</cfif>
 
@@ -135,7 +139,6 @@ YES
 						<cfset loc.tt = loc.conditions[IncrementValue(loc.i)]>
 						<cfset loc.iRight = this.interpret_condition(loc.t['left'], loc.t['right'], loc.t['operator'], arguments.context)>
 
-
 						<cfif loc.logicalOperators[loc.i] eq 'and'>
 							<cfset loc.display = loc.iLeft AND loc.iRight>
 						<cfelse>
@@ -145,11 +148,13 @@ YES
 
 				<cfelse>
 					<!--- If statement is a single condition --->
+					<cfdump var="#loc.conditions[1]#" label="conditions">
 					<cfset loc.display = this.interpret_condition(loc.conditions[1]['left'], loc.conditions[1]['right'], loc.conditions[1]['operator'], arguments.context)>
+					<cfdump var="display: #loc.display#">
 				</cfif>
 
 				<cfif loc.display>
-					<cfset loc.result = this.render_all(loc.block[3], arguemnts.context)>
+					<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 					<cfbreak>
 				</cfif>
 				
