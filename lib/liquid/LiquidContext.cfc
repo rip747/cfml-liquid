@@ -32,11 +32,12 @@
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
-		<cfdump var="#this.assigns#" label="context::push">
+<cfdump var="#this.assigns#" label="context::push 1">
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn false>
 		</cfif>
 		<cfset this.assigns.put(Createobject('java', 'java.util.LinkedHashMap').init())>
+<cfdump var="#this.assigns#" label="context::push 2">
 		<cfreturn true>
 	</cffunction>
 

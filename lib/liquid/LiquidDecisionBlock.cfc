@@ -1,10 +1,10 @@
 <cfcomponent output="false" extends="LiquidBlock">
 
 	<!--- The current left variable to compare --->
-	<cfset variables._left = "">
+	<cfset this._left = "">
 
 	<!--- The current right variable to compare --->
-	<cfset variables._right = "">
+	<cfset this._right = "">
 	
 	<cffunction name="string_value" hint="Returns a string value of an array for comparisons">
 		<cfargument name="value" type="any" required="true">
@@ -31,10 +31,10 @@
 		<cfargument name="right" type="string" required="true">
 		<cfargument name="context" type="any" required="true">
 		
-		<cfset variables._left = this.string_value(arguments.context.get(arguments.left))>
-		<cfset variables._right = this.string_value(arguemnts.context.get(arguments.right))>
+		<cfset this._left = this.string_value(arguments.context.get(arguments.left))>
+		<cfset this._right = this.string_value(arguemnts.context.get(arguments.right))>
 
-		<cfreturn variables._left eq variables._right>
+		<cfreturn this._left eq this._right>
 	</cffunction>
 
 	<cffunction name="interpret_condition" hint="Interpret a comparison">
@@ -66,16 +66,17 @@
 
 		<!--- special rules for null values --->
 		<cfif !len(arguments.left) OR !len(arguments.right)>
+		
 			<!--- null == null returns true --->
 			<cfif arguments.op eq "==">
 				<cfreturn true>
 			</cfif>
-			
+
 			<!--- null != anything other than null return true --->
 			<cfif arguments.op eq "!=" AND (len(arguments.left) OR len(arguments.right))>
 				<cfreturn true>
 			</cfif>
-			
+
 			<!--- everything else, return false; --->
 			<cfreturn false>
 		</cfif>

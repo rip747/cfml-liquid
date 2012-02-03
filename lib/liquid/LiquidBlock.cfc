@@ -67,7 +67,7 @@
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 <cfdump var="#this._nodelist#" label="after tag_name call">
-
+<!--- <cfabort> --->
 					<cfelse>
 <cfdump var="unknown tag: #loc.tag_name#">
 
@@ -89,7 +89,9 @@
 <cfdump var="#this._nodelist#" label="after blank token assignment">
 			</cfif>
 		</cfloop>
-
+<cfdump var="shouldnnot be here">
+<cfdump var="#this#">
+<!--- <cfabort> --->
 		<cfset this.assert_missing_delimitation()>
 	</cffunction>
 
@@ -138,6 +140,9 @@
 
 	<cffunction name="render" hint="Render the block.">
 		<cfargument name="context" type="any" required="true">
+<cfdump var="#this._nodelist#">
+<cfdump var="#arguments.context#">
+
 		<cfreturn this.render_all(this._nodelist, arguments.context)>
 	</cffunction>
 
@@ -151,12 +156,11 @@
 		<cfset var loc = {}>
 		<cfset loc.result = "">
 <cfdump var="#arguments#" label="liquidblock::render_all()">
+<!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all()"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
-				<cfdump var="liquidblock::render_all()::object" label="liquidblock::render_all()">
 				<cfset loc.result &= loc.token.render(arguments.context)>
 			<cfelse>
-				<cfdump var="liquidblock::render_all()::string" label="liquidblock::render_all()">
 				<cfset loc.result &= loc.token>
 			</cfif>
 		</cfloop>

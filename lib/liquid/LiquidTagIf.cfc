@@ -70,7 +70,6 @@ YES
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 
-
 		<cfset arguments.context.push()>
 		
 		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
@@ -79,6 +78,8 @@ YES
 		<cfset loc.result = "">
 
 		<cfloop array="#this._blocks#" index="loc.block">
+<cfdump var="#this._blocks#" label="_blocks">
+<cfdump var="#loc.block#" label="block">
 
 			<cfif loc.block[1] eq "else">
 				<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
@@ -160,9 +161,10 @@ YES
 				
 			</cfif>
 		</cfloop>
-
+<Cfdump var="#loc.result#">
 		<cfset arguments.context.pop()>
-
+<Cfdump var="#loc.result#">
+<cfabort>
 		<cfreturn loc.result>
 	</cffunction>
 	

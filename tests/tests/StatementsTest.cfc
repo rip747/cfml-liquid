@@ -10,14 +10,13 @@
 		<cfset loc.expected = "  true  ">
 		<cfset assert_template_result(loc.expected, loc.tpl, loc.template)>
 	</cffunction>
-<!--- 
-	function  test_true_not_eql_true()
-	{
-		$text = " {% if true != true %} true {% else %} false {% endif %} ";
-		$expected = "  false  ";
-		$this->assert_template_result($expected, $text);
-	}
 
+	<cffunction name="test_true_not_eql_true">
+		<cfset loc.tpl = " {% if true != true %} true {% else %} false {% endif %} ">
+		<cfset loc.expected = "  false  ">
+		<cfset assert_template_result(loc.expected, loc.tpl, loc.template)>
+	</cffunction>
+<!--- 
 	function  test_true_lq_true()
 	{
 	    $text = " {% if 0 > 0 %} true {% else %} false {% endif %} ";

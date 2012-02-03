@@ -56,13 +56,13 @@
 
 		<cfset loc.e = arguments.expected>
 		<cfset arguments.templateObj.parse(arguments.template)>
-<cfdump var="in testing">
-<cfdump var="#arguments.templateObj#">
-<cfdump var="#loc.e#">
+
 		<cfif arguments.debug>
 			<cfset this.debug('arguments.templateObj')>
 		</cfif>
-		
+<cfdump var="in testing">
+<cfdump var="#loc.e#">
+<cfdump var="#arguments.templateObj.render(arguments.assigns, this.filters)#">
 		<cfset loc.r = arguments.templateObj.render(arguments.assigns, this.filters)>
 
 		<cfset this.assert('loc.e eq loc.r')>
