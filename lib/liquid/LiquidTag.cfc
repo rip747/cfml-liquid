@@ -7,7 +7,7 @@
 	<cfset variables.file_system = "">
 	
 	<!--- Additional attributes --->
-	<cfset variables.attributes = {}>
+	<cfset variables.attributes = createObject("Java", "java.util.LinkedHashMap")>
 
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
@@ -30,9 +30,11 @@
 	
 		<cfset loc.attribute_regexp = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_TAG_ATTRIBUTES)>
 		
-		<cfset loc.matches = attribute_regexp.scan(arguments.markup)>
-		
-		<cfset structAppend(this.attributes, loc.matches, true)>
+		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
+
+		<cfif !StructIsEmpty(loc.matches)>
+			<cfset variables.attributes.addAll(loc.matches)>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="name" hint="Returns the name of the tag">

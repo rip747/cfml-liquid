@@ -14,25 +14,31 @@
 	<cffunction name="scan" hint="Returns an array of matches for the string in the same way as Ruby's scan method">
 		<cfargument name="str" type="string" required="true">
 		<cfset var loc = {}>
-		<cfset loc.results = ReMatchNoCase(this.pattern, arguments.str)>
-<!--- 
-		if (count($matches) == 1)
-		{
-			return $matches[0];
-		}
 		
-		array_shift($matches);
+		<cfset loc.results = {}>
 		
-		$result = array();
+		<cfset loc.matches = preg_match_all(this.pattern, arguments.str)>
 		
-		foreach($matches as $match_key => $sub_matches)
+		<cfif ArrayIsEmpty(loc.matches)>
+			<cfreturn loc.results>
+		</cfif>
+
+		<cfif ArrayLen(loc.matches) eq 1>
+			<cfreturn loc.matches[1]>
+		</cfif>
+		
+		<cfset loc.temp = array_shift(loc.matches)>
+		<cfset loc.matches = loc.temp.arr>
+		<cfset loc.match = loc.temp.value>
+		
+		foreach(loc.matches as $match_key => $sub_matches)
 		{
 			foreach($sub_matches as $sub_match_key => $sub_match)
 			{
 				$result[$sub_match_key][$match_key] = $sub_match;
 			}
 		}
- --->
+
 		<cfreturn loc.results>
 	</cffunction>
 

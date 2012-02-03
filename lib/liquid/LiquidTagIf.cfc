@@ -164,7 +164,7 @@ YES
 <Cfdump var="#loc.result#">
 		<cfset arguments.context.pop()>
 <Cfdump var="#loc.result#">
-<cfabort>
+<!--- <cfabort> --->
 		<cfreturn loc.result>
 	</cffunction>
 	

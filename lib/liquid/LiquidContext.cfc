@@ -36,7 +36,12 @@
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn false>
 		</cfif>
+<!--- 		<cfset loc.temp = Createobject('java', 'java.util.LinkedHashMap').init()>
+		<cfset StructInsert(this.assigns, stack, false)>
+		<cftry>
 		<cfset this.assigns.put(Createobject('java', 'java.util.LinkedHashMap').init())>
+		<cfcatch>error:<cfdump var="#this.assigns#"><cfabort></cfcatch>
+		</cftry> --->
 <cfdump var="#this.assigns#" label="context::push 2">
 		<cfreturn true>
 	</cffunction>
