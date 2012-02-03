@@ -161,7 +161,7 @@
 			</cfif>
 		</cfloop>
 
-		<cfreturn loc.result>
+		<cfreturn trim(loc.result)>
 	</cffunction>
 	
 </cfcomponent>
