@@ -16,6 +16,7 @@
 
 		<cfset variables.markup = arguments.markup>
 		<cfset variables.file_system = arguments.file_system>
+<cfdump var="#arguments#" label="liquidtag init args">
 
 		<cfreturn this.parse(arguments.tokens)>
 	</cffunction>

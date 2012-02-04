@@ -29,7 +29,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfelse>
 			<cfset this._fileSystem = createObject("component", "LiquidBlankFileSystem").init()>
 		</cfif>
-<cfdump var="#this._fileSystem#" label="fiesystem = LiquidTemplate::Init">
+
 		<!--- cache --->
 		<cfset this._cache = startCache()>
 		

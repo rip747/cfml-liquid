@@ -5,11 +5,13 @@
 	<cffunction name="init">
 		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#">
 		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
-
+		
+		<cfset this.scopes = []>
 		<cfset this.registers = arguments.registers>
 		<cfset this.assigns = arguments.assigns>
 		<!--- <cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)> --->
 		<cfset this.environments = {}>
+		<cfset ArrayAppend(this.scopes, this.assigns)>
 
 		<cfreturn this>
 	</cffunction>
@@ -28,30 +30,34 @@
 
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
 		<cfargument name="new_assigns" type="array" required="true">
-		<cfset this.assigns.addAll(arguments.new_assigns)>
+		<cfset StructAppend(this.assigns, arguments.new_assigns, true)>
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
-<cfdump var="#this.assigns#" label="context::push 1">
-		<cfif StructIsEmpty(this.assigns)>
+<cfdump var="#this.scopes#" label="context::push 1">
+		<cfif ArrayIsEmpty(this.scopes)>
 			<cfreturn false>
 		</cfif>
-<!--- 		<cfset loc.temp = Createobject('java', 'java.util.LinkedHashMap').init()>
-		<cfset StructInsert(this.assigns, stack, false)>
-		<cftry>
-		<cfset this.assigns.put(Createobject('java', 'java.util.LinkedHashMap').init())>
-		<cfcatch>error:<cfdump var="#this.assigns#"><cfabort></cfcatch>
-		</cftry> --->
-<cfdump var="#this.assigns#" label="context::push 2">
+		<cfset ArrayPrepend(this.scopes, StructNew())>
+		<cfset this.assigns = this.scopes[1]>
+<cfdump var="#this.scopes#" label="context::push 2">
 		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="pop" hint="Pops the current scope from the stack.">
-		<cfdump var="#this.assigns#" label="context::pop">
+<cfdump var="#this.scopes#" label="context::pop 1">
+		<cfif ArrayLen(this.scopes) eq 1>
+			<cfset createObject("component", "LiquidException").init('No elements to pop')>
+		</cfif>
+		
+		<cfset this.assigns = this.scopes[1]>
+		<cfset ArrayDeleteAt(this.scopes, 1)>
+		
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn false>
 		</cfif>
-		<cfset this.assigns.remove()>
+<cfdump var="#this.scopes#" label="context::pop 2">
+<cfabort>		
 		<cfreturn true>
 	</cffunction>
 

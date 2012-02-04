@@ -62,12 +62,12 @@
 					<cfset loc.tag_name_cfcPath = "liquiddir.#loc.tag_name#">
 					
 					<cfif fileExists(ExpandPath(loc.tag_name_fullPath))>
-<cfdump var="tag name found: #loc.tag_name#">
+<cfdump var="tag name found: #loc.tag_name_cfcPath#">
 <cfdump var="#this._nodelist#" label="before tag_name call">
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 <cfdump var="#this._nodelist#" label="after tag_name call">
-<!--- <cfabort> --->
+
 					<cfelse>
 <cfdump var="unknown tag: #loc.tag_name#">
 
@@ -165,7 +165,7 @@
 			</cfif>
 		</cfloop>
 
-		<cfreturn trim(loc.result)>
+		<cfreturn loc.result>
 	</cffunction>
 	
 </cfcomponent>

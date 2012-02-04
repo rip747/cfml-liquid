@@ -18,14 +18,14 @@
 	<!--- The name of the loop, which is a compound of the collection and variable names --->
 	<cfset variables._name = "">
 
-	<cffunction name="init" output="false">
+	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
 		<cfargument name="tokens" type="array" required="true">
 		<cfargument name="file_system" type="any" required="true" hint="LiquidFileSystem">
 		<cfset var loc = {}>
-		
+
 		<cfset super.init(arguments.markup, arguments.tokens, arguments.file_system)>
-		
+	
 		<cfset loc.syntax_regexp = createObject("component", "LiquidRegexp").init('(\w+)\s+in\s+(#application["LiquidConfig"]["LIQUID_ALLOWED_VARIABLE_CHARS"]#+)')>
 		
 		<cfif loc.syntax_regexp.match(arguments.markup)>
@@ -44,7 +44,7 @@
 		<cfreturn this>
 	</cffunction>
 	
-	<cffunction name="render" output="false">
+	<cffunction name="render">
 		<cfargument name="context" type="any" required="true" hint="LiquidContext">
 		<cfset var loc = {}>
 		

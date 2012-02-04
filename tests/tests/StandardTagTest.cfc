@@ -106,6 +106,7 @@
 		<cfset loc.a = {}>
 		<cfset loc.a["array"] = [1,2,3,4]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+<!--- 
 		
 		<cfset loc.e = "yoyo">
 		<cfset loc.t = "{%for item in array%}yo{%endfor%}">
@@ -138,6 +139,7 @@
 		<cfset loc.a = {}>
 		<cfset loc.a["array"] = [1,2,3]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+ --->
 		
 	</cffunction>
 <!---	
