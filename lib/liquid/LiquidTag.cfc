@@ -33,7 +33,7 @@
 		
 		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
 
-		<cfif !StructIsEmpty(loc.matches)>
+		<cfif !ArrayIsEmpty(loc.matches)>
 			<cfset variables.attributes.addAll(loc.matches)>
 		</cfif>
 	</cffunction>

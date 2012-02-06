@@ -15,7 +15,7 @@
 		<cfargument name="str" type="string" required="true">
 		<cfset var loc = {}>
 		
-		<cfset loc.results = {}>
+		<cfset loc.results = []>
 		
 		<cfset loc.matches = preg_match_all(this.pattern, arguments.str)>
 		
@@ -30,6 +30,8 @@
 		<cfset loc.temp = array_shift(loc.matches)>
 		<cfset loc.matches = loc.temp.arr>
 		<cfset loc.match = loc.temp.value>
+		
+<cfdump var="#loc.matches#"><cfabort>
 		
 		foreach(loc.matches as $match_key => $sub_matches)
 		{
