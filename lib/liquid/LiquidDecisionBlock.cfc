@@ -80,7 +80,7 @@
 			<!--- everything else, return false; --->
 			<cfreturn false>
 		</cfif>
-		<cfdump var="#arguments#" label="decisionblock::interpret_condition">
+<!--- <cfdump var="#arguments#" label="decisionblock::interpret_condition"> --->
 		<!--- regular rules --->
 		<cfswitch expression="#arguments.op#">
 			<cfcase value="==">

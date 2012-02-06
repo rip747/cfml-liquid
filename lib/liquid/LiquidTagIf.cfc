@@ -7,24 +7,22 @@ will return:
 YES
 ">
 
+	<cfset this._nodelistHolders = CreateObject("java","java.util.ArrayList").Init()>
+	
+	<cfset this._blocks = CreateObject("java","java.util.ArrayList").Init()>
+
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
 		<cfargument name="tokens" type="array" required="true">
 		<cfargument name="file_system" type="any" required="true">
 		<cfset var loc = {}>
-<cfdump var="#arguments#" label="Arguments = LiquidTagIf::Init">
+<!--- <cfdump var="#arguments#" label="Arguments = LiquidTagIf::Init"> --->
 
-		<cfif !ArrayIsEmpty(this._blocks)>
-			<cfset this._nodelist = this._nodelistHolders[ArrayLen(this._blocks)]>
-		</cfif>
-<cfdump var="#this._nodelist#" label="_nodelist = LiquidTagIf::Init">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders = LiquidTagIf::Init">
 		<cfset loc.temp = ['if', arguments.markup,  this._nodelist]>
 		<cfset arrayAppend(this._blocks, loc.temp)>
-		<!--- <Cfset this._nodelistHolders = this._nodelist> --->
 
-<cfdump var="#this._blocks#" label="blocks  = LiquidTagIf::Init">
-<cfdump var="#arguments.tokens#" label="tokens = LiquidTagIf::Init">
+<!--- <cfdump var="#this._blocks#" label="blocks  = LiquidTagIf::Init">
+<cfdump var="#arguments.tokens#" label="tokens = LiquidTagIf::Init"> --->
 		<cfset super.init(arguments.markup, arguments.tokens, arguments.file_system)>
 		<cfreturn this>
 	</cffunction>
@@ -34,33 +32,29 @@ YES
 		<cfargument name="params" type="any" required="true">
 		<cfargument name="tokens" type="any" required="true">
 		<cfset var loc = {}>
-<Cfdump var="#arguments#" label="Start = LiquidIf::unknown_tag">
+<!--- <Cfdump var="#arguments#" label="Start = LiquidIf::unknown_tag"> --->
 		<cfif arguments.tag eq 'else' OR arguments.tag eq 'elsif'>
 
-<cfdump var="#ArrayLen(this._blocks)#">
+<!--- <cfdump var="#ArrayLen(this._blocks)#">
 <cfdump var="#this._blocks#" label="blocks">
 <cfdump var="#this._nodelist#" label="_nodelist">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders">
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders"> --->
+
+		<cfset loc.temp = [arguments.tag, arguments.params, this._nodelist]>
+		<cfset ArrayAppend(this._blocks, loc.temp)>
 
 		<cfset this._blocks[ArrayLen(this._blocks)][3] = this._nodelist>
-		<cfset ArrayAppend(this._nodelistHolders, this._nodelist)>
+		<cfset this._nodelistHolders = this._nodelist>
 		<cfset ArrayClear(this._nodelist)>
-		<cfset ArrayAppend(this._nodelistHolders, this._nodelist)>
 
-<cfdump var="#this._blocks#" label="blocks 2">
+<!--- <cfdump var="#this._blocks#" label="blocks 2">
 <cfdump var="#this._nodelist#" label="_nodelist 2">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 2">
-			<!--- Update reference to nodelistHolder for this block --->
-<!--- 			<cfset loc.temp = ArrayLen(this._blocks)>
-			<cfset this._nodelist = this._nodelistHolders[loc.temp]>
-			<cfset this._nodelistHolders[loc.temp] =  CreateObject("java","java.util.ArrayList").Init()> --->
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 2"> --->
 
-			<cfset loc.temp = [arguments.tag, arguments.params, this._nodelist]>
-			<cfset ArrayAppend(this._blocks, loc.temp)>
 			
-<cfdump var="#this._blocks#" label="blocks 3">
+<!--- <cfdump var="#this._blocks#" label="blocks 3">
 <cfdump var="#this._nodelist#" label="_nodelist 3">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 3">
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 3"> --->
 		<cfelse>
 			<cfset super.unknown_tag(arguments.tag, arguments.params, arguments.tokens)>
 		</cfif>
@@ -69,7 +63,7 @@ YES
 	<cffunction name="render" hint="Render the tag">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-
+<!--- <cfdump var="#arguments.context#" label="tagIf render context"> --->
 		<cfset arguments.context.push()>
 		
 		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
@@ -78,10 +72,11 @@ YES
 		<cfset loc.result = "">
 
 		<cfloop array="#this._blocks#" index="loc.block">
-<cfdump var="#this._blocks#" label="_blocks">
-<cfdump var="#loc.block#" label="block">
+<!--- <cfdump var="#this._blocks#" label="_blocks">
+<cfdump var="#loc.block#" label="block"> --->
 
 			<cfif loc.block[1] eq "else">
+<!--- else block<cfdump var="#arguments.context#"> --->
 				<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 				<cfbreak>
 			</cfif>
@@ -98,13 +93,13 @@ YES
 				<cfset loc.temp = loc.logicalRegex.split(loc.block[2])>
 
 				<cfset loc.conditions = []>
-
+<!--- <cfdump var="#loc.temp#" label="temp split"> --->
 				<cfloop array="#loc.temp#" index="loc.condition">
 					
 					<cfif loc.conditionalRegex.match(loc.condition)>
 					
 						<cfset loc.t = {}>
-						<cfdump var="#loc.conditionalRegex.matches#" label="conditions">
+<!--- <cfdump var="#loc.conditionalRegex.matches#" label="conditions"> --->
 						<cfset loc.t.left = "">
 						<cfif ArrayLen(loc.conditionalRegex.matches) gte 2>
 							<cfset loc.t.left = loc.conditionalRegex.matches[2]>
@@ -149,9 +144,9 @@ YES
 
 				<cfelse>
 					<!--- If statement is a single condition --->
-					<cfdump var="#loc.conditions[1]#" label="conditions">
+<!--- <cfdump var="#loc.conditions[1]#" label="conditions"> --->
 					<cfset loc.display = this.interpret_condition(loc.conditions[1]['left'], loc.conditions[1]['right'], loc.conditions[1]['operator'], arguments.context)>
-					<cfdump var="display: #loc.display#">
+<!--- <cfdump var="display: #loc.display#"> --->
 				</cfif>
 
 				<cfif loc.display>
@@ -161,9 +156,9 @@ YES
 				
 			</cfif>
 		</cfloop>
-<Cfdump var="#loc.result#">
+<!--- <Cfdump var="#loc.result#"> --->
 		<cfset arguments.context.pop()>
-<Cfdump var="#loc.result#">
+<!--- <Cfdump var="#loc.result#"> --->
 <!--- <cfabort> --->
 		<cfreturn loc.result>
 	</cffunction>

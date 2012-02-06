@@ -1,12 +1,7 @@
 <cfcomponent output="false" extends="LiquidTag" hint="Base class for blocks.">
-
-	<!--- <cfset this._nodelist = CreateObject("java","java.util.ArrayList").Init()> --->
-	<cfset this._nodelist = []>
-	<cfset this._nodelistHolders = []>
-	<!--- Array holding the block type, block markup (conditions) and block nodelist --->
-	<cfset this._blocks = []>
-
 	<cfinclude template="utils.cfm">
+	
+	<cfset this._nodelist = CreateObject("java","java.util.ArrayList").Init()>
 
 	<cffunction name="getNodelist">
 		<cfreturn this._nodelist>
@@ -18,30 +13,32 @@
 		<cfset loc.start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_TAG_START#')>
 		<cfset loc.tag_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_TAG_START#\s*(\w+)\s*(.*)?#application.LiquidConfig.LIQUID_TAG_END#$')>
 		<cfset loc.variable_start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_VARIABLE_START#')>
-<Cfdump var="Start = LiquidBlock::Parse">
-<cfdump var="#arguments#" label="Arguments = LiquidBlock::Parse">
-		<cfset this._nodelist = []>
-<cfdump var="#this._nodelist#" label="when nodelist intialized">
+<!--- <Cfdump var="Start = LiquidBlock::Parse">
+<cfdump var="#arguments#" label="Arguments = LiquidBlock::Parse"> --->
+
+		<cfset this._nodelist = CreateObject("java","java.util.ArrayList").Init()>
+		
+<!--- <cfdump var="#this._nodelist#" label="when nodelist intialized"> --->
 		<cfif !IsArray(arguments.tokens)>
 			<cfreturn>
 		</cfif>
 
 		<cfset loc.tags = createObject("component", "LiquidTemplate").getTags()>
-<cfdump var="#loc.tags#" label="all tags">
+<!--- <cfdump var="#loc.tags#" label="all tags"> --->
 		<cfloop condition="#ArrayLen(arguments.tokens)#">
 			
 			<cfset loc.temp = array_shift(arguments.tokens)>
 			<cfset arguments.tokens = loc.temp.arr>
 			<cfset loc.token = loc.temp.value>
 
-<cfdump var="token: #loc.token#">
-<cfdump var="#this._nodelist#" label="in tokens loop: _nodelist">
+<!--- <cfdump var="token: #loc.token#">
+<cfdump var="#this._nodelist#" label="in tokens loop: _nodelist"> --->
 
 			<cfif loc.start_regexp.match(loc.token)>
 
 				<cfif loc.tag_regexp.match(loc.token)>
 
-<cfdump var="#loc.tag_regexp.matches#" label="token tag matches">
+<!--- <cfdump var="#loc.tag_regexp.matches#" label="token tag matches"> --->
 
 					<!--- if we found the proper block delimitor just end parsing here and let the outer block proceed  --->
 					<cfif loc.tag_regexp.matches[2] eq this.block_delimiter()>
@@ -54,7 +51,7 @@
 					<cfelse>
 						<!--- search for a defined class of the right name, instead of searching in an array --->
 						<cfset loc.tag_name = 'LiquidTag' & loc.tag_regexp.matches[2]>
-<cfdump var="#loc.tag_name#">
+<!--- <cfdump var="#loc.tag_name#"> --->
 
 					</cfif>
 
@@ -62,14 +59,14 @@
 					<cfset loc.tag_name_cfcPath = "liquiddir.#loc.tag_name#">
 					
 					<cfif fileExists(ExpandPath(loc.tag_name_fullPath))>
-<cfdump var="tag name found: #loc.tag_name_cfcPath#">
-<cfdump var="#this._nodelist#" label="before tag_name call">
+<!--- <cfdump var="tag name found: #loc.tag_name_cfcPath#">
+<cfdump var="#this._nodelist#" label="before tag_name call"> --->
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
-<cfdump var="#this._nodelist#" label="after tag_name call">
+<!--- <cfdump var="#this._nodelist#" label="after tag_name call"> --->
 
 					<cfelse>
-<cfdump var="unknown tag: #loc.tag_name#">
+<!--- <cfdump var="unknown tag: #loc.tag_name#"> --->
 
 						<cfset this.unknown_tag(loc.tag_regexp.matches[2], loc.tag_regexp.matches[3], arguments.tokens)>
 					</cfif>
@@ -79,24 +76,24 @@
 				</cfif>
 				
 			<cfelseif loc.variable_start_regexp.match(loc.token)>
-<cfdump var="#this._nodelist#" label="before create_variable call">
+<!--- <cfdump var="#this._nodelist#" label="before create_variable call"> --->
 				<cfset loc.temp = this.create_variable(loc.token)>
 				<cfset arrayAppend(this._nodelist, loc.temp)>
-<cfdump var="#this._nodelist#" label="after create_variable call">
+<!--- <cfdump var="#this._nodelist#" label="after create_variable call"> --->
 			<cfelseif len(loc.token)>
-<cfdump var="#this._nodelist#" label="before blank token assignment">
+<!--- <cfdump var="#this._nodelist#" label="before blank token assignment"> --->
 				<cfset arrayAppend(this._nodelist, loc.token)>
-<cfdump var="#this._nodelist#" label="after blank token assignment">
+<!--- <cfdump var="#this._nodelist#" label="after blank token assignment"> --->
 			</cfif>
 		</cfloop>
-<cfdump var="shouldnnot be here">
-<cfdump var="#this#">
+<!--- <cfdump var="shouldnnot be here">
+<cfdump var="#this#"> --->
 <!--- <cfabort> --->
 		<cfset this.assert_missing_delimitation()>
 	</cffunction>
 
 	<cffunction name="end_tag" hint="An action to execute when the end tag is reached">
-<cfdump var="#this#">
+<!--- <cfdump var="#this#"> --->
 		<cfreturn this>
 	</cffunction>
 
@@ -105,7 +102,7 @@
 		<cfargument name="params" type="any" required="true">
 		<cfargument name="tokens" type="any" required="true">
 		<cfset var loc = {}>
-		<cfdump var="#arguments#" label="aaaa">
+<!--- <cfdump var="#arguments#" label="aaaa"> --->
 		<cfswitch expression="#arguments.tag#">
 			<cfcase value="else">
 				<cfset createobject("component", "LiquidException").init(this.block_name() & " does not expect else tag")>
@@ -140,8 +137,8 @@
 
 	<cffunction name="render" hint="Render the block.">
 		<cfargument name="context" type="any" required="true">
-<cfdump var="#this._nodelist#">
-<cfdump var="#arguments.context#">
+<!--- <cfdump var="#this._nodelist#">
+<cfdump var="#arguments.context#"> --->
 
 		<cfreturn this.render_all(this._nodelist, arguments.context)>
 	</cffunction>
@@ -155,7 +152,7 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 		<cfset loc.result = "">
-<cfdump var="#arguments#" label="liquidblock::render_all()">
+<!--- <cfdump var="#arguments#" label="liquidblock::render_all()"> --->
 <!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all()"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
