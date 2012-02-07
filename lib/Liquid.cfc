@@ -59,7 +59,12 @@
 		<cfset structAppend(this.config, arguments.config)>
 		<cfset application["LiquidConfig"] = {}>
 		<cfset StructAppend(application["LiquidConfig"], this.config)>
+		<cfset setupCache()>
 		<cfreturn this>
+	</cffunction>
+	
+	<cffunction name="setupCache">
+		<cfset application[application.LiquidConfig.LIQUID_CACHE_KEY] = createObject("component", "liquid.LiquidCache").init()>
 	</cffunction>
 	
 </cfcomponent>
