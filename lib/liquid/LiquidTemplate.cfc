@@ -98,13 +98,14 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 				<cfset this._cache[loc.key] = this._root>
 			</cfif>
 		<cfelse>
-<cfdump var="#this.tokenize(arguments.source)#" label="Tokenized Source">
-<cfdump var="#this._fileSystem#" label="File System">
+<!--- <cfdump var="#this.tokenize(arguments.source)#" label="Tokenized Source">
+<cfdump var="#this._fileSystem#" label="File System"> --->
 			<cfset this._root = createObject("component", "LiquidDocument").init(
 					this.tokenize(arguments.source)
 					,this._fileSystem
 				)>
-<cfdump var="#this._root#" label="Document Root">
+<!--- <cfdump var="#this._root#" label="Document Root"> --->
+<!--- parse done<cfabort> --->
 		</cfif>
 		<cfreturn this>
 	</cffunction>
@@ -114,7 +115,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
 		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
 		<cfset var loc = {}>
-<cfdump var="#arguments#" label="template::render()::arguments">
+<!--- <cfdump var="#arguments#" label="template::render()::arguments"> --->
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
 		<cfif !isSimpleValue(arguments.filters) OR len(arguments.filters)>		
 			<cfif isArray(arguments.filters)>
@@ -127,8 +128,8 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfloop array="#this._filters#" index="loc.filter">
 			<cfset loc.context.add_filters(loc.filter)>
 		</cfloop>
-<cfdump var="#this._root#" label="template::render()::root">
-<cfdump var="#loc.context#" label="template::render()::context">
+<!--- <cfdump var="#this._root#" label="template::render()::root">
+<cfdump var="#loc.context#" label="template::render()::context"> --->
 		<cfreturn this._root.render(loc.context)>
 	</cffunction>
 

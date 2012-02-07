@@ -34,30 +34,40 @@ YES
 		<cfset var loc = {}>
 <!--- <Cfdump var="#arguments#" label="Start = LiquidIf::unknown_tag"> --->
 		<cfif arguments.tag eq 'else' OR arguments.tag eq 'elsif'>
-
-<!--- <cfdump var="#ArrayLen(this._blocks)#">
+<!--- 
+<cfdump var="#ArrayLen(this._blocks)#">
 <cfdump var="#this._blocks#" label="blocks">
 <cfdump var="#this._nodelist#" label="_nodelist">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders"> --->
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders">
+ --->
+
+<!--- 			<cfset this._nodelist = this._nodelistHolders[ArrayLen(this._blocks)]> --->
+
+<!--- 		$this->_nodelist = &$this->_nodelistHolders[count($this->_blocks) + 1]; --->
+		
+		<cfset this._blocks[ArrayLen(this._blocks)][3] = this._nodelist>
+		<cfset this._nodelist = this._nodelistHolders>
+<!--- 
+		
+<cfdump var="#this._blocks#" label="blocks 2">
+<cfdump var="#this._nodelist#" label="_nodelist 2">
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 2">
+ --->
 
 		<cfset loc.temp = [arguments.tag, arguments.params, this._nodelist]>
 		<cfset ArrayAppend(this._blocks, loc.temp)>
-
-		<cfset this._blocks[ArrayLen(this._blocks)][3] = this._nodelist>
-		<cfset this._nodelistHolders = this._nodelist>
 		<cfset ArrayClear(this._nodelist)>
-
-<!--- <cfdump var="#this._blocks#" label="blocks 2">
-<cfdump var="#this._nodelist#" label="_nodelist 2">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 2"> --->
-
+<!--- 
 			
-<!--- <cfdump var="#this._blocks#" label="blocks 3">
+<cfdump var="#this._blocks#" label="blocks 3">
 <cfdump var="#this._nodelist#" label="_nodelist 3">
-<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 3"> --->
+<cfdump var="#this._nodelistHolders#" label="_nodelistHolders 3">
+ --->
+
 		<cfelse>
 			<cfset super.unknown_tag(arguments.tag, arguments.params, arguments.tokens)>
 		</cfif>
+
 	</cffunction>
 
 	<cffunction name="render" hint="Render the tag">

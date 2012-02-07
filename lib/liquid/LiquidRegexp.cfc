@@ -31,7 +31,7 @@
 		<cfset loc.matches = loc.temp.arr>
 		<cfset loc.match = loc.temp.value>
 		
-<cfdump var="#loc.matches#"><cfabort>
+<!--- <cfdump var="#loc.matches#"><cfabort> --->
 		
 		foreach(loc.matches as $match_key => $sub_matches)
 		{

@@ -34,18 +34,18 @@
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
-<cfdump var="#this.scopes#" label="context::push 1">
+<!--- <cfdump var="#this.scopes#" label="context::push 1"> --->
 		<cfif ArrayIsEmpty(this.scopes)>
 			<cfreturn false>
 		</cfif>
 		<cfset ArrayPrepend(this.scopes, StructNew())>
 		<cfset this.assigns = this.scopes[1]>
-<cfdump var="#this.scopes#" label="context::push 2">
+<!--- <cfdump var="#this.scopes#" label="context::push 2"> --->
 		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="pop" hint="Pops the current scope from the stack.">
-<cfdump var="#this.scopes#" label="context::pop 1">
+<!--- <cfdump var="#this.scopes#" label="context::pop 1"> --->
 		<cfif ArrayLen(this.scopes) eq 1>
 			<cfset createObject("component", "LiquidException").init('No elements to pop')>
 		</cfif>
@@ -56,14 +56,14 @@
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn false>
 		</cfif>
-<cfdump var="#this.scopes#" label="context::pop 2">
+<!--- <cfdump var="#this.scopes#" label="context::pop 2"> --->
 <cfabort>		
 		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="get" hint="Replaces []">
 		<cfargument name="key" type="string" required="true">
-		<cfdump var="context::get - #arguments.key#">
+<!--- <cfdump var="context::get - #arguments.key#"> --->
 		<cfreturn this.resolve(arguments.key)>
 	</cffunction>
 
@@ -120,10 +120,10 @@
 	<cffunction name="fetch" hint="Fetches the current key in all the scopes">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
-<cfdump var="fetch: #arguments.key#">
+<!--- <cfdump var="fetch: #arguments.key#"> --->
 		<cfloop collection="#this.environments#" item="loc.environment">
 			<cfif StructKeyExists(loc.environment, arguments.key)>
-				<cfdump var="here1">
+<!--- <cfdump var="here1"> --->
 				<cfreturn loc.environment[arguments.key]>
 			</cfif>
 		</cfloop>

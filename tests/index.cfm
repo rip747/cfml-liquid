@@ -4,14 +4,17 @@
 </head>
 <body>
 
+<cfif !structkeyexists(url, "single")>
 
  	<cfset test = createObject("component", "Test")>
 	<cfset test.runTestPackage("cfml-liquid.tests.tests")>
 
-<!--- 
-<cfset test = createObject("component", "cfml-liquid.tests.tests.StatementsTest")>
-<cfset test.runTest("test", "test_true_not_eql_true")>
- --->
+<cfelse>
+
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.StatementsTest")>
+	<cfset test.runTest("test", "test_true_not_eql_true")>
+
+</cfif>
 
 	<cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
 </body>

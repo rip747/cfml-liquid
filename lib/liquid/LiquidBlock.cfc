@@ -6,6 +6,11 @@
 	<cffunction name="getNodelist">
 		<cfreturn this._nodelist>
 	</cffunction>
+	
+	<cffunction name="setNodeList">
+		<cfargument name="value" type="any" required="true">
+		<cfset arrayAppend(this._nodelist, arguments.value)>
+	</cffunction>
 
 	<cffunction name="parse">
 		<cfargument name="tokens" type="array" required="true">
@@ -15,8 +20,6 @@
 		<cfset loc.variable_start_regexp = createObject("component", "LiquidRegexp").init('^#application.LiquidConfig.LIQUID_VARIABLE_START#')>
 <!--- <Cfdump var="Start = LiquidBlock::Parse">
 <cfdump var="#arguments#" label="Arguments = LiquidBlock::Parse"> --->
-
-		<cfset this._nodelist = CreateObject("java","java.util.ArrayList").Init()>
 		
 <!--- <cfdump var="#this._nodelist#" label="when nodelist intialized"> --->
 		<cfif !IsArray(arguments.tokens)>
@@ -62,6 +65,9 @@
 <!--- <cfdump var="tag name found: #loc.tag_name_cfcPath#">
 <cfdump var="#this._nodelist#" label="before tag_name call"> --->
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
+						<cfif StructKeyExists(loc.temp, "_blocks")>
+							<cfset loc.temp._blocks[ArrayLen(loc.temp._blocks)][3] = loc.temp._nodelist>
+						</cfif>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 <!--- <cfdump var="#this._nodelist#" label="after tag_name call"> --->
 
