@@ -5,7 +5,6 @@
 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
 	</cffunction>
 	
-	
 	<cffunction name="test_no_transform">
 		
 		<cfset loc.e = "this text should come out of the template without change...">
@@ -106,7 +105,7 @@
 		<cfset loc.a = {}>
 		<cfset loc.a["array"] = [1,2,3,4]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-<!--- 
+
 		
 		<cfset loc.e = "yoyo">
 		<cfset loc.t = "{%for item in array%}yo{%endfor%}">
@@ -139,254 +138,352 @@
 		<cfset loc.a = {}>
 		<cfset loc.a["array"] = [1,2,3]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
- --->
 		
 	</cffunction>
-<!---	
-	function test_for_with_variable()
-	{
-		$this->assert_template_result(' 1  2  3 ', '{%for item in array%} {{item}} {%endfor%}',array('array' => array(1,2,3)));
-		$this->assert_template_result('123', '{%for item in array%}{{item}}{%endfor%}',array('array' => array(1,2,3)));
-		$this->assert_template_result('123', '{% for item in array %}{{item}}{% endfor %}',array('array' => array(1,2,3)));
-		$this->assert_template_result('abcd', '{%for item in array%}{{item}}{%endfor%}',array('array' => array('a','b','c','d')));
-		$this->assert_template_result('a b c', '{%for item in array%}{{item}}{%endfor%}',array('array' => array('a',' ','b',' ','c')));
-		$this->assert_template_result('abc', '{%for item in array%}{{item}}{%endfor%}',array('array' => array('a','','b','','c')));
-	}
-	
-	function test_for_helpers()
-	{
-		$assigns = array('array'=>array(1,2,3));
-		
-		$this->assert_template_result(' 1/3  2/3  3/3 ', '{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 1  2  3 ', '{%for item in array%} {{forloop.index}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 0  1  2 ', '{%for item in array%} {{forloop.index0}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 2  1  0 ', '{%for item in array%} {{forloop.rindex0}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 3  2  1 ', '{%for item in array%} {{forloop.rindex}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 1  0  0 ', '{%for item in array%} {{forloop.first}} {%endfor%}',$assigns);
-		$this->assert_template_result(' 0  0  1 ', '{%for item in array%} {{forloop.last}} {%endfor%}',$assigns);		
-	}
-	
-	function test_for_and_if()
-	{
-		$assigns = array('array' =>array(1,2,3));
-		$this->assert_template_result(' yay     ', '{%for item in array%} {% if forloop.first %}yay{% endif %} {%endfor%}', $assigns);
-		$this->assert_template_result(' yay  boo  boo ', '{%for item in array%} {% if forloop.first %}yay{% else %}boo{% endif %} {%endfor%}', $assigns);
-		$this->assert_template_result('   boo  boo ', '{%for item in array%} {% if forloop.first %}{% else %}boo{% endif %} {%endfor%}', $assigns);		
-	}
-	
-	function test_limiting()
-	{
-	    $assigns = array('array' => array(1,2,3,4,5,6,7,8,9,0));
-		$this->assert_template_result('12','{%for i in array limit:2 %}{{ i }}{%endfor%}',$assigns);
-		$this->assert_template_result('1234','{%for i in array limit:4 %}{{ i }}{%endfor%}',$assigns);
-		$this->assert_template_result('3456','{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}',$assigns);
-		$this->assert_template_result('3456','{%for i in array limit: 4  offset: 2 %}{{ i }}{%endfor%}',$assigns);
-		
-		$assigns['limit'] = 2;
-		$assigns['offset'] = 2;
-		$this->assert_template_result('34','{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}',$assigns);		
-	}
-	
-	function test_nested_for()
-	{
-		$assigns = array('array'=>array(array(1, 2), array(3,4), array(5, 6)));	
-		$this->assert_template_result('123456','{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}',$assigns);		
-	}
 
-	function test_offset_only()
-	{
-		$assigns = array('array'=>array(1,2,3,4,5,6,7,8,9,0));
-		$this->assert_template_result('890','{%for i in array offset:7 %}{{ i }}{%endfor%}',$assigns);
-	}
-	
-	function test_pause_resume()
-	{
-		$assigns = array('array'=>array('items'=>array(1,2,3,4,5,6,7,8,9,0)));
+	<cffunction name="test_for_with_variable">
 		
-		$markup = <<<MKUP
+		<cfset loc.e = " 1  2  3 ">
+		<cfset loc.t = "{%for item in array%} {{item}} {%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = [1,2,3]>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "123">
+		<cfset loc.t = "{%for item in array%}{{item}}{%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = [1,2,3]>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "123">
+		<cfset loc.t = "{% for item in array %}{{item}}{% endfor %}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = [1,2,3]>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "abcd">
+		<cfset loc.t = "{%for item in array%}{{item}}{%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = ['a','b','c','d']>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "a b c">
+		<cfset loc.t = "{%for item in array%}{{item}}{%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = ['a',' ','b',' ','c']>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.e = "abc">
+		<cfset loc.t = "{%for item in array%}{{item}}{%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["array"] = ['a','','b','','c']>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+	</cffunction>
+	
+	<cffunction name="test_for_helpers">
+		<cfset loc.a["array"] = [1,2,3]>
+		
+		<cfset loc.e = " 1/3  2/3  3/3 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.e = " 1  2  3 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.index}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = " 0  1  2 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.index0}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = " 2  1  0 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.rindex0}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = " 3  2  1 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.rindex}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = " 1  0  0 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.first}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.e = " 0  0  1 ">
+		<cfset loc.t = "{%for item in array%} {{forloop.last}} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+	</cffunction>
+
+	<cffunction name="test_for_and_if">
+		<cfset loc.a["array"] = [1,2,3]>
+		
+		<cfset loc.e = " yay     ">
+		<cfset loc.t = "{%for item in array%} {% if forloop.first %}yay{% endif %} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.e = " yay  boo  boo ">
+		<cfset loc.t = "{%for item in array%} {% if forloop.first %}yay{% else %}boo{% endif %} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "   boo  boo ">
+		<cfset loc.t = "{%for item in array%} {% if forloop.first %}{% else %}boo{% endif %} {%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+	</cffunction>
+
+	<cffunction name="test_limiting">
+		<cfset loc.a["array"] = [1,2,3,4,5,6,7,8,9,0]>
+		
+		<cfset loc.e = "12">
+		<cfset loc.t = "{%for i in array limit:2 %}{{ i }}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.e = "1234">
+		<cfset loc.t = "{%for i in array limit:4 %}{{ i }}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "3456">
+		<cfset loc.t = "{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.e = "3456">
+		<cfset loc.t = "{%for i in array limit: 4  offset: 2 %}{{ i }}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+
+		<cfset loc.e = "34">
+		<cfset loc.t = "{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}">
+		<cfset loc.a['limit'] = 2>
+		<cfset loc.a['offset'] = 2>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_nested_for">
+		<cfset loc.a["array"] = [[1,2],[3,4],[5,6]]>
+		
+		<cfset loc.e = "123456">
+		<cfset loc.t = "{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+
+	<cffunction name="test_offset_only">
+		<cfset loc.a["array"] = [1,2,3,4,5,6,7,8,9,0]>
+		
+		<cfset loc.e = "890">
+		<cfset loc.t = "{%for i in array offset:7 %}{{ i }}{%endfor%}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+		
+	<cffunction name="test_pause_resume">
+		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
+		<cfset loc.a["array"] = {items = loc.temp}>
+		<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
-MKUP;
-    	$expected = <<<XPCTD
+">
+
+		<cfset loc.e = "
 123
 next
 456
 next
 789
-XPCTD;
-    	$this->assert_template_result($expected, $markup, $assigns);
-	}
+		">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_pause_resume_limit()
-	{
-		$assigns = array('array'=>array('items'=>array(1,2,3,4,5,6,7,8,9,0)));
-		
-		$markup = <<<MKUP
+	<cffunction name="test_pause_resume_limit">
+		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
+		<cfset loc.a["array"] = {items = loc.temp}>
+		<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 1 %}{{i}}{%endfor%}
-MKUP;
-    	$expected = <<<XPCTD
+">
+
+		<cfset loc.e = "
 123
 next
 456
 next
 7
-XPCTD;
-    	$this->assert_template_result($expected, $markup, $assigns);
-	}
+		">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_pause_resume_BIG_limit()
-	{
-		$assigns = array('array'=>array('items'=>array(1,2,3,4,5,6,7,8,9,0)));
-		
-		$markup = <<<MKUP
+	<cffunction name="test_pause_resume_BIG_limit">
+		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
+		<cfset loc.a["array"] = {items = loc.temp}>
+		<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 1000 %}{{i}}{%endfor%}
-MKUP;
-    	$expected = <<<XPCTD
+">
+
+		<cfset loc.e = "
 123
 next
 456
 next
 7890
-XPCTD;
-    	$this->assert_template_result($expected, $markup, $assigns);
-	}
+		">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_pause_resume_BIG_offset()
-	{
-		$assigns = array('array'=>array('items'=>array(1,2,3,4,5,6,7,8,9,0)));
-		
-		$markup = <<<MKUP
+	<cffunction name="test_pause_resume_BIG_offset">
+		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
+		<cfset loc.a["array"] = {items = loc.temp}>
+		<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 1000 offset:1000 %}{{i}}{%endfor%}
-MKUP;
-    	$expected = <<<XPCTD
+">
+
+		<cfset loc.e = "
 123
 next
 456
 next
 
-XPCTD;
-    	$this->assert_template_result($expected, $markup, $assigns);
-	}	
+		">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_assign()
-	{
-		$assigns = array('var' => 'content');
-		$this->assert_template_result('var2:  var2:content','var2:{{var2}} {%assign var2 = var%} var2:{{var2}}',$assigns);
-	}
+	<cffunction name="test_assign">
+		<cfset loc.a["var"] = "content">
+		<cfset loc.e = "var2:  var2:content">
+		<cfset loc.t = "var2:{{var2}} {%assign var2 = var%} var2:{{var2}}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_capture()
-	{
-		$assigns = array('var' => 'content');
-		$this->assert_template_result('content foo content foo ','{{ var2 }}{% capture var2 %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}', $assigns);		
-	}
+	<cffunction name="test_capture">
+		<cfset loc.a["var"] = "content">
+		<cfset loc.e = "content foo content foo ">
+		<cfset loc.t = "{{ var2 }}{% capture var2 %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 	
-	function test_case()
-	{
-		$assigns = array('condition' => 2 );
-		$this->assert_template_result(' its 2 ','{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}', $assigns);
-		
-		$assigns = array('condition' => 1 );
-		$this->assert_template_result(' its 1 ','{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}', $assigns);
-		
-		$assigns = array('condition' => 3 );
-		$this->assert_template_result('','{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}', $assigns);
-		
-		$assigns = array('condition' => "string here" );
-		$this->assert_template_result(' hit ','{% case condition %}{% when "string here" %} hit {% endcase %}', $assigns);
-		
-		$assigns = array('condition' => "bad string here" );
-		$this->assert_template_result('','{% case condition %}{% when "string here" %} hit {% endcase %}', $assigns);
-	}
-	
-	function test_case_with_else()
-	{
-		$assigns = array('condition' => 5 );
-		$this->assert_template_result(' hit ','{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}', $assigns);
-		
-		$assigns = array('condition' => 6 );
-		$this->assert_template_result(' else ','{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}', $assigns);
-	}
-	
-	function test_cycle()
-	{
-		$this->assert_template_result('one','{%cycle "one", "two"%}');
-		$this->assert_template_result('one two','{%cycle "one", "two"%} {%cycle "one", "two"%}');
-		$this->assert_template_result('one two one','{%cycle "one", "two"%} {%cycle "one", "two"%} {%cycle "one", "two"%}');
-		
-	}
-	
-	function test_multiple_cycles()
-	{
-		$this->assert_template_result('1 2 1 1 2 3 1','{%cycle 1,2%} {%cycle 1,2%} {%cycle 1,2%} {%cycle 1,2,3%} {%cycle 1,2,3%} {%cycle 1,2,3%} {%cycle 1,2,3%}');
-	}
-	
-	function test_multiple_named_cycles()
-	{
-		$this->assert_template_result('one one two two one one','{%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %}');
-	}
+	<cffunction name="test_case">
+		<cfset loc.a["condition"] = 2>
+		<cfset loc.e = " its 2 ">
+		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 
-	function test_multiple_named_cycles_with_names_from_context()
-	{
-		$assigns = array("var1" => 1, "var2" => 2 );
-	    $this->assert_template_result('one one two two one one','{%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %}', $assigns);
-	}
-	
-	function test_size_of_array()
-	{
-		$assigns = array('array1' => array(1, 2, 3, 4));
-		$this->assert_template_result('array has 4 elements', "array has {{ array1.size }} elements", $assigns, null);
-	}
-	
-	// this test is a superflous, but we'll include it for completion's sake
-	function test_size_of_hash()
-	{
-		$assigns = array("hash" => array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4));
-		$this->assert_template_result('hash has 4 elements', "hash has {{ hash.size }} elements", $assigns);
-	}
-	
-	function test_hash_can_override_size()
-	{
-		$assigns = array("hash" => array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'size' => '5000'));
-		$this->assert_template_result('hash has 5000 elements', "hash has {{ hash.size }} elements", $assigns);
-	}
+		<cfset loc.a["condition"] = 1>
+		<cfset loc.e = " its 1 ">
+		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<cfset loc.a["condition"] = 3>
+		<cfset loc.e = "">
+		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 
-	function test_include_tag()
-	{
-		$template = new LiquidTemplate();
-		$template->setFileSystem(new LiquidTestFileSystem());
-		
-		$template->parse("Outer-{% include 'inner' with 'value' other:23 %}-Outer{% include 'inner' for var other:'loop' %}");
-		
-		$output = $template->render(array("var" => array(1,2,3)));
-		
-		$this->assertEqual("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", $output);
-	}
-	
-	function test_include_tag_no_with()
-	{
-		$template = new LiquidTemplate();
-		$template->setFileSystem(new LiquidTestFileSystem());
-		
-		$template->parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}");
+		<cfset loc.a["condition"] = "string here">
+		<cfset loc.e = " hit ">
+		<cfset loc.t = "{% case condition %}{% when ""string here"" %} hit {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 
-		$output = $template->render(array("inner"=>"orig", "var" => array(1,2,3)));
+		<cfset loc.a["condition"] = "bad string here">
+		<cfset loc.e = "">
+		<cfset loc.t = "{% case condition %}{% when ""string here"" %} hit {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+
+	<cffunction name="test_case_with_else">
+		<cfset loc.a["condition"] = 5>
+		<cfset loc.e = " hit ">
+		<cfset loc.t = "{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+
+		<cfset loc.a["condition"] = 6>
+		<cfset loc.e = " else ">
+		<cfset loc.t = "{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
 		
-		$this->assertEqual("Outer-Inner: orig-Outer-Inner: orig23", $output);
-	}
---->
+	<cffunction name="test_cycle">
+		<cfset loc.e = "one">
+		<cfset loc.t = '{%cycle "one", "two"%}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+
+		<cfset loc.e = "one two">
+		<cfset loc.t = '{%cycle "one", "two"%} {%cycle "one", "two"%}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+		
+		<cfset loc.e = "one two one">
+		<cfset loc.t = '{%cycle "one", "two"%} {%cycle "one", "two"%} {%cycle "one", "two"%}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+	</cffunction>
+	
+	<cffunction name="test_multiple_cycles">
+		<cfset loc.e = "1 2 1 1 2 3 1">
+		<cfset loc.t = '{%cycle 1,2%} {%cycle 1,2%} {%cycle 1,2%} {%cycle 1,2,3%} {%cycle 1,2,3%} {%cycle 1,2,3%} {%cycle 1,2,3%}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+	</cffunction>
+
+	<cffunction name="test_multiple_named_cycles">
+		<cfset loc.e = "one one two two one one">
+		<cfset loc.t = '{%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %} {%cycle 1: "one", "two" %} {%cycle 2: "one", "two" %}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+	</cffunction>
+
+	<cffunction name="test_multiple_named_cycles_with_names_from_context">
+		<cfset loc.a["array"] = {var1 = 1, var2 = 2}>
+		<cfset loc.e = "one one two two one one">
+		<cfset loc.t = '{%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %}'>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+		
+	<cffunction name="test_size_of_array">
+		<cfset loc.a["array1"] = [1, 2, 3, 4]>
+		<cfset loc.e = "array has 4 elements">
+		<cfset loc.t = "array has {{ array1.size }} elements">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_size_of_hash">
+		<cfset loc.a["hash"] = {a = 1, b = 2, c = 3, d = 4}>
+		<cfset loc.e = "hash has 4 elements">
+		<cfset loc.t = "hash has {{ hash.size }} elements">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_hash_can_override_size">
+		<cfset loc.a["hash"] = {a = 1, b = 2, c = 3, d = 4, size = '5000'}>
+		<cfset loc.e = "hash has 5000 elements">
+		<cfset loc.t = "hash has {{ hash.size }} elements">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+
+	<cffunction name="test_include_tag">
+		<cfset loc.a["var"] = [1,2,3]>
+		<cfset loc.file_system = createObject("component", "cfml-liquid.tests.tests.classes.LiquidTestFileSystem")>
+		<cfset loc.template.setFileSystem(loc.file_system)>
+		<cfset loc.template.parse("Outer-{% include 'inner' with 'value' other:23 %}-Outer{% include 'inner' for var other:'loop' %}")>
+		<cfset loc.output = loc.template.render(loc.a)>
+
+		<cfset assert("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", loc.output)>
+	</cffunction>
+
+	<cffunction name="test_include_tag_no_with">
+		<cfset loc.a["inner"] = "orig">
+		<cfset loc.a["var"] = [1,2,3]>
+		<cfset loc.file_system = createObject("component", "cfml-liquid.tests.tests.classes.LiquidTestFileSystem")>
+		<cfset loc.template.setFileSystem(loc.file_system)>
+		<cfset loc.template.parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}")>
+		<cfset loc.output = loc.template.render(loc.a)>
+
+		<cfset assert("Outer-Inner: orig-Outer-Inner: orig23", loc.output)>
+	</cffunction>
+
 </cfcomponent>
