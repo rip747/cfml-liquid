@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "test_override_global_filter")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.VariableResolutionTest")>
+	<cfset test.runTest("test", "TEST_SIMPLE_WITH_WHITESPACES")>
 
 </cfif>
 

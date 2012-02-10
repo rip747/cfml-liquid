@@ -168,14 +168,16 @@
 		<cfset loc.result = "">
 <!--- <cfdump var="#arguments#" label="liquidblock::render_all()"> --->
 <!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all()"> --->
+<!--- <cfdump var="#arguments.list#"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
 				<cfset loc.result &= loc.token.render(arguments.context)>
 			<cfelse>
 				<cfset loc.result &= loc.token>
 			</cfif>
+<!--- <cfdump var="#len(loc.result)#"> --->
 		</cfloop>
-
+<!--- <cfdump var="#len(loc.result)#"> --->
 		<cfreturn loc.result>
 	</cffunction>
 	
