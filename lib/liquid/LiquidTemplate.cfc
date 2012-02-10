@@ -117,17 +117,21 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfset var loc = {}>
 <!--- <cfdump var="#arguments#" label="template::render()::arguments"> --->
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
-		<cfif !isSimpleValue(arguments.filters) OR len(arguments.filters)>		
+		
+		<cfif !isSimpleValue(arguments.filters)>
+				
 			<cfif isArray(arguments.filters)>
 				<cfset this._filters.addAll(arguments.filters)>
-			<cfelse>
+			<cfelseif IsObject(arguments.filters)>
 				<cfset arrayAppend(this._filters, arguments.filters)>
 			</cfif>
+			
+			<cfloop array="#this._filters#" index="loc.filter">
+				<cfset loc.context.add_filters(loc.filter)>
+			</cfloop>
+			
 		</cfif>
 
-		<cfloop array="#this._filters#" index="loc.filter">
-			<cfset loc.context.add_filters(loc.filter)>
-		</cfloop>
 <!--- <cfdump var="#this._root#" label="template::render()::root">
 <cfdump var="#loc.context#" label="template::render()::context"> --->
 		<cfreturn this._root.render(loc.context)>

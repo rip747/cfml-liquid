@@ -29,7 +29,7 @@
 	</cffunction>
 
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
-		<cfargument name="new_assigns" type="array" required="true">
+		<cfargument name="new_assigns" type="struct" required="true">
 		<cfset StructAppend(this.assigns, arguments.new_assigns, true)>
 	</cffunction>
 
@@ -94,7 +94,7 @@
 			<cfreturn false>
 		</cfif>
 		
-		<cfset loc.temp = preg_match("^\'(.*)\'$", arguments.key)>
+		<cfset loc.temp = preg_match("^'(.*)'$", arguments.key)>
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
