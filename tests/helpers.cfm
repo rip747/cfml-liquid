@@ -1,4 +1,4 @@
-<Cfset this.filters = "">
+<cfset this.filters = "">
 
 <cffunction name="arrayCompare" returntype="boolean">
 	<cfargument name="LeftArray" type="array" required="true">
