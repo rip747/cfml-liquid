@@ -83,7 +83,7 @@
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 
 		<cfset loc.e = ' YES '>
-		<cfset loc.t = "{% if "foo" %} YES {% endif %}">
+		<cfset loc.t = "{% if ""foo"" %} YES {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 		
 		<cfset loc.a = {foo = {bar = true}}>

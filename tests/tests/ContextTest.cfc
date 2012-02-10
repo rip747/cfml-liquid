@@ -6,7 +6,7 @@
 
 	<cffunction name="test_variables">
 		<cfset loc.context.set('test', 'test')>
-		<cfset debug('loc.context.inspect()')>
+		<!--- <cfset debug('loc.context.inspect()')> --->
 		<cfset loc.e = loc.context.get('test')>
 		<cfset assert("loc.e eq 'test'")>
 		
@@ -37,19 +37,18 @@
 		<cfset loc.context = createobject("component", "cfml-liquid.lib.liquid.LiquidContext").init()>
 		<cfset loc.filter = createobject("component", "classes.HiFilter")>
 		<cfset loc.context.add_filters(loc.filter)>
-		<cfset loc.e = loc.context.invoke('hi', 'hi?')>
+		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
 		<cfset assert("loc.e, 'hi? hi!'")>
 
 		<cfset loc.context = createobject("component", "cfml-liquid.lib.liquid.LiquidContext").init()>
-		<cfset loc.e = loc.context.invoke('hi', 'hi?')>
+		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
 		<cfset assert("loc.e, 'hi?'")>
 
 		<cfset loc.context.add_filters(loc.filter)>
-		<cfset loc.e = loc.context.invoke('hi', 'hi?')>
+		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
 		<cfset assert("loc.e, 'hi? hi!'")>
 	</cffunction>
 	
-
 	<cffunction name="test_override_global_filter" hint="skip this one for now, as we haven't implemented global filters yet">
 		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>

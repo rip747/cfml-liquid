@@ -3,7 +3,7 @@
 	<cffunction name="setup">
 		<cfset loc.a = {}>
 		<cfset loc.a['best_cars'] = 'bmw'>
-		<cfset loc.a['car'] = {bmw = 'good', 'gm' = 'bad'}>
+		<cfset loc.a['car'] = {bmw = 'good', gm = 'bad'}>
 
 		<cfset loc.filters = createObject("component", "classes.FunnyFilter")>
 		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>

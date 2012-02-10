@@ -9,7 +9,7 @@
 		<cfset this.scopes = []>
 		<cfset this.registers = arguments.registers>
 		<cfset this.assigns = arguments.assigns>
-		<!--- <cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)> --->
+		<cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)>
 		<cfset this.environments = {}>
 		<cfset ArrayAppend(this.scopes, this.assigns)>
 
@@ -21,11 +21,11 @@
 		<cfset this.filterbank.add_filter(arguments.filter)>
 	</cffunction>
 
-	<cffunction name="invokeMethod" hint="Invoke the filter that matches given name">
+	<cffunction name="invoke_method" hint="Invoke the filter that matches given name">
 		<cfargument name="name" type="string" required="true" hint="The name of the filter">
 		<cfargument name="value" type="any" required="true" hint="The value to filter">
 		<cfargument name="args" type="array" required="false" default="#ArrayNew(1)#" hint="Additional arguments for the filter">
-		<cfreturn this.filterbank.invokeMethod(arguments.name, arguments.value, arguments.args)>
+		<cfreturn this.filterbank.invoke_method(arguments.name, arguments.value, arguments.args)>
 	</cffunction>
 
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">

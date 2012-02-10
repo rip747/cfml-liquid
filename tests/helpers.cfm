@@ -60,10 +60,18 @@
 		<cfif arguments.debug>
 			<cfset this.debug('arguments.templateObj')>
 		</cfif>
-<cfdump var="in testing">
+<!--- <cfdump var="in testing">
 <cfdump var="#loc.e#">
-<cfdump var="#arguments.templateObj.render(arguments.assigns, this.filters)#">
+<cfdump var="#arguments.templateObj.render(arguments.assigns, this.filters)#"> --->
 		<cfset loc.r = arguments.templateObj.render(arguments.assigns, this.filters)>
 
 		<cfset this.assert('loc.e eq loc.r')>
+</cffunction>
+	
+<cffunction name="getClassName">
+	<cfargument name="obj" type="any" required="true">
+	<cfif IsObject(arguments.obj)>
+		<cfreturn ListLast(getMetaData(arguments.obj).name, ".")>
+	</cfif>
+	<cfreturn "">
 </cffunction>

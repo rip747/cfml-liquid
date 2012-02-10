@@ -1,7 +1,7 @@
-<cfcomponent output="false" extends="liquid.LiquidTag" hint="
+<cfcomponent output="false" extends="LiquidTag" hint="
 Performs an assignment of one variable to another
 {%assign var = var %}
-{%assign var = "hello" | upcase %}
+{%assign var = 'hello' | upcase %}
 ">
 
 	<cffunction name="init">
@@ -10,12 +10,12 @@ Performs an assignment of one variable to another
 		<cfargument name="file_system" type="any" required="true">
 		<cfset var loc = {}>
 		
-		<cfset loc.syntax_regexp = createobject("component", "liquid.LiquidRegexp").init('(\w+)\s*=\s*(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#+)')>
+		<cfset loc.syntax_regexp = createobject("component", "LiquidRegexp").init('(\w+)\s*=\s*(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#)')>
 
-		<cfset loc.filter_seperator_regexp = createobject("component", "liquid.LiquidRegexp").init('#application.LiquidConfig.LIQUID_FILTER_SEPARATOR#\s*(.*)')>
-		<cfset loc.filter_split_regexp =createobject("component", "liquid.LiquidRegexp").init('#application.LiquidConfig.LIQUID_FILTER_SEPARATOR#')>
-		<cfset loc.filter_name_regexp = createobject("component", "liquid.LiquidRegexp").init('\s*(\w+)')>
-		<cfset loc.filter_argument_regexp = createobject("component", "liquid.LiquidRegexp").init('(?:#application.LiquidConfig.LIQUID_FILTER_ARGUMENT_SEPARATOR.'|'application.LiquidConfig.LIQUID_ARGUMENT_SEPARATOR.')\s*('application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#)')>
+		<cfset loc.filter_seperator_regexp = createobject("component", "LiquidRegexp").init('#application.LiquidConfig.LIQUID_FILTER_SEPARATOR#\s*(.*)')>
+		<cfset loc.filter_split_regexp =createobject("component", "LiquidRegexp").init('#application.LiquidConfig.LIQUID_FILTER_SEPARATOR#')>
+		<cfset loc.filter_name_regexp = createobject("component", "LiquidRegexp").init('\s*(\w+)')>
+		<cfset loc.filter_argument_regexp = createobject("component", "LiquidRegexp").init('(?:#application.LiquidConfig.LIQUID_FILTER_ARGUMENT_SEPARATOR#|#application.LiquidConfig.LIQUID_ARGUMENT_SEPARATOR#)\s*(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#)')>
 
 		<cfset this.filters = []>
 
@@ -27,7 +27,7 @@ Performs an assignment of one variable to another
 				<cfset loc.filter_name_regexp.match(loc.filter)>
 				<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
 
-				<cfset filter_argument_regexp.match_all(arguments.filter)>
+				<cfset loc.filter_argument_regexp.match_all(loc.filter)>
 				<cfset loc.matches = array_flatten(loc.filter_argument_regexp.matches[1])>
 				
 				<cfset loc.temp = [loc.filtername, loc.matches]>
@@ -35,7 +35,7 @@ Performs an assignment of one variable to another
 			</cfloop>
 		</cfif>
 
-		<cfif loc.syntax_regexp.match($markup)>
+		<cfif loc.syntax_regexp.match(arguments.markup)>
 			<cfset this._to = loc.syntax_regexp.matches[1]>
 			<cfset this._from = loc.syntax_regexp.matches[2]>
 		<cfelse>
@@ -62,7 +62,7 @@ Performs an assignment of one variable to another
 				<cfset arrayAppend(loc.filter_arg_values, arguments.context.get(loc.arg_key))>
 			</cfloop>
 
-			<cfset loc.output = argumentscontext.invoke_method(loc.filtername, loc.output, loc.filter_arg_values)>
+			<cfset loc.output = arguments.context.invoke_method(loc.filtername, loc.output, loc.filter_arg_values)>
 		</cfloop>
 
 		<cfset arguments.context.set(this._to, loc.output)>

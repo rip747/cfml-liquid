@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.StatementsTest")>
-	<cfset test.runTest("test", "test_true_not_eql_true")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
+	<cfset test.runTest("test")>
 
 </cfif>
 

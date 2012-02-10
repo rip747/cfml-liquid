@@ -28,12 +28,12 @@
 				<cfset loc.filter = trim(loc.filter)>
 				<cfset loc.filter_name_regexp.match(loc.filter)>
 
-				<Cftry>
+<!--- 				<Cftry> --->
 					<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
-					<cfcatch type="any">
+<!--- 					<cfcatch type="any">
 						error[<cfdump var="#loc.filter_name_regexp.matches#" label="error">]<Cfabort>
 				</cfcatch>
-				</Cftry>
+				</Cftry> --->
 				<cfset loc.filter_argument_regexp.match_all(loc.filter)>
 				<Cfset loc.temp = []>
 				<cfset loc.matches = []>

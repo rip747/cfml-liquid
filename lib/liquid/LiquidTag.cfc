@@ -1,4 +1,5 @@
 <cfcomponent output="false" hint="Base class for tags">
+	<cfinclude template="utils.cfm">
 	
 	<!--- The markup for the tag --->
 	<cfset variables.markup = "">

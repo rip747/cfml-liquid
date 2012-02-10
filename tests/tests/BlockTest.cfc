@@ -9,15 +9,14 @@
 		<cfset loc.a = ['  ']>
 		<cfset loc.template.parse('  ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
-		<cfset assert("loc.a eq loc.nodelist")>
+		<cfset assert("loc.a.equals(loc.nodelist)")>
 	</cffunction>
 	
 	<cffunction name="test_variable_beginning">
 		<cfset loc.template.parse('{{funk}}  ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
-		
-		<cfset assert("ArrayLen(loc.nodelist eq 2")>
-		<cfset assert("getMetaData(loc.nodelist[1]) eq 'LiquidVariable'")>
+		<cfset assert("ArrayLen(loc.nodelist) eq 2")>
+		<cfset assert("getClassName(loc.nodelist[1]) eq 'LiquidVariable'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[2])")>
 	</cffunction>
 
@@ -25,18 +24,18 @@
 		<cfset loc.template.parse('  {{funk}}')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
 		
-		<cfset assert("ArrayLen(loc.nodelist eq 2")>
+		<cfset assert("ArrayLen(loc.nodelist) eq 2")>
 		<cfset assert("IsSimpleValue(loc.nodelist[1])")>
-		<cfset assert("getMetaData(loc.nodelist[2]) eq 'LiquidVariable'")>
+		<cfset assert("getClassName(loc.nodelist[2]) eq 'LiquidVariable'")>
 	</cffunction>
 
 	<cffunction name="test_variable_middle">
 		<cfset loc.template.parse('  {{funk}}  ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
 
-		<cfset assert("ArrayLen(loc.nodelist eq 3")>
+		<cfset assert("ArrayLen(loc.nodelist) eq 3")>
 		<cfset assert("IsSimpleValue(loc.nodelist[1])")>
-		<cfset assert("getMetaData(loc.nodelist[2]) eq 'LiquidVariable'")>
+		<cfset assert("getClassName(loc.nodelist[2]) eq 'LiquidVariable'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[3])")>
 	</cffunction>	
 
@@ -44,13 +43,13 @@
 		<cfset loc.template.parse('  {{funk}}  {{soul}}  {{brother}} ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
 		
-		<cfset assert("ArrayLen(loc.nodelist eq 7")>
+		<cfset assert("ArrayLen(loc.nodelist) eq 7")>
 		<cfset assert("IsSimpleValue(loc.nodelist[1])")>
-		<cfset assert("getMetaData(loc.nodelist[2]) eq 'LiquidVariable'")>
+		<cfset assert("getClassName(loc.nodelist[2]) eq 'LiquidVariable'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[3])")>
-		<cfset assert("getMetaData(loc.nodelist[4]) eq 'LiquidVariable'")>
+		<cfset assert("getClassName(loc.nodelist[4]) eq 'LiquidVariable'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[5])")>
-		<cfset assert("getMetaData(loc.nodelist[6]) eq 'LiquidVariable'")>
+		<cfset assert("getClassName(loc.nodelist[6]) eq 'LiquidVariable'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[7])")>
 	</cffunction>
 
@@ -58,10 +57,10 @@
 		<cfset loc.template.parse('  {% comment %}  {% endcomment %} ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
 		
-		<cfset assert("ArrayLen(loc.nodelist eq 3")>
+		<cfset assert("ArrayLen(loc.nodelist) eq 3")>
 		<cfset assert("IsSimpleValue(loc.nodelist[1])")>
-		<cfset assert("getMetaData(loc.nodelist[2]) eq 'LiquidTagComment'")>
+		<cfset assert("getClassName(loc.nodelist[2]) eq 'LiquidTagComment'")>
 		<cfset assert("IsSimpleValue(loc.nodelist[3])")>
 	</cffunction>
-	
+
 </cfcomponent>

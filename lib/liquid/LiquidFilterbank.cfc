@@ -47,7 +47,7 @@
 		<cfthrow type="LiquidError" message="Parameter passed to add_filter must be an object or a the name of a method">
 	</cffunction>
 
-	<cffunction name="invokeMethod" hint="Invokes the filter with the given name">
+	<cffunction name="invoke_method" hint="Invokes the filter with the given name">
 		<cfargument name="name" type="string" required="true" hint="The name of the filter">
 		<cfargument name="value" type="string" required="true" hint="The value to filter">
 		<cfargument name="args" type="any" required="true" hint="The additional arguments for the filter">

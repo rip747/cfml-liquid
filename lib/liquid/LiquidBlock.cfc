@@ -1,5 +1,4 @@
 <cfcomponent output="false" extends="LiquidTag" hint="Base class for blocks.">
-	<cfinclude template="utils.cfm">
 	
 	<cfset this._nodelist = CreateObject("java","java.util.ArrayList").Init()>
 
@@ -45,7 +44,6 @@
 
 					<!--- if we found the proper block delimitor just end parsing here and let the outer block proceed  --->
 					<cfif loc.tag_regexp.matches[2] eq this.block_delimiter()>
-
 						<cfreturn this.end_tag()>
 					</cfif>
 
@@ -54,7 +52,7 @@
 					<cfelse>
 						<!--- search for a defined class of the right name, instead of searching in an array --->
 						<cfset loc.tag_name = 'LiquidTag' & loc.tag_regexp.matches[2]>
-<!--- <cfdump var="#loc.tag_name#"> --->
+<!--- <cfdump var="tagname: #loc.tag_name#"> --->
 
 					</cfif>
 
@@ -64,7 +62,17 @@
 					<cfif fileExists(ExpandPath(loc.tag_name_fullPath))>
 <!--- <cfdump var="tag name found: #loc.tag_name_cfcPath#">
 <cfdump var="#this._nodelist#" label="before tag_name call"> --->
+<!--- 						<cftry> --->
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
+<!--- 						<cfcatch type="any">
+							<cfdump var="#loc.tag_name_fullPath#">
+							<cfdump var="#loc.tag_name_cfcPath#">
+							<cfdump var="#loc.tag_regexp#">
+							<cfdump var="#getmetadata(this.file_system)#">
+							<cfdump var="#cfcatch#">
+							<cfabort>
+						</cfcatch>
+						</cftry> --->
 						<cfif StructKeyExists(loc.temp, "_blocks")>
 							<cfset loc.temp._blocks[ArrayLen(loc.temp._blocks)][3] = loc.temp._nodelist>
 						</cfif>

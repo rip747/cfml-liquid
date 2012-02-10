@@ -107,6 +107,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 <!--- <cfdump var="#this._root#" label="Document Root"> --->
 <!--- parse done<cfabort> --->
 		</cfif>
+<!--- 		here<cfdump var="#this._root#"><cfabort> --->
 		<cfreturn this>
 	</cffunction>
 
