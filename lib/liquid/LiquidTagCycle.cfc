@@ -15,9 +15,9 @@ one one two two
 ">
 
 	<cffunction name="init">
-		<cfargument name="$markup" type="string" required="true">
-		<cfargument name="$tokens" type="array" required="true">
-		<cfargument name="$file_system" type="any" required="true">
+		<cfargument name="markup" type="string" required="true">
+		<cfargument name="tokens" type="array" required="true">
+		<cfargument name="file_system" type="any" required="true">
 		<cfset var loc = {}>
 		
 		<!--- The name of the cycle; if none is given one is created using the value list --->
@@ -28,7 +28,7 @@ one one two two
 		<cfset loc.simple_syntax = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_QUOTED_FRAGMENT)>
 		<cfset loc.named_syntax = createObject("component", "LiquidRegexp").init("(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#)\s*\:\s*(.*)")>
 		
-		<cfif loc.named_syntax.match(argumentsmarkup)>
+		<cfif loc.named_syntax.match(arguments.markup)>
 			<cfset this._variables = this._variablesFromString(loc.named_syntax.matches[3])>
 			<cfset this._name = loc.named_syntax.matches[2]>
 		<cfelseif loc.simple_syntax.match(arguments.markup)>
@@ -49,7 +49,7 @@ one one two two
 		
 		<cfset loc.key = arguments.context.get(this._name)>
 		
-		<cfif IsDefined(arguments.context.registers['cycle'][loc.key]>
+		<cfif IsDefined("arguments.context.registers.cycle.#loc.key#")>
 			<cfset loc.iteration = arguments.context.registers['cycle'][loc.key]>
 		<cfelse>
 			<cfset loc.iteration = 0>
@@ -81,8 +81,8 @@ one one two two
 		<cfloop array="#loc.parts#" index="loc.part">
 			<cfset loc.regexp.match(loc.part)>
 			
-			<cfif loc.regexp.matches[2]>
-				<cfset ArrayAppend(loc.results, loc.regexp.matches[2])>
+			<cfif len(loc.regexp.matches[2])>
+				<cfset ArrayAppend(loc.result, loc.regexp.matches[2])>
 			</cfif>
 		</cfloop>
 		

@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 	
-	<cffunction name="ht">
+	<cffunction name="hi">
 		<cfargument name="value" type="string" required="true">
 		<cfreturn arguments.value & ' hi!'>
 	</cffunction>

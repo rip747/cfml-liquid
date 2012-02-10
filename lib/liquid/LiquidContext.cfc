@@ -54,10 +54,9 @@
 		<cfset ArrayDeleteAt(this.scopes, 1)>
 		
 		<cfif StructIsEmpty(this.assigns)>
-			<cfreturn false>
+			<cfreturn "">
 		</cfif>
 <!--- <cfdump var="#this.scopes#" label="context::pop 2"> --->
-<cfabort>		
 		<cfreturn true>
 	</cffunction>
 
@@ -70,7 +69,7 @@
 	<cffunction name="set" hint="Replaces []=">
 		<cfargument name="key" type="string" required="true">
 		<cfargument name="value" type="any" required="true">
-		<cfset this.assign[arguments.key] = arguments.value>
+		<cfset this.assigns[arguments.key] = arguments.value>
 	</cffunction>
 
 	<cffunction name="has_key" returntype="boolean" hint="Returns true if the given key will properly resolve">
@@ -91,6 +90,7 @@
 		</cfif>
 		
 		<cfif arguments.key eq "false">
+
 			<cfreturn false>
 		</cfif>
 		
@@ -113,14 +113,13 @@
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
-		
+<!--- <cfdump var="#arguments.key#"><cfabort> --->
 		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
 	<cffunction name="fetch" hint="Fetches the current key in all the scopes">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
-<!--- <cfdump var="fetch: #arguments.key#"> --->
 		<cfloop collection="#this.environments#" item="loc.environment">
 			<cfif StructKeyExists(loc.environment, arguments.key)>
 <!--- <cfdump var="here1"> --->
@@ -129,7 +128,6 @@
 		</cfloop>
 			
 		<cfif StructKeyExists(this.assigns, arguments.key)>
-
 			<cfset loc.obj = this.assigns[arguments.key]>
 			
 			<cfif IsInstanceof(loc.obj, "LiquidDrop")>
@@ -153,23 +151,23 @@
 		<cfset var loc = {}>
 
 		<!--- Support [0] style array indicies --->
-		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
+<!--- 		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
 		<cfif !ArrayIsEmpty(loc.matches)>
 			<cfset arguments.key = ReReplace(arguments.key, "|\[([0-9]+)\]|", "\1", "all")>
-		</cfif>
+		</cfif> --->
 
 		<cfset loc.parts = ListToArray(arguments.key, application.LiquidConfig.LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR)>
 		<cfset loc.temp = array_shift(loc.parts)>
 		<cfset loc.parts = loc.temp.arr>
 		<cfset loc.object = this.fetch(loc.temp.value)>
-	
+
 		<cfif isObject(loc.object)>
 			<cfif !StructKeyExists(loc.object, "toLiquid")>
 				<cfthrow type="LiquidError" message="Method 'toLiquid' not exists!">
 			</cfif>
 			<cfset loc.object = loc.object.toLiquid()>
 		</cfif>
-		
+<!--- <cfdump var="#loc#"> --->
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
 
 			<cfloop array="#loc.parts#" index="loc.part">
@@ -180,10 +178,16 @@
 				
 				<cfif loc.part eq "size">
 				
-					<cfif IsStruct(loc.object)>
+					<cfif IsArray(loc.object)>
+						<cfset loc.object = ArrayLen(loc.object)>
+					<cfelseif IsQuery(loc.object)>
+						<cfset loc.object = loc.object.recordcount>
+					<cfelseif IsSimpleValue(loc.object)>
+						<cfset loc.object = len(loc.object)>
+					<cfelseif IsStruct(loc.object)>
 						<cfset loc.object = StructCount(loc.object)>
 					</cfif>
-				
+
 				<cfelseif IsStruct(loc.object) AND StructKeyExists(loc.object, loc.part)>
 				
 					<cfset loc.object = loc.object[loc.part]>
@@ -224,7 +228,7 @@
 			<cfreturn "">
 			
 		</cfif>
-
+<!--- <cfdump var="#loc#"><cfabort> --->
 	</cffunction>
 	
 	<cffunction name="inspect">

@@ -42,6 +42,7 @@
 				</cfif>
 				<cfset loc.temp = [loc.filtername, loc.matches]>
 				<cfset arrayAppend(variables._filters, loc.temp)>
+
 			</cfloop>
 			
 		</cfif>
@@ -54,16 +55,19 @@
 		<cfset var loc = {}>
 <!--- <cfdump var="#variables._name#" label="varaibles::render()"> --->
 		<cfset loc.output = arguments.context.get(variables._name)>
-<!--- <cfdump var="#loc.output#" label="varaibles::render()">	 --->
+<!--- <cfdump var="#variables._filters#" label="varaibles::render()"> --->
 		<cfloop array="#variables._filters#" index="loc.filter">
+			
+			<cfset loc.filtername = loc.filter[1]>
+			<cfset loc.filter_arg_keys = loc.filter[2]>
 			
 			<cfset loc.filter_arg_values = []>
 			
-			<cfloop array="#variables._filters[loc.filter]#" index="loc.key">
-				<cfset arrayAppend(loc.filter_arg_values, arguments.context.get(loc.key))>
+			<cfloop array="#loc.filter_arg_keys#" index="loc.arg_keys">
+				<cfset arrayAppend(loc.filter_arg_values, arguments.context.get(loc.arg_keys))>
 			</cfloop>
-			
-			<cfset loc.output = arguments.context.invoke(loc.filter, loc.output, loc.filter_arg_values)>
+<!--- <cfdump var="#loc#"> --->
+			<cfset loc.output = arguments.context.invoke_method(loc.filtername, loc.output, loc.filter_arg_values)>
 		</cfloop>
 		
 		<cfreturn loc.output>

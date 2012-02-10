@@ -6,7 +6,6 @@
 
 	<cffunction name="test_variables">
 		<cfset loc.context.set('test', 'test')>
-		<!--- <cfset debug('loc.context.inspect()')> --->
 		<cfset loc.e = loc.context.get('test')>
 		<cfset assert("loc.e eq 'test'")>
 		
@@ -28,40 +27,57 @@
 	</cffunction>
 	
 	<cffunction name="test_length_query">
-		<cfset loc.context.set('numbers', array(1, 2, 3, 4))>
+		<cfset loc.a = [1, 2, 3, 4]>
+		<cfset loc.context.set('numbers', loc.a)>
 		<cfset loc.e = loc.context.get('numbers.size')>
 		<cfset assert("loc.e eq 4")>
+		
+		<cfset loc.a = {1=1, 2=2, 3=3, 4=4, 5=5}>
+		<cfset loc.context.set('numbers', loc.a)>
+		<cfset loc.e = loc.context.get('numbers.size')>
+		<cfset assert("loc.e eq 5")>
+
+		<cfset loc.a = QueryNew("firstname,lastname")>
+		<cfset QueryAddRow(loc.a)>
+		<cfset QuerySetCell(loc.a, "firstname", "Tony")>
+		<cfset QuerySetCell(loc.a, "lastname", "Petruzzi")>
+		<cfset QueryAddRow(loc.a)>
+		<cfset QuerySetCell(loc.a, "firstname", "Per")>
+		<cfset QuerySetCell(loc.a, "lastname", "Djurner")>
+		<cfset loc.context.set('numbers', loc.a)>
+		<cfset loc.e = loc.context.get('numbers.size')>
+		<cfset assert("loc.e eq 2")>
 	</cffunction>
 
 	<cffunction name="test_add_filter">
 		<cfset loc.context = createobject("component", "cfml-liquid.lib.liquid.LiquidContext").init()>
 		<cfset loc.filter = createobject("component", "classes.HiFilter")>
 		<cfset loc.context.add_filters(loc.filter)>
-		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
-		<cfset assert("loc.e, 'hi? hi!'")>
+ 		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
+		<cfset assert("loc.e eq 'hi? hi!'")>
 
 		<cfset loc.context = createobject("component", "cfml-liquid.lib.liquid.LiquidContext").init()>
 		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
-		<cfset assert("loc.e, 'hi?'")>
+		<cfset assert("loc.e eq 'hi?'")>
 
 		<cfset loc.context.add_filters(loc.filter)>
 		<cfset loc.e = loc.context.invoke_method('hi', 'hi?')>
-		<cfset assert("loc.e, 'hi? hi!'")>
+		<cfset assert("loc.e eq 'hi? hi!'")>
 	</cffunction>
 	
 	<cffunction name="test_override_global_filter" hint="skip this one for now, as we haven't implemented global filters yet">
 		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
-		<cfset loc.GlobalFilter = createObject("component", "classes.GlobalFilter").init()>
+		<cfset loc.GlobalFilter = createObject("component", "classes.GlobalFilter")>
 		<cfset loc.template.registerFilter(loc.GlobalFilter)>
 		
 		<cfset loc.template.parse("{{'test' | notice }}")>
 		<cfset loc.e = loc.template.render()>
-		<cfset assert("loc.e eq 'Global test'")>
-		
+ 		<cfset assert("loc.e eq 'Global test'")>
+<!---		
 		<cfset loc.LocalFilter = createObject("component", "classes.LocalFilter").init()>
 		<cfset loc.e = loc.template.render(StructNew(), loc.LocalFilter)>
-		<cfset assert("loc.e eq 'Local test'")>
+		<cfset assert("loc.e eq 'Local test'")> --->
 	</cffunction>
 	
 	<cffunction name="test_add_item_in_outer_scope">

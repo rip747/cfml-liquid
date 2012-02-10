@@ -11,9 +11,9 @@
 
 	<cffunction name="init">
 		<cfargument name="context" type="any" required="true">
-		<cfset var standardFilters = createObject("component", "LiquidStandardFilters").init()>
+
 		<cfset this.context = arguments.context>
-		<cfset this.add_filter(standardFilters)>
+		<cfset this.add_filter("LiquidStandardFilters")>
 		
 		<cfreturn this>
 	</cffunction>
@@ -22,29 +22,43 @@
 		<cfargument name="filter" type="any" required="true" hint="Can either be an object, the name of a class (in which case the filters will be called statically) or the name of a function">
 		<cfset var loc = {}>
 		
+		<cfif not IsObject(arguments.filter) AND !isSimpleValue(arguments.filter)>
+			<cfset createObject("component", "LiquidException").init("Parameter passed to add_filter must be an object or a string")>
+		</cfif>
+		
 		<!--- if the passed filter was an object, store the object for future reference. --->
 		<cfif isObject(arguments.filter)>
 			
 			<cfset arguments.filter.context = this.context>
 			<cfset loc.name = getMetaData(arguments.filter).name>
 			<cfset this.filters[loc.name] = arguments.filter>
-			
-			<cfloop collection="#arguments.filter#" item="loc.method">
-				<cfset this.method_map[loc.method] = loc.name>
-			</cfloop>
-			
 			<cfset arguments.filter = loc.name>
-			<cfreturn true>
 			
 		</cfif>
+		
+		<cftry>
+			<cfset loc.methods = getComponentMetaData(arguments.filter).functions>
+			<cfcatch type="any">
+				<cfset loc.methods = []>
+			</cfcatch>
+		</cftry>
 
+		<cfif !ArrayIsEmpty(loc.methods)>
+			<cfloop array="#loc.methods#" index="loc.method">
+				<cfif loc.method.name neq "init">
+					<cfset this.method_map[loc.method.name] = arguments.filter>
+				</cfif>
+			</cfloop>
+			<cfreturn true>
+		</cfif>
+				
 		<!--- if it wasn't an object an isn't a string either, it's a bad parameter --->
-		<cfif isSimpleValue(arguments.filter) AND IsCustomFunction(arguments.filter)>
+		<cfif IsCustomFunction(arguments.filter)>
 			<cfset this.method_map[arguments.filter] = false>
 			<cfreturn true>
 		</cfif>
 		
-		<cfthrow type="LiquidError" message="Parameter passed to add_filter must be an object or a the name of a method">
+		<cfset createObject("component", "LiquidException").init("Parameter passed to add_filter must a class or a function")>
 	</cffunction>
 
 	<cffunction name="invoke_method" hint="Invokes the filter with the given name">
@@ -55,28 +69,27 @@
 		<cfif !IsStruct(arguments.args)>
 			<cfset arguments.args = {}>
 		</cfif>
-		
+
 		<cfset StructInsert(arguments.args, arguments.value, "")>
-		
+
 		<!--- consult the mapping  --->
 		<cfif StructKeyExists(this.method_map, arguments.name)>
 			<cfset loc.class = this.method_map[arguments.name]>
 
 			<!--- if we have a registered object for the class, use that instead --->
-			<cfif StructKeyExists(this.filters, arguments.class)>
+			<cfif StructKeyExists(this.filters, loc.class)>
 				<cfset loc.class = this.filters[loc.class]>
 			</cfif>
-			
+
 			<!--- if we're calling a function --->
-			<cfif loc.class eq false>
-				<cfinvoke method="#arguments.name#" argumentcollection="#argumetns#" returnvariable="loc.ret">
+			<cfif IsSimpleValue(loc.class) and loc.class eq false>
+				<cfinvoke method="#arguments.name#" argumentcollection="#arguments#" returnvariable="loc.ret">
 				<cfreturn loc.ret>
 			<cfelse>
-				<cfinvoke component="#loc.class#" method="#arguments.name#" argumentcollection="#argumetns#" returnvariable="loc.ret">
+				<cfinvoke component="#loc.class#" method="#arguments.name#" argumentcollection="#arguments#" returnvariable="loc.ret">
 				<cfreturn loc.ret>
 			</cfif>
 		</cfif>
-		
 		<cfreturn arguments.value>
 	</cffunction>
 
