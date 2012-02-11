@@ -85,9 +85,9 @@
 		<cfset loc.context.push()>
 		<cfset loc.e = loc.context.get('test')>
 		<cfset assert("loc.e eq 'test'")>
-<!--- 		<cfset loc.context.pop()>
+		<cfset loc.context.pop()>
 		<cfset loc.e = loc.context.get('test')>
-		<cfset assert("loc.e eq 'test'")> --->
+		<cfset assert("loc.e eq 'test'")>
 	</cffunction>
 
 	<cffunction name="test_add_item_in_inner_scope">

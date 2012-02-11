@@ -39,16 +39,16 @@ Your drop can either implement the methods sans any parameters or implement the 
 		<cfargument name="method" type="string" required="true">
 		<cfset var loc = {}>
 		
-		<cfif this.hasKey(arguments.method)>
+		<cfset loc.ret = this.beforeMethod(arguments.method)>
+		
+		<cfif !StructKeyExists(loc, "ret")>
 			<cfreturn "">
 		</cfif>
-		
-		<cfset loc.ret = this.beforeMethod(arguments.method)>
 
-		<cfif !StructKeyExists(loc, "ret")>
+		<cfif StructKeyExists(this, arguments.method)>
 			<cfinvoke component="#this#" method="#arguments.method#" returnvariable="loc.ret">
 		</cfif>
-		
+	
 		<cfreturn loc.ret>
 	</cffunction>
 

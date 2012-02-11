@@ -3,7 +3,7 @@
 	<cfinclude template="utils.cfm">
 
 	<cffunction name="init">
-		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#">
+		<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
 		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
 		
 		
@@ -31,7 +31,8 @@
 
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
 		<cfargument name="new_assigns" type="struct" required="true">
-		<cfset StructAppend(this.assigns, arguments.new_assigns, true)>
+		<cfset StructAppend(this.scopes[1], arguments.new_assigns, true)>
+<!--- <cfdump var="#this.scopes#"> --->
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
@@ -114,33 +115,34 @@
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
-		
+
 		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
 	<cffunction name="fetch" hint="Fetches the current key in all the scopes">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
+		
 		<cfloop collection="#this.environments#" item="loc.environment">
 			<cfif StructKeyExists(loc.environment, arguments.key)>
-<!--- <cfdump var="here1"> --->
 				<cfreturn loc.environment[arguments.key]>
 			</cfif>
 		</cfloop>
-			
+
 		<cfloop array="#this.scopes#" index="loc.scope">
-			
+
 			<cfif StructKeyExists(loc.scope, arguments.key)>
-			
+
 				<cfset loc.obj = loc.scope[arguments.key]>
-				
+
 				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
+
 					<cfset loc.obj.setContext(this)>
 				</cfif>
-	
+
 				<cfreturn loc.obj>
 			</cfif>
-		
+
 		</cfloop>
 		
 		<cfreturn "">
@@ -168,21 +170,21 @@
 		<cfset loc.object = this.fetch(loc.temp.value)>
 
 		<cfif isObject(loc.object)>
-			<cfif !StructKeyExists(loc.object, "toLiquid")>
+			<cfif !IsInstanceof(loc.object, "LiquidDrop") AND !StructKeyExists(loc.object, "toLiquid")>
 				<cfthrow type="LiquidError" message="Method 'toLiquid' not exists!">
 			</cfif>
 			<cfset loc.object = loc.object.toLiquid()>
 		</cfif>
-<!--- <cfdump var="#loc#"><cfabort> --->
+
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
 
 			<cfloop array="#loc.parts#" index="loc.part">
-				
+		
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					<cfset loc.object.setContext(this)>
 				</cfif>
 				
-				<cfif loc.part eq "size">
+				<cfif !IsObject(loc.object) AND loc.part eq "size">
 				
 					<cfif IsArray(loc.object)>
 						<cfset loc.object = ArrayLen(loc.object)>
@@ -193,17 +195,13 @@
 					<cfelseif IsStruct(loc.object)>
 						<cfset loc.object = StructCount(loc.object)>
 					</cfif>
-
-				<cfelseif IsStruct(loc.object) AND StructKeyExists(loc.object, loc.part)>
-				
-					<cfset loc.object = loc.object[loc.part]>
 				
 				<cfelseif isObject(loc.object)>
-				
+
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					
 						<cfset loc.object = loc.object.invokeDrop(loc.part)>
-						
+
 					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD) AND IsCustomFunction(loc.part)>
 						
 						<cfset loc.args = {method = loc.part}>
@@ -224,7 +222,7 @@
 				<cfif isObject(loc.object) AND StructKeyExists(loc.object, "toLiquid")>
 					<cfset loc.object = loc.object.toLiquid()>
 				</cfif>
-				
+
 			</cfloop>
 
 			<cfreturn loc.object>
