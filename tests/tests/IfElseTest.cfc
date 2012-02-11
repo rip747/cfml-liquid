@@ -186,6 +186,7 @@
 	</cffunction>
   
 	<cffunction name="test_comparisons_on_null">
+		<cfset loc.a = {}>
 		<cfset loc.e = ''>
 		
 		<cfset loc.t = "{% if null < 10 %} NO {% endif %}">

@@ -36,6 +36,12 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfreturn this>
 	</cffunction>
 	
+	<cffunction name="setFileSystem">
+		<cfargument name="fileSystem" type="any" required="true">
+		<cfset this._fileSystem = arguments.fileSystem>
+	</cffunction>
+	
+	
 	<cffunction name="getCache">
 		<cfreturn this._cache>
 	</cffunction>
@@ -118,7 +124,9 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfset var loc = {}>
 <!--- <cfdump var="#arguments#" label="template::render()::arguments"> --->
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
-		
+<!--- <cfdump var="#arguments#">
+<cfdump var="#loc.context.assigns#">
+<cfabort> --->
 		<cfif !isSimpleValue(arguments.filters)>
 				
 			<cfif isArray(arguments.filters)>

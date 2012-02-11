@@ -10,13 +10,13 @@
 ">
 
 	<!--- The collection to loop over --->
-	<cfset variables._collectionName = "">
+	<cfset this._collectionName = "">
 	
 	<!--- The variable name to assign collection elements to --->
-	<cfset variables._variableName = "">
+	<cfset this._variableName = "">
 
 	<!--- The name of the loop, which is a compound of the collection and variable names --->
-	<cfset variables._name = "">
+	<cfset this._name = "">
 
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
@@ -30,9 +30,9 @@
 		
 		<cfif loc.syntax_regexp.match(arguments.markup)>
 
-			<cfset variables._variableName = loc.syntax_regexp.matches[2]>
-			<cfset variables._collectionName = loc.syntax_regexp.matches[3]>
-			<cfset variables._name = loc.syntax_regexp.matches[2] & '-' & loc.syntax_regexp.matches[3]>
+			<cfset this._variableName = loc.syntax_regexp.matches[2]>
+			<cfset this._collectionName = loc.syntax_regexp.matches[3]>
+			<cfset this._name = loc.syntax_regexp.matches[2] & '-' & loc.syntax_regexp.matches[3]>
 			<cfset this.extract_attributes(arguments.markup)>
 			
 		<cfelse>
@@ -52,29 +52,29 @@
 			<cfset arguments.context.registers["for"] = []>
 		</cfif>
 		
-		<cfset loc.collection = arguments.context.get(variables._collectionName)>
+		<cfset loc.collection = arguments.context.get(this._collectionName)>
 
 		<cfif !StructKeyExists(loc, "collection") OR !IsArray(loc.collection) OR ArrayIsEmpty(loc.collection)>
 			<cfreturn "">
 		</cfif>
 		
 		<!--- array(0, count($collection)) --->
-		<cfif StructKeyExists(variables.attributes, "limit") OR StructKeyExists(variables.attributes, "offset")>
+		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
 		
 			<cfset loc.range = [ArrayLen(loc.collection), 0]>
 
 			<cfset loc.offset = 0>
 			
-			<cfif StructKeyExists(variables.attributes, 'offset')>
-				<cfif variables.attributes['offset'] eq "continue">
-					<cfset loc.offset = arguments.context.registers['for'][variables._name]>
+			<cfif StructKeyExists(this.attributes, 'offset')>
+				<cfif this.attributes['offset'] eq "continue">
+					<cfset loc.offset = arguments.context.registers['for'][this._name]>
 				<cfelse>
-					<cfset loc.offset = arguments.context.get(variables.attributes['offset'])>
+					<cfset loc.offset = arguments.context.get(this.attributes['offset'])>
 				</cfif>
 			</cfif>
 			
-			<cfif StructKeyExists(variables.attributes, 'limit')>
-				<cfset loc.limit = arguments.context.get(variables.attributes['limit'])>
+			<cfif StructKeyExists(this.attributes, 'limit')>
+				<cfset loc.limit = arguments.context.get(this.attributes['limit'])>
 			<cfelse>
 				<cfset loc.limit = "">
 			</cfif>
@@ -87,7 +87,7 @@
 			
 			<cfset loc.range = [loc.offset, loc.range_end]>
 			
-			<cfset arguments.context.registers['for'][variables._name] = loc.range_end + loc.offset>
+			<cfset arguments.context.registers['for'][this._name] = loc.range_end + loc.offset>
 			
 			<cfset loc.collection = createObject("java", "java.util.ArrayList").Init(loc.collection).subList(JavaCast("int", loc.range[1]), JavaCast("int", loc.range[2]))>
 			
@@ -105,9 +105,9 @@
 
 		<cfloop from="1" to="#loc.length#" index="loc.index">
 
-			<cfset arguments.context.set(variables._variableName, loc.index)>
+			<cfset arguments.context.set(this._variableName, loc.index)>
 			<cfset loc.temp = {}>
-			<cfset loc.temp.name = variables._name>
+			<cfset loc.temp.name = this._name>
 			<cfset loc.temp.length = loc.length>
 			<cfset loc.temp.index = loc.index + 1>
 			<cfset loc.temp.index0 = loc.index>

@@ -73,7 +73,7 @@ YES
 	<cffunction name="render" hint="Render the tag">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-<!--- <cfdump var="#arguments.context#" label="tagIf render context"> --->
+<cfdump var="#arguments.context.assigns#" label="tagIf render context">
 		<cfset arguments.context.push()>
 		
 		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
@@ -153,13 +153,14 @@ YES
 					</cfloop>
 
 				<cfelse>
+<!--- <cfdump var="#arguments.context.assigns#"><cfabort> --->
 					<!--- If statement is a single condition --->
 <!--- <cfdump var="#loc.conditions[1]#" label="conditions"> --->
 					<cfset loc.display = this.interpret_condition(loc.conditions[1]['left'], loc.conditions[1]['right'], loc.conditions[1]['operator'], arguments.context)>
 <!--- <cfdump var="display: #loc.display#"> --->
 				</cfif>
 
-				<cfif loc.display>
+				<cfif (IsBoolean(loc.display) and loc.display) OR len(loc.display)>
 					<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 					<cfbreak>
 				</cfif>

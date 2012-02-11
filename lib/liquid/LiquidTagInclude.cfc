@@ -15,28 +15,20 @@ Will include the template called 'foo', with a variable called foo that will hav
 Will loop over all the values of bar, including the template foo, passing a variable called foo
 with each value of bar
 ">
-	/**
-	 * @var string The name of the template
-	 */
-	private $template_name;
+
+	<!--- The name of the template --->
+	<cfset this.template_name = "">
+
+	<!--- True if the variable is a collection --->
+	<cfset this.collection = false>
+
+	<!--- The value to pass to the child template as the template name --->
+	<cfset this.variable = "">
+
+	<!--- The LiquidDocument that represents the included template --->
+	<cfset this.document = "">
 	
-	/**
-	 * @var bool True if the variable is a collection
-	 */
-	private $collection;
-	
-	/**
-	 * @var mixed The value to pass to the child template as the template name
-	 */
-	private $variable;
-	
-	/**
-	 * @var LiquidDocument The LiquidDocument that represents the included template
-	 */
-	private $document;
-	
-	
-	protected $_hash;
+	<cfset this._hash = "">	
 
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
@@ -44,18 +36,11 @@ with each value of bar
 		<cfargument name="file_system" type="any" required="true" hint="LiquidFileSystem">
 		<cfset var loc = {}>
 		
-		<cfset loc.regex = createObject("component", "LiquidRegexp").init('("[^"]+"|''[^'']+'')(\s+(with|for)\s+(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#+))?')>
-		
-		<!--- True if the variable is a collection --->
-		<cfset this.collection = false>
-		
-		<!--- The value to pass to the child template as the template name --->
-		<cfset this.variable = "">
-		
+		<cfset loc.regex = createObject("component", "LiquidRegexp").init('("[^"]+"|''[^'']+'')(\s+(with|for)\s+(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#))?')>
 		
 		<cfif loc.regex.match(arguments.markup)>
 			
-			<cfset this.template_name = left(loc.regex.matches[2], 1, len(loc.regex.matches[2]) - 2)>
+			<cfset this.template_name = left(loc.regex.matches[2], len(loc.regex.matches[2]) - 2)>
 			
 			<cfif ArrayLen(loc.regex.matches) gte 3 AND loc.regex.matches[3] eq "for">
 				<cfset this.collection = true>
@@ -79,7 +64,7 @@ with each value of bar
 		<cfargument name="tokens" type="array" required="true">
 		<cfset var loc = {}>
 		
-		<cfif !IsDefined(this.file_system)>
+		<cfif !StructKeyExists(this, "file_system")>
 			<cfset createObject("component", "LiquidException").init("No file system")>
 		</cfif>
 	
@@ -91,9 +76,10 @@ with each value of bar
 		<cfset loc.cache = application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 
 		<cfif IsDefined("loc.cache")>
-			<cfif this.document = loc.cache.read(this._hash)) neq false AND this.document.checkIncludes() neq true>
+			<cfif (this.document eq loc.cache.read(this._hash)) neq false AND this.document.checkIncludes() neq true>
 			<cfelse>
-				<cfset this.document = createObject("component", "LiquidDocument").init(LiquidTemplate::tokenize($source), $this->file_system)>
+				<cfset loc.template = createObject("component", "LiquidTemplate")>
+				<cfset this.document = createObject("component", "LiquidDocument").init(loc.template.tokenize(loc.source), this.file_system)>
 				<cfset loc.s = createObject("component", "LquidTemplate").tokenize(loc.source)>
 				<cfset loc.cache.write(this._hash, this.document)>
 			</cfif>
@@ -120,7 +106,7 @@ with each value of bar
 		<cfreturn true>
 	</cffunction>
 
-	<cffunction name="">public function render(&$context)
+	<cffunction name="render">
 		<cfargument name="context" type="any" required="true" hint="LiquidContext">
 		<cfset var loc = {}>
 		

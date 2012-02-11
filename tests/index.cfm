@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.VariableResolutionTest")>
-	<cfset test.runTest("test", "TEST_SIMPLE_WITH_WHITESPACES")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.StatementsTest")>
+	<cfset test.runTest("test", "TEST_IS_NOT_COLLECTION_EMPTY")>
 
 </cfif>
 

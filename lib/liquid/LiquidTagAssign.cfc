@@ -39,7 +39,7 @@ Performs an assignment of one variable to another
 			<cfset this._to = loc.syntax_regexp.matches[1]>
 			<cfset this._from = loc.syntax_regexp.matches[2]>
 		<cfelse>
-			<cfthrow type="LiquidError" message="Syntax Error in 'assign' - Valid syntax: assign [var] = [source]">
+			<cfset createObject("component", "LiquidException").init("Syntax Error in 'assign' - Valid syntax: assign [var] = [source]")>
 		</cfif>
 		
 		<cfreturn this>

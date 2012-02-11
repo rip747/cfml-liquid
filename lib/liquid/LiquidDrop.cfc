@@ -32,7 +32,7 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="setContext" hint="sets the context of the drop">
 		<cfargument name="context" type="any" required="true">
-		<cfreturn variables._context = arguments.context>
+		<cfset variables._context = arguments.context>
 	</cffunction>
 
 	<cffunction name="invokeDrop" hint="Invoke a specific method">
@@ -59,10 +59,6 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="toLiquid" hint="return this drop instance">
 		<cfreturn this>
-	</cffunction>
-
-	<cffunction name="toString" hint="return the name of the class">
-		<cfreturn getMetaData(this).name>
 	</cffunction>
 
 </cfcomponent>

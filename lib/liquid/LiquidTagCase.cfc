@@ -69,7 +69,7 @@ A switch statememt
 	</cffunction>
 
 	<cffunction name="push_nodelist" hint="Pushes the current right value and nodelist into the nodelist stack">
-		<cfset var loc. = {}>
+		<cfset var loc = {}>
 		<cfif len(this.right)>
 			<cfset loc.temp = [this.right, this._nodelist]>
 			<cfset ArrayAppend(this._nodelist, loc.temp)>

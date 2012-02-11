@@ -86,7 +86,7 @@
 					</cfif>
 				
 				<cfelse>
-					<cfset createobject("component", "LiquidException").init("Tag $token was not properly terminated")>
+					<cfset createobject("component", "LiquidException").init("Tag #loc.token# was not properly terminated")>
 				</cfif>
 				
 			<cfelseif loc.variable_start_regexp.match(loc.token)>
@@ -146,7 +146,7 @@
 			<cfset loc.ret = createObject("component", "LiquidVariable").init(loc.variable_regexp.matches[2])>
 			<cfreturn loc.ret>
 		</cfif>
-		<cfset createobject("component", "LiquidException").init("Variable $token was not properly terminated")>
+		<cfset createobject("component", "LiquidException").init("Variable #loc.token# was not properly terminated")>
 	</cffunction>
 
 	<cffunction name="render" hint="Render the block.">

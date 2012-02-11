@@ -7,7 +7,7 @@ Captures the output inside a block and assigns it to a variable
 
 	<cfset this._to = "">
 
-	<cffunction name="init" output="false">
+	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
 		<cfargument name="tokens" type="array" required="true">
 		<cfargument name="file_system" type="any" required="true" hint="LiquidFileSystem">
@@ -26,9 +26,9 @@ Captures the output inside a block and assigns it to a variable
 	</cffunction>
 
 	<cffunction name="render">
-		<cfargument name="context" type="any" required="" hint="">
+		<cfargument name="context" type="any" required="true" hint="">
+		<cfset var loc = {}>
 		<cfset loc.output = super.render(arguments.context)>
-		
 		<cfset arguments.context.set(this._to, loc.output)>
 	</cffunction>	
 </cfcomponent>

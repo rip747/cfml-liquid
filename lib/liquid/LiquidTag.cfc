@@ -2,21 +2,21 @@
 	<cfinclude template="utils.cfm">
 	
 	<!--- The markup for the tag --->
-	<cfset variables.markup = "">
+	<cfset this.markup = "">
 	
 	<!--- Filesystem object is used to load included template files --->
-	<cfset variables.file_system = "">
+	<cfset this.file_system = "">
 	
 	<!--- Additional attributes --->
-	<cfset variables.attributes = createObject("Java", "java.util.LinkedHashMap")>
+	<cfset this.attributes = createObject("Java", "java.util.LinkedHashMap")>
 
 	<cffunction name="init">
 		<cfargument name="markup" type="string" required="true">
 		<cfargument name="tokens" type="array" required="true">
 		<cfargument name="file_system" type="any" required="true">
 
-		<cfset variables.markup = arguments.markup>
-		<cfset variables.file_system = arguments.file_system>
+		<cfset this.markup = arguments.markup>
+		<cfset this.file_system = arguments.file_system>
 <!--- <cfdump var="#arguments#" label="liquidtag init args"> --->
 
 		<cfreturn this.parse(arguments.tokens)>
@@ -35,7 +35,7 @@
 		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
 
 		<cfif !ArrayIsEmpty(loc.matches)>
-			<cfset variables.attributes.addAll(loc.matches)>
+			<cfset this.attributes.addAll(loc.matches)>
 		</cfif>
 	</cffunction>
 

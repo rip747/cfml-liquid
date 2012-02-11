@@ -3,9 +3,9 @@ Quickly create a table from a collection
 ">
 
 	<cffunction name="init">
-		<cfargument name="$markup" type="string" required="true">
-		<cfargument name="$tokens" type="array" required="true">
-		<cfargument name="$file_system" type="any" required="true" hint="LiquidFileSystem">
+		<cfargument name="markup" type="string" required="true">
+		<cfargument name="tokens" type="array" required="true">
+		<cfargument name="file_system" type="any" required="true" hint="LiquidFileSystem">
 		<cfset var loc = {}>
 		
 		<!--- The variable name of the table tag --->
@@ -22,8 +22,8 @@ Quickly create a table from a collection
 		<cfset loc.syntax = createObject("component", "LiquidRegexp").init("(\w+)\s+in\s+(#application.LiquidConfig.LIQUID_ALLOWED_VARIABLE_CHARS#+)")>
 		
 		<cfif loc.syntax.match(arguments.markup)>
-			<cfset this.variable_name = loc.syntax->matches[2]>
-			<cfset this.collection_name = loc.syntax->matches[3]>
+			<cfset this.variable_name = loc.syntax.matches[2]>
+			<cfset this.collection_name = loc.syntax.matches[3]>
 			
 			<cfset this.extract_attributes(arguments.markup)>
 		<cfelse>

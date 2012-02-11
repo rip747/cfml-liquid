@@ -45,16 +45,34 @@
 		<cfset var loc = {}>
 
 		<cfif !len(arguments.op)>
-
 			<cfset loc.value = this.string_value(arguments.context.get(arguments.left))>
 			<cfreturn loc.value>
 		</cfif>
+		
+		<cfdump var="#arguments.context.assigns#">
+		<cfdump var="#isArray(arguments.context.get(arguments.left))#">
+		<cfdump var="#arguments.context.get(arguments.left)#">
+		
 		<!--- values of 'empty' have a special meaning in array comparisons --->
 		<cfif arguments.right eq "empty" AND isArray(arguments.context.get(arguments.left))>
 			<cfset arguments.left = ArrayLen(arguments.context.get(arguments.left))>
 			<cfset arguments.right = 0>
+		<cfelseif arguments.right eq "empty" AND IsStruct(arguments.context.get(arguments.left))>
+			<cfset arguments.left = StructCount(arguments.context.get(arguments.left))>
+			<cfset arguments.right = 0>
+		<cfelseif arguments.right eq "empty" AND IsQuery(arguments.context.get(arguments.left))>
+			<cfset loc.temp = arguments.context.get(arguments.left)>
+			<cfset arguments.left = loc.temp.recordcount>
+			<cfset arguments.right = 0>
 		<cfelseif arguments.left eq "empty" AND isArray(arguments.context.get(arguments.right))>
 			<cfset arguments.right = ArrayLen(arguments.context.get(arguments.right))>
+			<cfset arguments.left = 0>
+		<cfelseif arguments.left eq "empty" AND IsStruct(arguments.context.get(arguments.right))>
+			<cfset arguments.right = StructCount(arguments.context.get(arguments.right))>
+			<cfset arguments.left = 0>
+		<cfelseif arguments.left eq "empty" AND IsQuery(arguments.context.get(arguments.right))>
+			<cfset loc.temp = arguments.context.get(arguments.right)>
+			<cfset arguments.right = loc.temp.recordcount>
 			<cfset arguments.left = 0>
 		<cfelse>
 			<cfset arguments.left = arguments.context.get(arguments.left)>

@@ -105,7 +105,7 @@
 	</cffunction>
 	
 	<cffunction name="test_is_not_collection_empty">
-		<cfset loc.a = {array=[1,2,3]}>
+		<cfset loc.a = {array = [1,2,3]}>
 		<cfset loc.tpl = " {% if array == empty %} true {% else %} false {% endif %} ">
 		<cfset loc.expected = "  false  ">
 		<cfset assert_template_result(loc.expected, loc.tpl, loc.template, loc.a)>
