@@ -13,7 +13,7 @@
         <cfset assert("loc.e eq true")>
 		
 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
-		<cfset loc.template.parse( {{ product.top_sales }} )>
+		<cfset loc.template.parse(' {{ product.top_sales }} ')>
 		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
 		<cfset loc.a = {product = loc.ProductDrop}>
 		<cfset loc.e = raised('loc.template.render(loc.a)')>
