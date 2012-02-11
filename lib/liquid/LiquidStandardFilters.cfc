@@ -34,7 +34,7 @@
 	<cffunction name="upcase" hint="Convert an input to uppercase">
 		<cfargument name="input" type="any" required="true">
 		<cfif isSimpleValue(arguments.input)>
-			<cfreturn ucase(arguments.string)>
+			<cfreturn ucase(arguments.input)>
 		</cfif>
 		<cfreturn arguments.input>
 	</cffunction>

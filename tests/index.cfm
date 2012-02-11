@@ -12,7 +12,7 @@
 <cfelse>
 
 	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "TEST_ADD_FILTER")>
+	<cfset test.runTest("test", "test_add_item_in_outer_scope")>
 
 </cfif>
 

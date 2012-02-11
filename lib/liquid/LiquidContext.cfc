@@ -6,12 +6,13 @@
 		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#">
 		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
 		
-		<cfset this.scopes = []>
+		
 		<cfset this.registers = arguments.registers>
 		<cfset this.assigns = arguments.assigns>
 		<cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)>
 		<cfset this.environments = {}>
-		<cfset ArrayAppend(this.scopes, this.assigns)>
+		<cfset this.scopes = [this.assigns]>
+		<!--- <cfset ArrayAppend(this.scopes, )> --->
 
 		<cfreturn this>
 	</cffunction>
@@ -50,13 +51,13 @@
 			<cfset createObject("component", "LiquidException").init('No elements to pop')>
 		</cfif>
 		
-		<cfset this.assigns = this.scopes[1]>
 		<cfset ArrayDeleteAt(this.scopes, 1)>
-		
+		<cfset this.assigns = this.scopes[1]>
+<!--- <cfdump var="#this.scopes#" label="context::pop 2"> --->
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn "">
 		</cfif>
-<!--- <cfdump var="#this.scopes#" label="context::pop 2"> --->
+
 		<cfreturn true>
 	</cffunction>
 
@@ -113,7 +114,7 @@
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
-<!--- <cfdump var="#arguments.key#"><cfabort> --->
+		
 		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
@@ -127,15 +128,20 @@
 			</cfif>
 		</cfloop>
 			
-		<cfif StructKeyExists(this.assigns, arguments.key)>
-			<cfset loc.obj = this.assigns[arguments.key]>
+		<cfloop array="#this.scopes#" index="loc.scope">
 			
-			<cfif IsInstanceof(loc.obj, "LiquidDrop")>
-				<cfset loc.obj.setContext(this)>
+			<cfif StructKeyExists(loc.scope, arguments.key)>
+			
+				<cfset loc.obj = loc.scope[arguments.key]>
+				
+				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
+					<cfset loc.obj.setContext(this)>
+				</cfif>
+	
+				<cfreturn loc.obj>
 			</cfif>
-
-			<cfreturn loc.obj>
-		</cfif>
+		
+		</cfloop>
 		
 		<cfreturn "">
 	</cffunction>
@@ -167,7 +173,7 @@
 			</cfif>
 			<cfset loc.object = loc.object.toLiquid()>
 		</cfif>
-<!--- <cfdump var="#loc#"> --->
+<!--- <cfdump var="#loc#"><cfabort> --->
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
 
 			<cfloop array="#loc.parts#" index="loc.part">
