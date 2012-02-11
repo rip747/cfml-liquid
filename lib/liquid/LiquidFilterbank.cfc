@@ -63,14 +63,14 @@
 
 	<cffunction name="invoke_method" hint="Invokes the filter with the given name">
 		<cfargument name="name" type="string" required="true" hint="The name of the filter">
-		<cfargument name="value" type="string" required="true" hint="The value to filter">
+		<cfargument name="value" type="any" required="true" hint="The value to filter">
 		<cfargument name="args" type="any" required="true" hint="The additional arguments for the filter">
 
-		<cfif !IsStruct(arguments.args)>
-			<cfset arguments.args = {}>
+		<cfif !IsArray(arguments.args)>
+			<cfset arguments.args = []>
 		</cfif>
 
-		<cfset StructInsert(arguments.args, arguments.value, "")>
+		<cfset ArrayPrepend(arguments.args, arguments.value)>
 
 		<!--- consult the mapping  --->
 		<cfif StructKeyExists(this.method_map, arguments.name)>
@@ -83,14 +83,57 @@
 
 			<!--- if we're calling a function --->
 			<cfif IsSimpleValue(loc.class) and loc.class eq false>
-				<cfinvoke method="#arguments.name#" argumentcollection="#arguments#" returnvariable="loc.ret">
+				<cfset loc.method_args = build_method_args(arguments.args, arguments.name)>
+				<cfinvoke method="#arguments.name#" argumentcollection="#loc.method_args#" returnvariable="loc.ret">
 				<cfreturn loc.ret>
 			<cfelse>
-				<cfinvoke component="#loc.class#" method="#arguments.name#" argumentcollection="#arguments#" returnvariable="loc.ret">
+				<cfset loc.method_args = build_method_args(arguments.args, arguments.name, loc.class)>
+				<cfinvoke component="#loc.class#" method="#arguments.name#" argumentcollection="#loc.method_args#" returnvariable="loc.ret">
 				<cfreturn loc.ret>
 			</cfif>
 		</cfif>
 		<cfreturn arguments.value>
+	</cffunction>
+	
+	<cffunction name="build_method_args" returntype="struct">
+		<cfargument name="args" type="array" required="true">
+		<cfargument name="method" type="string" required="true">
+		<cfargument name="class" type="any" required="false">
+		<cfset var loc = {}>
+		<cfset loc.ret = {}>
+
+		<cfif StructKeyExists(arguments, "class")>
+		
+			<cfif IsObject(arguments.class)>
+				<cfset loc.class_methods = getMetaData(arguments.class).functions>
+			<cfelse>
+				<cfset loc.class_methods = getComponentMetaData(arguments.class).functions>
+			</cfif>
+
+			<cfloop array="#loc.class_methods#" index="loc.class_method">
+				<cfif loc.class_method.name eq arguments.method>
+					<cfset loc.method_args = loc.class_method.parameters>
+					<cfbreak>
+				</cfif>
+			</cfloop>
+			
+		<cfelse>
+		
+			<cfset loc.method_args = getMetaData(arguments.name).parameters>
+			
+		</cfif>
+		
+		<cfset loc.counter = ArrayLen(loc.method_args)>
+		<cfset loc.args_counter = ArrayLen(arguments.args)>
+		
+		<cfloop from="1" to="#loc.counter#" index="loc.i">
+			<cfif loc.args_counter gte loc.i>
+				<cfset loc.method_arg = loc.method_args[loc.i].name>
+				<cfset loc.ret[loc.method_arg] = arguments.args[loc.i]>
+			</cfif>
+		</cfloop>
+		
+		<cfreturn loc.ret>
 	</cffunction>
 
 </cfcomponent>

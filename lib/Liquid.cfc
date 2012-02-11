@@ -42,7 +42,7 @@
 	<cfset this.config.LIQUID_ALLOWED_VARIABLE_CHARS = "[a-zA-Z_.-]">
 	
 	<!--- Regex for quoted fragments --->
-	<cfset this.config.LIQUID_QUOTED_FRAGMENT = """[^""]+""|\'[^\']+\'|[^\s,|]+">
+	<cfset this.config.LIQUID_QUOTED_FRAGMENT = '"[^"]+"|''[^'']+''|[^\s,|]+'>
 	
 	<!--- Regex for recognizing tab attributes --->
 	<cfset this.config.LIQUID_TAG_ATTRIBUTES = "(\w+)\s*\:\s*(" & this.config.LIQUID_QUOTED_FRAGMENT & ")">
