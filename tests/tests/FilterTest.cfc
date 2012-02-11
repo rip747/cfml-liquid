@@ -11,13 +11,18 @@
 		)>
 	</cffunction>
 	
+	<cffunction name="create_class_instance">
+		<cfargument name="klass" type="string" required="true">
+		<cfreturn createObject("component", "classes.#arguments.klass#").init()>
+	</cffunction>
+	
 	<cffunction name="create_moneyfilter_instance">
 		<cfreturn createObject("component", "classes.MoneyFilter").init()>
 	</cffunction>
 	
 	<cffunction name="test_local_filter">
 		<cfset loc.v = create_var_instance('var | money')>
-		<cfset loc.f = create_moneyfilter_instance()>
+		<cfset loc.f = create_class_instance("MoneyFilter")>
 		
 		<cfset loc.context.set('var', 1000)>
 		<cfset loc.context.add_filters(loc.f)>
@@ -25,10 +30,10 @@
 		<cfset loc.r = loc.v.render(loc.context)>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-<!--- 	
+
 	<cffunction name="test_underscore_in_filter_name">
 		<cfset loc.v = create_var_instance('var | money_with_underscore ')>
-		<cfset loc.f = create_moneyfilter_instance()>
+		<cfset loc.f = create_class_instance("MoneyFilter")>
 		
 		<cfset loc.context.set('var', 1000)>
 		<cfset loc.context.add_filters(loc.f)>
@@ -37,37 +42,46 @@
 		<cfset assert('loc.e eq loc.r')>			
 	</cffunction>
 
-	<cffunction name="test_second_filter_overwrites_first">
-	{
-		$var = new LiquidVariable('var | money ');
-		<cfset loc.context.set('var', 1000);
-		<cfset loc.context.add_filters(new MoneyFilter(), 'money');
-		<cfset loc.context.add_filters(new CanadianMoneyFilter(), 'money');
-		<cfset loc.assertIdentical(' 1000$ CAD ', $var.render(<cfset loc.context));				
+	<cffunction name="test_second_filter_overwrites_first">		
+		<cfset loc.var = create_var_instance('var | money ')>
+		<cfset loc.f = create_class_instance("MoneyFilter")>
+		<cfset loc.context.add_filters(loc.f)>
+		<cfset loc.f = create_class_instance("CanadianMoneyFilter")>
+		<cfset loc.context.add_filters(loc.f)>
+
+		<cfset loc.context.set('var', 1000)>
+		<cfset loc.e = ' 1000$ CAD '>
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>				
 	</cffunction>
 	
 	<cffunction name="test_size">
-	{
-		$var = new LiquidVariable("var | size");
-		<cfset loc.context.set('var', 1000);
-		//<cfset loc.context.add_filters(new MoneyFilter());
-		<cfset loc.assertEqual(4, $var.render(<cfset loc.context));		
+		<cfset loc.var = create_var_instance("var | size")>
+		<cfset loc.f = create_class_instance("MoneyFilter")>
+		<cfset loc.context.add_filters(loc.f)>
+
+		<cfset loc.context.set('var', 1000)>
+		<cfset loc.e = 4>
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
 	<cffunction name="test_join">
-	{
-		$var = new LiquidVariable("var | join");
-	
-		<cfset loc.context.set('var', array(1, 2, 3, 4));
-		<cfset loc.assertEqual("1 2 3 4", $var.render(<cfset loc.context));		
+		<cfset loc.var = create_var_instance("var | join")>
+		<cfset loc.a = [1, 2, 3, 4]>
+		<cfset loc.context.set('var', loc.a)>
+		<cfset loc.e = "1 2 3 4">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
-	<cffunction name="test_strip_html"> ()
-	{
-		$var = new LiquidVariable("var | strip_html");
-		
- 	    <cfset loc.context.set('var', "<b>bla blub</a>");
- 	    <cfset loc.assertEqual("bla blub", $var.render(<cfset loc.context));  
+	<cffunction name="test_strip_html">
+		<cfset loc.var = create_var_instance("var | strip_html")>
+
+		<cfset loc.context.set('var', "<b>bla blub</a>")>
+		<cfset loc.e = "bla blub">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-	 --->
+
 </cfcomponent>
