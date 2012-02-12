@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.DropTest")>
-	<cfset test.runTest("test", "test_text_array_drop")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.FileSystemTest")>
+	<cfset test.runTest("test", "TEST_LOCAL")>
 
 </cfif>
 

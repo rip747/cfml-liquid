@@ -15,16 +15,17 @@
 	
 	<cffunction name="test_local">
 		<cfset loc.root = expandPath(".") & '/templates/'>
-		
+		<cfset loc.root = ListChangeDelims(loc.root, "/", "\")>
+
 		<cfset loc.file_system = createObject("component", "cfml-liquid.lib.liquid.LiquidLocalFileSystem").init(loc.root)>
 		
-		<cfset loc.e = loc.root & "mypartial.tpl">
+		<cfset loc.e = loc.root & "_mypartial.liquid">
 		<cfset loc.r = loc.file_system.full_path("mypartial")>
-		<cfset assert("loc.e eq loc.e")>
-
-		<cfset loc.e = loc.root & "dir/mypartial.tpl">
+		<cfset assert("loc.e eq loc.r")>
+	
+		<cfset loc.e = loc.root & "dir/_mypartial.liquid">
 		<cfset loc.r = loc.file_system.full_path("dir/mypartial")>
-		<cfset assert("loc.e eq loc.e")>
+		<cfset assert("loc.e eq loc.r")>
 
 		<cftry>
 			<cfset loc.file_system.full_path("../dir/mypartial")>
