@@ -86,12 +86,11 @@
 			<cfreturn "">
 		</cfif>
 	
-		<cfif arguments.key eq "true">
+		<cfif !IsNumeric(arguments.key) AND IsBoolean(arguments.key) and arguments.key eq "true">
 			<cfreturn true>
 		</cfif>
 		
-		<cfif arguments.key eq "false">
-
+		<cfif !IsNumeric(arguments.key) AND IsBoolean(arguments.key) and arguments.key eq "false">
 			<cfreturn false>
 		</cfif>
 		

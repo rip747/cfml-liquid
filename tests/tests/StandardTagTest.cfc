@@ -438,7 +438,7 @@ next
 	</cffunction>
 
 	<cffunction name="test_multiple_named_cycles_with_names_from_context">
-		<cfset loc.a["array"] = {var1 = 1, var2 = 2}>
+		<cfset loc.a = {var1 = 1, var2 = 2}>
 		<cfset loc.e = "one one two two one one">
 		<cfset loc.t = '{%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %}'>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
