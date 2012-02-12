@@ -55,7 +55,10 @@
 		<cfset var loc = {}>
 <!--- <cfdump var="#variables._name#" label="varaibles::render()"><cfabort> --->
 		<cfset loc.output = arguments.context.get(variables._name)>
-<cfdump var="#loc.output#">
+		<cfif IsSimplevalue(loc.output)>
+			<cfset loc.output = trim(loc.output)>
+		</cfif>
+<!--- <cfdump var="#loc.output#"> --->
 <!--- <cfdump var="#len(loc.output)#" label="varaibles::render()"> --->
 		<cfloop array="#variables._filters#" index="loc.filter">
 			

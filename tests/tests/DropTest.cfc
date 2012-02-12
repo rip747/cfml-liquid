@@ -9,15 +9,16 @@
 		<cfset loc.template.parse('  ')>
 		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
 		<cfset loc.a = {product = loc.ProductDrop}>
-		<cfset loc.e = loc.template.render(loc.a)>
-        <cfset assert("loc.e eq ''")>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset loc.e = '  '>
+        <cfset assert("loc.e eq loc.r")>
 		
  		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
 		<cfset loc.template.parse(' {{ product.top_sales }} ')>
 		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
 		<cfset loc.a = {product = loc.ProductDrop}>
 		<cfset loc.e = raised('loc.template.render(loc.a)')>
-        <cfset assert("loc.e eq 'worked'")>
+        <cfset assert("loc.e.message eq 'worked'")>
 	</cffunction>
 
 	<cffunction name="test_text_drop">

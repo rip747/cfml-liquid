@@ -215,8 +215,9 @@
 	<cffunction name="test_syntax_error_no_variable">
 		<cfset loc.e = ''>
 		<cfset loc.t = "{% if jerry == 1 %}">
-		<cfset loc.r = raised('assert_template_result(loc.e, loc.t, loc.template, loc.a)')>
-		<cfset assert('loc.r eq "if tag was never closed"')>	
+		<cfset loc.e = "if tag was never closed">
+		<cfset loc.r = raised('assert_template_result(loc.e, loc.t, loc.template)')>
+		<cfset assert('loc.e eq loc.r.message')>
 	</cffunction>
  
 </cfcomponent>

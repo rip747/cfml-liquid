@@ -8,7 +8,7 @@
 	<cffunction name="test_invalid_assign" hint="Tests the normal behavior of throwing an exception when the assignment is incorrect">
 		<cfset loc.r = raised("loc.template.parse('{% assign test %}')")>
 		<cfset loc.e = 'LiquidError'>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r.type")>
 	</cffunction>
 
 	<cffunction name="test_simple_assign" hint="Tests a simple assignment with no filters">

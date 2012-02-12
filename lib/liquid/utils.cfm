@@ -25,13 +25,14 @@
 	<cfset var loc = {}>
 	<cfset loc.results = arrayNew(1)>
 	<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
-    <cfif not loc.test.pos[1]>
+    <cfif loc.test.pos[1] eq 0>
 		<cfset loc.results[1] = arguments.str>
+		<cfreturn loc.results>
     </cfif>
-	<cfif loc.test.pos[1] gt 1>
-		<cfset ArrayAppend(loc.results, mid(arguments.str, 1, loc.test.pos[1] - 1))>
-	</cfif>
     <cfloop condition="loc.test.pos[1] gt 0">
+<!--- 		<cfif loc.test.pos[1] neq 0 and arguments.captureDelim>
+			<cfset ArrayAppend(loc.results, mid(arguments.str, 1, loc.test.pos[1] - 1))>
+		</cfif> --->
 		<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
 		<cfset ArrayAppend(loc.results, mid(arguments.str, loc.test.pos[1], loc.test.len[1]))>
 		<cfset arguments.str = RemoveChars(arguments.str, 1, loc.test.pos[1] + loc.test.len[1] - 1)>
@@ -40,7 +41,7 @@
 		</cfif>
 		<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
 	</cfloop>
-	<cfif len(arguments.str)>
+	<cfif len(arguments.str) and arguments.captureDelim>
 		<cfset ArrayAppend(loc.results, arguments.str)>
 	</cfif>
 <!--- 	
@@ -62,6 +63,45 @@
 	<!--- <cfdump var="#loc.results#"> --->
 	<cfreturn loc.results>
 </cffunction>
+
+<cffunction name="pregSplit3">
+	<cfargument name="regex" type="string" required="true" hint="I am the regular expression being used to split the string." />
+	<cfargument name="str" type="string" required="true" hint="I am the string being split." />
+	<cfargument name="limit" type="numeric" required="false" default="0" hint="the number of results to limit to" />
+	<cfargument name="captureDelim" type="boolean" required="false" default="true" hint="should we capture the delim also" />
+	<cfset var loc = {}>
+	<cfset loc.results = arrayNew(1)>
+	<cfset loc.matches = ReMatchNoCase(arguments.regex, arguments.str)>
+    <cfif ArrayIsEmpty(loc.matches)>
+		<cfset loc.results[1] = arguments.str>
+		<cfreturn loc.results>
+    </cfif>
+	<cfset loc.matcheslen = ArrayLen(loc.matches)>
+	<cfloop from="1" to="#loc.matcheslen#" index="loc.i">
+		<cfset loc.match = loc.matches[loc.i]>
+		<!--- <cfdump var="#arguments.str#"><br/> --->
+		<cfset loc.f = FindNoCase(loc.match, arguments.str)>
+		<cfif loc.f gt 1>
+			<cfset ArrayAppend(loc.results, left(arguments.str, loc.f - 1))>
+		</cfif>
+		<cfset ArrayAppend(loc.results, loc.match)>
+		<cfset loc.counter = loc.f + len(loc.match)>
+		<cfset loc.strlen = len(arguments.str)>
+<!--- 		<cfdump var="#loc.strlen#"><br/>
+		<cfdump var="#loc.counter#"><br/>
+		<cfdump var="#mid(arguments.str, loc.f, loc.counter)#"><br/> --->
+		<cfif loc.counter lte loc.strlen>
+			<cfset arguments.str = right(arguments.str, loc.strlen - loc.counter + 1)>
+		</cfif>
+	</cfloop>
+<!--- match:<cfdump var="#loc.match#"><br/>
+arguments.str:<cfdump var="#arguments.str#"><br/> --->
+	<cfif len(arguments.str) and FindNoCase(loc.match, arguments.str) eq 0>
+		<cfset ArrayAppend(loc.results, arguments.str)>
+	</cfif>
+	<cfreturn loc.results>
+</cffunction>
+
 
 <cffunction name="pregSplit">
 	<cfargument name="regex" type="string" required="true" hint="I am the regular expression being used to split the string." />

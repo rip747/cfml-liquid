@@ -394,15 +394,15 @@
 
 
 
-	<cffunction name="raised" returntype="string" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
+	<cffunction name="raised" returntype="any" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
 		<cfargument type="string" name="expression" required="true">
 		<cftry>
 			<cfset evaluate(arguments.expression)>
 			<cfcatch type="any">
-				<cfreturn trim(cfcatch.type)>
+				<cfreturn "#cfcatch#">
 			</cfcatch>
 		</cftry>
-		<cfreturn "">
+		<cfreturn StructNew()>
 	</cffunction>
 	
 	

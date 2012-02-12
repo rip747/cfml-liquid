@@ -59,7 +59,11 @@
 	<cffunction name="split" hint="Splits the given string">
 		<cfargument name="str" type="string" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
-		<cfreturn pregSplit(this.pattern, arguments.str, arguments.limit, false)>
+		<cfset var matches = pregSplit(this.pattern, arguments.str, arguments.limit, false)>
+<!--- <cfdump var="#arguments.str#" label="splite">
+<cfdump var="#matches#" label="splite"> --->
+<!--- <cfabort> --->
+		<cfreturn matches>
 	</cffunction>
 	
 </cfcomponent>

@@ -84,11 +84,13 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<!--- need to put the values from the returning array into our reference array --->
 <!--- <cfset loc.regex = CreateObject("java","java.util.regex.Pattern").compile(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, 32)>
 <cfdump var="#loc.regex.split(arguments.source)#"><cfabort> --->
-		<cfset arguments.source = pregSplit(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, arguments.source)>
+		<cfset arguments.source = pregSplit3(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, arguments.source)>
 		<cfloop array="#arguments.source#" index="loc.i">
 			<cfset ArrayAppend(loc.arr, loc.i)>
 		</cfloop>
-
+<!--- <cfdump var="#arguments.source#" label="tokenize">
+<cfdump var="#loc.arr#" label="tokenize"> --->
+<!--- <cfabort> --->
 		<cfreturn loc.arr>
 	</cffunction>
 
