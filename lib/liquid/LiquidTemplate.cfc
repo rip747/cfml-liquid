@@ -31,7 +31,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		</cfif>
 
 		<!--- cache --->
-		<cfset this._cache = startCache()>
+		<cfset startCache()>
 		
 		<cfreturn this>
 	</cffunction>
@@ -43,7 +43,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 	
 	
 	<cffunction name="getCache">
-		<cfreturn this._cache>
+		<cfreturn application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 	</cffunction>
 
 	<cffunction name="getRoot">
@@ -55,8 +55,10 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 	</cffunction>
 	
 	<cffunction name="startCache">
-		<cfset request[application.LiquidConfig.LIQUID_CACHE_KEY] = {}>
-		<cfreturn request[application.LiquidConfig.LIQUID_CACHE_KEY]>
+		<cfif !StructKeyExists(application, application.LiquidConfig.LIQUID_CACHE_KEY)>
+			<cfset application[application.LiquidConfig.LIQUID_CACHE_KEY] = createObject("component", "LiquidCache").init()>
+		</cfif>
+		<cfreturn application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 	</cffunction>
 	
 	<cffunction name="registerTag">
@@ -93,17 +95,19 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfset var loc = {}>
 		<cfset loc.key = hash(arguments.source)>
 		<cfset loc.found = false>
-		<cfif !structIsEmpty(this._cache)>
-			<cfif !StructKeyExists(this._cache, loc.key) OR this._root neq this._cache[loc.key] OR this._root.checkIncludes() eq true>
-				<cfset loc.found = true>
-			<cfelse>
+		<cfset loc.cache = getCache()>
+		<!--- <cfif !structIsEmpty(loc.cache)> --->
+<!--- 			<cfif loc.cache.exists(loc.key) AND this._root.checkIncludes() neq true>
+				<cfset this._root = loc.cache.read(loc.key)>
+			<cfelse> --->
 				<cfset this._root = createObject("component", "LiquidDocument").init(
 						this.tokenize(arguments.source)
 						,this._fileSystem
 					)>
-				<cfset this._cache[loc.key] = this._root>
-			</cfif>
-		<cfelse>
+				<cfset loc.cache.write(loc.key, this._root)>
+			<!--- </cfif> --->
+<!--- 		<cfelse>
+
 <!--- <cfdump var="#this.tokenize(arguments.source)#" label="Tokenized Source">
 <cfdump var="#this._fileSystem#" label="File System"> --->
 			<cfset this._root = createObject("component", "LiquidDocument").init(
@@ -112,7 +116,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 				)>
 <!--- <cfdump var="#this._root#" label="Document Root"> --->
 <!--- parse done<cfabort> --->
-		</cfif>
+		</cfif> --->
 <!--- 		here<cfdump var="#this._root#"><cfabort> --->
 		<cfreturn this>
 	</cffunction>
@@ -142,8 +146,9 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 			<cfset loc.context.add_filters(loc.filter)>
 		</cfloop>
 
-<!--- <cfdump var="#this._root#" label="template::render()::root">
-<cfdump var="#loc.context#" label="template::render()::context"> --->
+<!--- <cfdump var="#this._root#" label="template::render()::root"> --->
+<!--- <cfdump var="#loc.context#" label="template::render()::context"> --->
+<!--- <cfabort> --->
 		<cfreturn this._root.render(loc.context)>
 	</cffunction>
 

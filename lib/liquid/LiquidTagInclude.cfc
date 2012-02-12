@@ -39,8 +39,8 @@ with each value of bar
 		<cfset loc.regex = createObject("component", "LiquidRegexp").init('("[^"]+"|''[^'']+'')(\s+(with|for)\s+(#application.LiquidConfig.LIQUID_QUOTED_FRAGMENT#))?')>
 		
 		<cfif loc.regex.match(arguments.markup)>
-			
-			<cfset this.template_name = left(loc.regex.matches[2], len(loc.regex.matches[2]) - 2)>
+
+			<cfset this.template_name = mid(loc.regex.matches[2], 2, len(loc.regex.matches[2]) - 2)>
 			
 			<cfif ArrayLen(loc.regex.matches) gte 3 AND loc.regex.matches[3] eq "for">
 				<cfset this.collection = true>
@@ -67,7 +67,7 @@ with each value of bar
 		<cfif !StructKeyExists(this, "file_system")>
 			<cfset createObject("component", "LiquidException").init("No file system")>
 		</cfif>
-	
+
 		<!--- read the source of the template and create a new sub document --->
 		<cfset loc.source = this.file_system.read_template_file(this.template_name)>
 		
@@ -76,13 +76,17 @@ with each value of bar
 		<cfset loc.cache = application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 
 		<cfif IsDefined("loc.cache")>
-			<cfif (this.document eq loc.cache.read(this._hash)) neq false AND this.document.checkIncludes() neq true>
-			<cfelse>
+<!--- 			<cfif loc.cache.exists(this._hash)>
+				<cfset this.document = loc.cache.read(this._hash)>
+			</cfif>
+		
+			<cfdump var="#this.document#"><cfabort>
+			<cfif this.document.checkIncludes() eq true> --->
 				<cfset loc.template = createObject("component", "LiquidTemplate")>
 				<cfset this.document = createObject("component", "LiquidDocument").init(loc.template.tokenize(loc.source), this.file_system)>
-				<cfset loc.s = createObject("component", "LquidTemplate").tokenize(loc.source)>
+				<cfset loc.s = createObject("component", "LiquidTemplate").tokenize(loc.source)>
 				<cfset loc.cache.write(this._hash, this.document)>
-			</cfif>
+			<!--- </cfif> --->
 		<cfelse>
 			<cfset this.document = createObject("component", "LiquidDocument").init(loc.s, this.file_system)>
 		</cfif>

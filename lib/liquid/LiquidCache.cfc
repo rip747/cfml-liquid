@@ -2,7 +2,7 @@
 	
 	<cfset this._expire = 3600>
 	
-	<cffunction name="init">public function __construct($options = array())
+	<cffunction name="init">
 		<cfargument name="options" type="struct" required="false" default="#StructNew()#">
 		
 		<cfif StructKeyExists(arguments, "_expire")>
@@ -20,7 +20,7 @@
 	<cffunction name="exists">
 		<cfargument name="key" type="string" required="true">
 		<cfif StructKeyExists(application[application.LiquidConfig.LIQUID_CACHE_KEY], arguments.key)>
-			<cfreturn ture>
+			<cfreturn true>
 		</cfif>
 		<cfreturn false>
 	</cffunction>

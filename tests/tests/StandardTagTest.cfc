@@ -470,9 +470,10 @@ next
 		<cfset loc.file_system = createObject("component", "cfml-liquid.tests.tests.classes.LiquidTestFileSystem")>
 		<cfset loc.template.setFileSystem(loc.file_system)>
 		<cfset loc.template.parse("Outer-{% include 'inner' with 'value' other:23 %}-Outer{% include 'inner' for var other:'loop' %}")>
-		<cfset loc.output = loc.template.render(loc.a)>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset loc.e = "Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop">
 
-		<cfset assert("Outer-Inner: value23-OuterInner: 1loopInner: 2loopInner: 3loop", loc.output)>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_include_tag_no_with">
@@ -481,9 +482,10 @@ next
 		<cfset loc.file_system = createObject("component", "cfml-liquid.tests.tests.classes.LiquidTestFileSystem")>
 		<cfset loc.template.setFileSystem(loc.file_system)>
 		<cfset loc.template.parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}")>
-		<cfset loc.output = loc.template.render(loc.a)>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset loc.e = "Outer-Inner: orig-Outer-Inner: orig23">
 
-		<cfset assert("Outer-Inner: orig-Outer-Inner: orig23", loc.output)>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>

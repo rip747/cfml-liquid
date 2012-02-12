@@ -3,7 +3,7 @@ This project aims to port the Liquid Templating Language over to ColdFusion. For
 Currect State
 =============
 
-The port is complete. Now just need to get tests passing. currently there are 47 failures and 15 errors.
+The port is complete. Now just need to get tests passing. currently there are 18 failures and 13 errors.
 
 Running Tests
 =============
