@@ -29,6 +29,7 @@ Captures the output inside a block and assigns it to a variable
 		<cfargument name="context" type="any" required="true" hint="">
 		<cfset var loc = {}>
 		<cfset loc.output = super.render(arguments.context)>
+<!--- 		<cfdump var="#loc.output#"><cfabort> --->
 		<cfset arguments.context.set(this._to, loc.output)>
 	</cffunction>	
 </cfcomponent>

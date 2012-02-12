@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.AssignTest")>
-	<cfset test.runTest("test", "test_invalid_assign")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardTagTest")>
+	<cfset test.runTest("test", "")>
 
 </cfif>
 

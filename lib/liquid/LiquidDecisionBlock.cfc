@@ -32,7 +32,7 @@
 		<cfargument name="context" type="any" required="true">
 		
 		<cfset this._left = this.string_value(arguments.context.get(arguments.left))>
-		<cfset this._right = this.string_value(arguemnts.context.get(arguments.right))>
+		<cfset this._right = this.string_value(arguments.context.get(arguments.right))>
 
 		<cfreturn this._left eq this._right>
 	</cffunction>
