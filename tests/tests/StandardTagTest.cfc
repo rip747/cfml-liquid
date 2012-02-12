@@ -187,7 +187,7 @@
 		<cfset loc.e = " 1/3  2/3  3/3 ">
 		<cfset loc.t = "{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-		
+
 		<cfset loc.e = " 1  2  3 ">
 		<cfset loc.t = "{%for item in array%} {{forloop.index}} {%endfor%}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
@@ -199,7 +199,7 @@
 		<cfset loc.e = " 2  1  0 ">
 		<cfset loc.t = "{%for item in array%} {{forloop.rindex0}} {%endfor%}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-
+ 
 		<cfset loc.e = " 3  2  1 ">
 		<cfset loc.t = "{%for item in array%} {{forloop.rindex}} {%endfor%}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>

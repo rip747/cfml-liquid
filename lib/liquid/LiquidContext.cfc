@@ -148,11 +148,14 @@
 	<cffunction name="parse" returntype="any" hint="Resolved the namespaced queries gracefully.">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
-
+<!--- <cfdump var="#arguments.key#"> --->
 		<!--- Support [0] style array indicies --->
 		<cfif ReFindNoCase("|\[[0-9]+\]|", arguments.key)>
 			<cfset arguments.key = ReReplaceNoCase(arguments.key, "|\[([0-9]+)\]|", ".\1")>
 		</cfif>
+		
+<!--- <cfdump var="#arguments.key#"> --->
+		
 		
 <!--- 		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
 		<cfif !ArrayIsEmpty(loc.matches)>

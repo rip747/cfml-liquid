@@ -40,7 +40,7 @@
 			<cfset createobject("component", "LiquidException").init("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]")>
 			
 		</cfif>
-		
+
 		<cfreturn this>
 	</cffunction>
 	
@@ -102,19 +102,23 @@
 		<cfset arguments.context.push()>
 		
 		<cfset loc.length = ArrayLen(loc.collection)>
-<!--- <cfdump var="#loc.collection#"> --->
+
 		<cfloop from="1" to="#loc.length#" index="loc.index">
-<!--- <cfdump var="#arguments.context.assigns#"> --->
+<!--- <cfdump var="#loc.collection#">
+<cfdump var="#loc.index#">
+<cfdump var="#loc.index#">
+<cfdump var="#loc.length#"> --->
 			<cfset arguments.context.set(this._variableName, loc.collection[loc.index])>
 			<cfset loc.temp = {}>
 			<cfset loc.temp.name = this._name>
 			<cfset loc.temp.length = loc.length>
-			<cfset loc.temp.index = loc.index + 1>
-			<cfset loc.temp.index0 = loc.index>
-			<cfset loc.temp.rindex = loc.length - loc.index>
-			<cfset loc.temp.rindex0 = loc.length - loc.index - 1>
-			<cfset loc.temp.first = IIf(loc.index eq 1, de(true), de(false))>
-			<cfset loc.temp.last = IIF(loc.index eq (loc.length - 1), de(true), de(false))>
+			<cfset loc.temp.index = loc.index>
+			<cfset loc.temp.index0 = loc.index - 1>
+			<cfset loc.temp.rindex = loc.length - loc.index + 1>
+			<cfset loc.temp.rindex0 = loc.length - loc.index>
+			<cfset loc.temp.first = IIf(loc.index eq 1, de(1), de(0))>
+			<cfset loc.temp.last = IIF(loc.index eq (loc.length), de(1), de(0))>
+<!--- <cfdump var="#loc.temp#"> --->
 			<cfset arguments.context.set('forloop', loc.temp)>
 <!--- <cfdump var="#arguments.context.assigns#"><cfabort> --->
 			<cfset loc.result &= this.render_all(this._nodelist, arguments.context)>
