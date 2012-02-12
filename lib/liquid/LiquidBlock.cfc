@@ -153,7 +153,6 @@
 		<cfargument name="context" type="any" required="true">
 <!--- <cfdump var="#this._nodelist#">
 <cfdump var="#arguments.context#"> --->
-
 		<cfreturn this.render_all(this._nodelist, arguments.context)>
 	</cffunction>
 
@@ -170,6 +169,7 @@
 <!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all()"> --->
 <!--- <cfdump var="#arguments.list#"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
+<cfdump var="#loc.token#" label="token">
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
 				<cfset loc.result &= loc.token.render(arguments.context)>
 			<cfelse>

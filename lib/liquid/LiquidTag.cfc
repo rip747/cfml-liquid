@@ -33,10 +33,13 @@
 		<cfset loc.attribute_regexp = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_TAG_ATTRIBUTES)>
 		
 		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
+		
+		<cfset this.attributes = {}>
 
-		<cfif !ArrayIsEmpty(loc.matches)>
-			<cfset this.attributes.addAll(loc.matches)>
-		</cfif>
+		<cfloop array="#loc.matches#" index="loc.match">
+			<cfset this.attributes[loc.match[1]] = loc.match[2]>
+		</cfloop>
+	
 	</cffunction>
 
 	<cffunction name="name" hint="Returns the name of the tag">

@@ -30,16 +30,15 @@
 		<cfset loc.temp = array_shift(loc.matches)>
 		<cfset loc.matches = loc.temp.arr>
 		<cfset loc.match = loc.temp.value>
-		
-<!--- <cfdump var="#loc.matches#"><cfabort> --->
-		
-		foreach(loc.matches as $match_key => $sub_matches)
-		{
-			foreach($sub_matches as $sub_match_key => $sub_match)
-			{
-				$result[$sub_match_key][$match_key] = $sub_match;
-			}
-		}
+
+		<cfloop from="1" to="#ArrayLen(loc.matches)#" index="loc.m">
+			<cfloop from="1" to="#ArrayLen(loc.matches[loc.m])#" index="loc.i">
+				<cfif ArrayLen(loc.results) neq loc.i>
+					<cfset loc.results[loc.i] = []>
+				</cfif>
+				<cfset ArrayAppend(loc.results[loc.i], loc.matches[loc.m][loc.i])>
+			</cfloop>
+		</cfloop>
 
 		<cfreturn loc.results>
 	</cffunction>

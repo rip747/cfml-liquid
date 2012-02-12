@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "TEST_OVERRIDE_GLOBAL_FILTER")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.HtmlTagTest")>
+	<cfset test.runTest("test", "test_html_table_with_different_cols")>
 
 </cfif>
 

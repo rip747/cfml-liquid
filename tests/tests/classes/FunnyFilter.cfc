@@ -28,10 +28,10 @@
     	<cfreturn "<p>" & arguments.input & "</p>">
 	</cffunction>
 
-	<cffunction name="link_to"> (, )
-		<cfargument name="$name" type="string" required="true">
-		<cfargument name="$url" type="string" required="true">
-		<cfreturn "<a href=""" & arguments.url & """>" & arguments.$name & "</a>">
+	<cffunction name="link_to">
+		<cfargument name="name" type="string" required="true">
+		<cfargument name="url" type="string" required="true">
+		<cfreturn "<a href=""" & arguments.url & """>" & arguments.name & "</a>">
 	</cffunction>
 
 </cfcomponent>

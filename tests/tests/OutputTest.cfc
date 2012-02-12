@@ -5,7 +5,7 @@
 		<cfset loc.a['best_cars'] = 'bmw'>
 		<cfset loc.a['car'] = {bmw = 'good', gm = 'bad'}>
 
-		<cfset loc.filters = createObject("component", "classes.FunnyFilter")>
+		<cfset this.filters = createObject("component", "classes.FunnyFilter")>
 		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
 	</cffunction>

@@ -36,18 +36,18 @@ Quickly create a table from a collection
 	<cffunction name="render">
 		<cfargument name="context" type="any" required="true" hint="LiquidContext">
 		<cfset var loc = {}>
-		
+
 		<cfset loc.collection = arguments.context.get(this.collection_name)>
-		
-		<cfif !StructKeyExists(loc, "collection") OR !IsArray(loc.collection) OR ArrayIsEmpty(loc.collection)>
+
+		<cfif !StructKeyExists(loc, "collection") OR !IsArray(loc.collection)>
 			<cfreturn "">
 		</cfif>
 		
 		<!--- discard keys --->
-		<!--- TODO: do we even need this? --->
-		$collection = array_values($collection);
-		
-		<cfif StructKeyExists(variables.attributes, "limit") OR StructKeyExists(variables.attributes, "offset")>
+		<!--- TODO: do we even need this? doesn't look like it does anything --->
+		<!--- $collection = array_values($collection); --->
+
+		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
 			<cfset loc.limit = arguments.context.get(this.attributes['limit'])>
 			<cfset loc.offset = arguments.context.get(this.attributes['offset'])>
 			<cfset loc.collection = createObject("java", "java.util.ArrayList").Init(loc.collection).subList(JavaCast("int", loc.offset), JavaCast("int", loc.limit))>
@@ -59,16 +59,16 @@ Quickly create a table from a collection
 		
 		<cfset loc.row = 1>
 		<cfset loc.col = 0>
-		
+
 		<cfset loc.result = '<tr class="row1">#chr(10)#'>
 		
 		<cfset arguments.context.push()>
 		
 		<cfloop from="1" to="#loc.length#" index="loc.index">
-			
+
 			<cfset arguments.context.set(this.variable_name, loc.collection[loc.index])>
 			<cfset loc.temp = {}>
-			<cfset loc.temp.name = variables._name>
+			<cfset loc.temp.name = this.variable_name>
 			<cfset loc.temp.length = loc.length>
 			<cfset loc.temp.index = loc.index + 1>
 			<cfset loc.temp.index0 = loc.index>
@@ -78,11 +78,11 @@ Quickly create a table from a collection
 			<cfset loc.temp.last = IIF(loc.index eq (loc.length - 1), de(true), de(false))>
 			<cfset arguments.context.set('tablerowloop', loc.temp)>
 			
-			<cfset loc.result &= '<td class="col#loc.col++#">' & this.render_all(this._nodelist, arguments.context) & "</td>">
+			<cfset loc.result &= '<td class="col#++loc.col#">' & this.render_all(this._nodelist, arguments.context) & "</td>">
 			
-			<cfif loc.col eq loc.cols AND not (loc.index eq loc.length - 1)>
+			<cfif loc.col eq loc.cols AND not (loc.index - 1 eq loc.length - 1)>
 				<cfset loc.col = 0>
-				<cfset loc.result &= '</tr>#chr(10)#<tr class="row#loc.row++#">'>
+				<cfset loc.result &= '</tr>#chr(10)#<tr class="row#++loc.row#">'>
 			</cfif>
 			
 		</cfloop>

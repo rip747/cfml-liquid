@@ -152,6 +152,10 @@
 		<cfset var loc = {}>
 
 		<!--- Support [0] style array indicies --->
+		<cfif ReFindNoCase("|\[[0-9]+\]|", arguments.key)>
+			<cfset arguments.key = ReReplaceNoCase(arguments.key, "|\[([0-9]+)\]|", ".\1")>
+		</cfif>
+		
 <!--- 		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
 		<cfif !ArrayIsEmpty(loc.matches)>
 			<cfset arguments.key = ReReplace(arguments.key, "|\[([0-9]+)\]|", "\1", "all")>
