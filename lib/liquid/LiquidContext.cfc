@@ -190,7 +190,13 @@
 				<cfif !IsObject(loc.object)>
 <!--- <cfdump var="#loc.object#">				
 <cfdump var="#loc.next_part_name#"> --->
-					<cfif loc.next_part_name eq 'size' AND ArrayLen(loc.parts) eq 0>
+					<cfif
+						loc.next_part_name eq 'size'
+						AND ArrayLen(loc.parts) eq 0
+						AND (
+								(IsStruct(loc.object) || IsObject(loc.object)) AND !StructKeyExists(loc.object, "size")
+								OR (IsArray(loc.object) || IsQuery(loc.object))
+						)>
 						<cfif IsArray(loc.object)>
 							<cfreturn ArrayLen(loc.object)>
 						<cfelseif IsQuery(loc.object)>
