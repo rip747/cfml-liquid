@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.FilterbankTest")>
-	<cfset test.runTest("test", "TEST_FUNCTION_FILTER")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.FilterTest")>
+	<cfset test.runTest("test", "TEST_JOIN")>
 
 </cfif>
 

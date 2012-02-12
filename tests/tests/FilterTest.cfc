@@ -43,7 +43,7 @@
 	</cffunction>
 
 	<cffunction name="test_second_filter_overwrites_first">		
-		<cfset loc.var = create_var_instance('var | money ')>
+		<cfset loc.v = create_var_instance('var | money ')>
 		<cfset loc.f = create_class_instance("MoneyFilter")>
 		<cfset loc.context.add_filters(loc.f)>
 		<cfset loc.f = create_class_instance("CanadianMoneyFilter")>
@@ -56,7 +56,7 @@
 	</cffunction>
 	
 	<cffunction name="test_size">
-		<cfset loc.var = create_var_instance("var | size")>
+		<cfset loc.v = create_var_instance("var | size")>
 		<cfset loc.f = create_class_instance("MoneyFilter")>
 		<cfset loc.context.add_filters(loc.f)>
 
@@ -67,7 +67,7 @@
 	</cffunction>
 	
 	<cffunction name="test_join">
-		<cfset loc.var = create_var_instance("var | join")>
+		<cfset loc.v = create_var_instance("var | join")>
 		<cfset loc.a = [1, 2, 3, 4]>
 		<cfset loc.context.set('var', loc.a)>
 		<cfset loc.e = "1 2 3 4">
@@ -76,7 +76,7 @@
 	</cffunction>
 	
 	<cffunction name="test_strip_html">
-		<cfset loc.var = create_var_instance("var | strip_html")>
+		<cfset loc.v = create_var_instance("var | strip_html")>
 
 		<cfset loc.context.set('var', "<b>bla blub</a>")>
 		<cfset loc.e = "bla blub">

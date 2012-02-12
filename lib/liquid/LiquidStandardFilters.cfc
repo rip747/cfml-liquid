@@ -94,7 +94,7 @@
 			<cfset arguments.string = REReplaceNoCase(arguments.string, "<\ *[a-z].*?>", "", "all")>
 			<cfset arguments.string = REReplaceNoCase(arguments.string, "<\ */\ *[a-z].*?>", "", "all")>
 		</cfif>
-		<cfreturn arguments.input>
+		<cfreturn arguments.string>
 	</cffunction>
 
 	<cffunction name="join" hint="Joins elements of an array with a given character between them">
