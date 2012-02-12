@@ -12,7 +12,7 @@
 <cfelse>
 
 	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "TEST_LENGTH_QUERY")>
+	<cfset test.runTest("test", "TEST_OVERRIDE_GLOBAL_FILTER")>
 
 </cfif>
 

@@ -75,7 +75,7 @@
 		<cfset loc.e = loc.template.render()>
  		<cfset assert("loc.e eq 'Global test'")>
 		
-		<cfset loc.LocalFilter = createObject("component", "classes.LocalFilter").init()>
+		<cfset loc.LocalFilter = createObject("component", "classes.LocalFilter")>
 		<cfset loc.e = loc.template.render(StructNew(), loc.LocalFilter)>
 		<cfset assert("loc.e eq 'Local test'")>
 	</cffunction>
