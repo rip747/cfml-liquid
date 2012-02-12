@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.StatementsTest")>
-	<cfset test.runTest("test", "TEST_VAR_STRINGS_EQUAL")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.IfElseTest")>
+	<cfset test.runTest("test", "TEST_IF_FROM_VARIABLE")>
 
 </cfif>
 

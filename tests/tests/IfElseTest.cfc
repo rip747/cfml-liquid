@@ -66,12 +66,11 @@
 		<cfset loc.t = "{% if foo.bar %} NO {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 
-		
 		<cfset loc.a = {var = "text"}>
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if var %} YES {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-		
+	
 		<cfset loc.a = {var = "true"}>
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if var %} YES {% endif %}">
@@ -85,7 +84,7 @@
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if ""foo"" %} YES {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template)>
-		
+
 		<cfset loc.a = {foo = {bar = true}}>
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if foo.bar %} YES {% endif %}">
@@ -101,7 +100,6 @@
 		<cfset loc.t = "{% if foo.bar %} YES {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 		
-		
 		<cfset loc.a = {var = false}>
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if var %} NO {% else %} YES {% endif %}">
@@ -111,7 +109,7 @@
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if var %} NO {% else %} YES {% endif %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-		
+
 		<cfset loc.a = {var = true}>
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if var %} YES {% else %} NO {% endif %}">
