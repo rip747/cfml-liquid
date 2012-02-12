@@ -57,7 +57,7 @@
 			<cfset this.method_map[arguments.filter] = false>
 			<cfreturn true>
 		</cfif>
-		
+
 		<cfset createObject("component", "LiquidException").init("Parameter passed to add_filter must a class or a function")>
 	</cffunction>
 

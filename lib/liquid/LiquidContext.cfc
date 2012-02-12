@@ -5,14 +5,12 @@
 	<cffunction name="init">
 		<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
 		<cfargument name="registers" type="struct" required="false" default="#StructNew()#">
-		
-		
+				
 		<cfset this.registers = arguments.registers>
 		<cfset this.assigns = arguments.assigns>
 		<cfset this.filterbank = createObject("component", "LiquidFilterbank").init(this)>
 		<cfset this.environments = {}>
 		<cfset this.scopes = [this.assigns]>
-		<!--- <cfset ArrayAppend(this.scopes, )> --->
 
 		<cfreturn this>
 	</cffunction>

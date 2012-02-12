@@ -6,16 +6,26 @@
 	<cffunction name="setup">
 		<cfset this.context = createObject("component", "cfml-liquid.lib.liquid.LiquidContext").init()>
 	</cffunction>
-
+<!---
+	WAY too dangerous to allow filter based off of global methods
 	<cffunction name="test_function_filter">
 		<cfset loc.var = createObject("component", "cfml-liquid.lib.liquid.LiquidVariable").init('var | function_filter')>
+		<cfset this.context.function_filter = function_filter>
 		<cfset this.context.set('var', 1000)>
-		<cfset this.context.add_filters('test_function_filter')>
+		<cfset this.context.add_filters('request.function_filter')>
 		<cfset loc.e = 'worked'>
 		<cfset loc.r = loc.var.render(this.context)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 	
+ 	<cffunction name="function_filter">
+		<cfargument name="value" type="string" required="true">
+		<cfreturn "worked">
+	</cffunction>
+	<cfset request.function_filter = function_filter>
+ --->
+<!--- 
+	CF doesn't have static classes
 	<cffunction name="test_static_class_filter">
 		<cfset loc.var = createObject("component", "cfml-liquid.lib.liquid.LiquidVariable").init('var | static_test')>
 		<cfset this.context.set('var', 1000)>
@@ -24,6 +34,7 @@
 		<cfset loc.r = loc.var.render(this.context)>
 		<cfset assert("loc.e eq loc.r")>	
 	</cffunction>
+ --->
 	
 	<cffunction name="test_object_filter">
 		<cfset loc.var = createObject("component", "cfml-liquid.lib.liquid.LiquidVariable").init('var | instance_test_one')>
@@ -39,10 +50,5 @@
 		<cfset loc.r = loc.var.render(this.context)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
-	
-	<cffunction name="function_filter">
-		<cfargument name="value" type="string" required="true">
-		<cfreturn "worked">
-	</cffunction>
-	
+	 
 </cfcomponent>
