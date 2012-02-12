@@ -24,7 +24,7 @@
 		<cfif !IsArray(arguments.tokens)>
 			<cfreturn>
 		</cfif>
-
+<!--- <cfdump var="#arguments.tokens#"> --->
 		<cfset loc.tags = createObject("component", "LiquidTemplate").getTags()>
 <!--- <cfdump var="#loc.tags#" label="all tags"> --->
 		<cfloop condition="#ArrayLen(arguments.tokens)#">
@@ -32,10 +32,12 @@
 			<cfset loc.temp = array_shift(arguments.tokens)>
 			<cfset arguments.tokens = loc.temp.arr>
 			<cfset loc.token = loc.temp.value>
-
+			<cfset loc.start_regexp.match(loc.token)>
+			<cfset loc.tag_regexp.match(loc.token)>
 <!--- <cfdump var="token: #loc.token#">
-<cfdump var="#this._nodelist#" label="in tokens loop: _nodelist"> --->
-
+<cfdump var="#this._nodelist#" label="in tokens loop: _nodelist">
+<cfdump var="#loc.start_regexp.matches#" label="start_regexp">
+<cfdump var="#loc.tag_regexp.matches#" label="tag_regexp"> --->
 			<cfif loc.start_regexp.match(loc.token)>
 
 				<cfif loc.tag_regexp.match(loc.token)>
@@ -86,6 +88,7 @@
 					</cfif>
 				
 				<cfelse>
+
 					<cfset createobject("component", "LiquidException").init("Tag #loc.token# was not properly terminated")>
 				</cfif>
 				

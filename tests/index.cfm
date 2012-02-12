@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.IfElseTest")>
-	<cfset test.runTest("test", "TEST_IF_FROM_VARIABLE")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.BlockTest")>
+	<cfset test.runTest("test", "TEST_VARIABLE_BEGINNING")>
 
 </cfif>
 

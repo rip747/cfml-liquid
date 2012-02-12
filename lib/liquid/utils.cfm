@@ -15,6 +15,54 @@
 	<cfreturn loc.ret>
 </cffunction>
 
+
+<cffunction name="pregSplit2">
+	<cfargument name="regex" type="string" required="true" hint="I am the regular expression being used to split the string." />
+	<cfargument name="str" type="string" required="true" hint="I am the string being split." />
+	<cfargument name="limit" type="numeric" required="false" default="0" hint="the number of results to limit to" />
+	<cfargument name="captureDelim" type="boolean" required="false" default="true" hint="should we capture the delim also" />
+	<cfargument name="noEmpties" type="boolean" required="false" default="true" hint="remove empty elements">
+	<cfset var loc = {}>
+	<cfset loc.results = arrayNew(1)>
+	<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
+    <cfif not loc.test.pos[1]>
+		<cfset loc.results[1] = arguments.str>
+    </cfif>
+	<cfif loc.test.pos[1] gt 1>
+		<cfset ArrayAppend(loc.results, mid(arguments.str, 1, loc.test.pos[1] - 1))>
+	</cfif>
+    <cfloop condition="loc.test.pos[1] gt 0">
+		<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
+		<cfset ArrayAppend(loc.results, mid(arguments.str, loc.test.pos[1], loc.test.len[1]))>
+		<cfset arguments.str = RemoveChars(arguments.str, 1, loc.test.pos[1] + loc.test.len[1] - 1)>
+		<cfif loc.test.pos[1] neq 1>
+			<cfset ArrayAppend(loc.results, mid(arguments.str, 1, loc.test.pos[1] - 1))>
+		</cfif>
+		<cfset loc.test = REFind(arguments.regex, arguments.str,1,1)>
+	</cfloop>
+	<cfif len(arguments.str)>
+		<cfset ArrayAppend(loc.results, arguments.str)>
+	</cfif>
+<!--- 	
+	<cfif arguments.noEmpties and !ArrayIsEmpty(loc.results)>
+		<cfset loc.counter = ArrayLen(loc.results)>
+		<cfloop from="#loc.counter#" to="1" index="loc.i" step="-1">
+			<cfif !len(trim(loc.results[loc.i]))>
+				<cfset ArrayDeleteAt(loc.results, loc.i)>
+			</cfif>
+		</cfloop>
+	</cfif> --->
+	
+<!--- 	<cfif !arguments.captureDelim and ArrayLen(loc.results) gt 1>
+		<cfset ArrayDeleteAt(loc.results, 1)>
+		<cfif !ArrayIsEmpty(loc.results)>
+			<cfset ArrayDeleteAt(loc.results, ArrayLen(loc.results))>
+		</cfif>
+	</cfif> --->
+	<!--- <cfdump var="#loc.results#"> --->
+	<cfreturn loc.results>
+</cffunction>
+
 <cffunction name="pregSplit">
 	<cfargument name="regex" type="string" required="true" hint="I am the regular expression being used to split the string." />
 	<cfargument name="str" type="string" required="true" hint="I am the string being split." />
@@ -53,8 +101,10 @@
 			</cfif>
 		</cfif>
 	</cfif>
+	<!--- <cfdump var="#loc.results#"> --->
 	<cfreturn loc.results>
 </cffunction>
+
 
 <cffunction name="method_exists">
 	<cfargument name="class" type="any" required="true">

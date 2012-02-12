@@ -155,32 +155,32 @@
 	<cffunction name="test_nested_if">
 		<cfset loc.e = ''>
 		<cfset loc.t = "{% if false %}{% if false %} NO {% endif %}{% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 		
-		<cfset loc.e = ''>
+ 		<cfset loc.e = ''>
 		<cfset loc.t = "{% if false %}{% if true %} NO {% endif %}{% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 
 		<cfset loc.e = ''>
 		<cfset loc.t = "{% if true %}{% if false %} NO {% endif %}{% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if true %}{% if true %} YES {% endif %}{% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 
 		
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if true %}{% if true %} YES {% else %} NO {% endif %}{% else %} NO {% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 		
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if true %}{% if false %} NO {% else %} YES {% endif %}{% else %} NO {% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 		
 		<cfset loc.e = ' YES '>
 		<cfset loc.t = "{% if false %}{% if true %} NO {% else %} NONO {% endif %}{% else %} YES {% endif %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 	</cffunction>
   
 	<cffunction name="test_comparisons_on_null">

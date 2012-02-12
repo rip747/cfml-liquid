@@ -75,13 +75,15 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 	<cffunction name="tokenize" hint="Tokenizes the given source string">
 		<cfargument name="source" type="string" required="true">
 		<cfset var loc = {}>
-		
+<!--- <cfdump var="#arguments.source#">	 --->
 		<!--- use a java array list since we need to pass the parsed token by reference. THIS IS THE KEY TO ALL OF THIS! --->
 		<cfset loc.arr = CreateObject("java","java.util.ArrayList").Init()>
 		<cfif !len(arguments.source)>
 			<cfreturn loc.arr>
 		</cfif>
 		<!--- need to put the values from the returning array into our reference array --->
+<!--- <cfset loc.regex = CreateObject("java","java.util.regex.Pattern").compile(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, 32)>
+<cfdump var="#loc.regex.split(arguments.source)#"><cfabort> --->
 		<cfset arguments.source = pregSplit(application.LiquidConfig.LIQUID_TOKENIZATION_REGEXP, arguments.source)>
 		<cfloop array="#arguments.source#" index="loc.i">
 			<cfset ArrayAppend(loc.arr, loc.i)>
@@ -151,5 +153,6 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 <!--- <cfabort> --->
 		<cfreturn this._root.render(loc.context)>
 	</cffunction>
+
 
 </cfcomponent>
