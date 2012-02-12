@@ -12,7 +12,7 @@
 <cfelse>
 
 	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "TEST_CENTS_THROUGH_DROP")>
+	<cfset test.runTest("test", "TEST_LENGTH_QUERY")>
 
 </cfif>
 

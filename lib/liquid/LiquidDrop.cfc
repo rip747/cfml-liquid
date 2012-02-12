@@ -27,6 +27,7 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="beforeMethod" hint="Catch all method that is invoked before a specific method">
 		<cfargument name="method" type="string" required="true">
+		<cfreturn "">
 	</cffunction>
 
 
@@ -38,17 +39,18 @@ Your drop can either implement the methods sans any parameters or implement the 
 	<cffunction name="invokeDrop" hint="Invoke a specific method">
 		<cfargument name="method" type="string" required="true">
 		<cfset var loc = {}>
-		
+
 		<cfset loc.ret = this.beforeMethod(arguments.method)>
 		
 		<cfif !StructKeyExists(loc, "ret")>
+			here<cfabort>
 			<cfreturn "">
 		</cfif>
 
 		<cfif StructKeyExists(this, arguments.method)>
 			<cfinvoke component="#this#" method="#arguments.method#" returnvariable="loc.ret">
 		</cfif>
-	
+
 		<cfreturn loc.ret>
 	</cffunction>
 

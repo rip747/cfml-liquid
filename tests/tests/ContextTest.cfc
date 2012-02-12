@@ -176,15 +176,13 @@
 	
 	<cffunction name="test_cents_through_drop_nestedly">
 		<cfset loc.CentsDrop = createObject("component", "classes.CentsDrop")>
-		<cfset loc.b = {amount = loc.CentsDrop}>
-		<cfset loc.a = {cents = {cents = loc.b}}>
+		<cfset loc.a = {cents = {cents = loc.CentsDrop}}>
 		<cfset loc.context.merge(loc.a)>
 		<cfset loc.e = loc.context.get('cents.cents.amount')>
 		<cfset assert("loc.e eq 100")>
-		
+ 		
 		<cfset loc.CentsDrop = createObject("component", "classes.CentsDrop")>
-		<cfset loc.b = {amount = loc.CentsDrop}>
-		<cfset loc.a = {cents = {cents = {cents = loc.b}}}>
+		<cfset loc.a = {cents = {cents = {cents = loc.CentsDrop}}}>
 		<cfset loc.context.merge(loc.a)>
 		<cfset loc.e = loc.context.get('cents.cents.cents.amount')>
 		<cfset assert("loc.e eq 100")>

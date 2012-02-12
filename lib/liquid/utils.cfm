@@ -56,6 +56,25 @@
 	<cfreturn loc.results>
 </cffunction>
 
+<cffunction name="method_exists">
+	<cfargument name="class" type="any" required="true">
+	<cfargument name="method" type="string" required="true">
+	<cfset var loc = {}>
+
+	<cfif IsObject(arguments.class)>
+		<cfset loc.class_methods = getMetaData(arguments.class).functions>
+	<cfelse>
+		<cfset loc.class_methods = getComponentMetaData(arguments.class).functions>
+	</cfif>
+
+	<cfloop array="#loc.class_methods#" index="loc.class_method">
+		<cfif loc.class_method.name eq arguments.method>
+			<cfreturn true>
+		</cfif>
+	</cfloop>
+	
+	<cfreturn false>
+</cffunction>
 
 <cfscript>
 /**

@@ -136,7 +136,6 @@
 				<cfset loc.obj = loc.scope[arguments.key]>
 
 				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
-
 					<cfset loc.obj.setContext(this)>
 				</cfif>
 
@@ -146,12 +145,6 @@
 		</cfloop>
 		
 		<cfreturn "">
-	</cffunction>
-	
-	<cffunction name="fetch_recursions">
-		<cfargument name="key" type="string" required="true">
-	
-	
 	</cffunction>
 
 	<cffunction name="parse" returntype="any" hint="Resolved the namespaced queries gracefully.">
@@ -178,33 +171,50 @@
 
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
 
-			<cfloop array="#loc.parts#" index="loc.part">
-		
+			<cfloop condition="#ArrayLen(loc.parts)# gt 0">
+<!--- <cfdump var="#loc.object#">	 --->
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					<cfset loc.object.setContext(this)>
 				</cfif>
 				
-				<cfif !IsObject(loc.object) AND loc.part eq "size">
+				<cfset loc.temp = array_shift(loc.parts)>
+				<cfset loc.parts = loc.temp.arr>
+				<cfset loc.next_part_name = loc.temp.value>
 				
-					<cfif IsArray(loc.object)>
-						<cfset loc.object = ArrayLen(loc.object)>
-					<cfelseif IsQuery(loc.object)>
-						<cfset loc.object = loc.object.recordcount>
-					<cfelseif IsSimpleValue(loc.object)>
-						<cfset loc.object = len(loc.object)>
-					<cfelseif IsStruct(loc.object)>
-						<cfset loc.object = StructCount(loc.object)>
+				<cfif !IsObject(loc.object)>
+<!--- <cfdump var="#loc.object#">				
+<cfdump var="#loc.next_part_name#"> --->
+					<cfif loc.next_part_name eq 'size' AND ArrayLen(loc.parts) eq 0>
+						<cfif IsArray(loc.object)>
+							<cfreturn ArrayLen(loc.object)>
+						<cfelseif IsQuery(loc.object)>
+							<cfreturn loc.object.recordcount>
+						<cfelseif IsSimpleValue(loc.object)>
+							<cfreturn len(loc.object)>
+						<cfelseif IsStruct(loc.object)>
+							<cfreturn StructCount(loc.object)>
+						</cfif>
+					</cfif>
+<!--- <cfdump var="#loc.object#">	 --->
+					<cfif StructKeyExists(loc.object, loc.next_part_name)>
+						<cfset loc.object = loc.object[loc.next_part_name]>
+					<cfelse>
+						<cfreturn "">
 					</cfif>
 				
 				<cfelseif isObject(loc.object)>
 
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
-					
-						<cfset loc.object = loc.object.invokeDrop(loc.part)>
 
-					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD) AND IsCustomFunction(loc.part)>
-						
-						<cfset loc.args = {method = loc.part}>
+						<cfif !method_exists(loc.object , loc.next_part_name)>
+							<cfreturn "">
+						</cfif>
+
+						<cfset loc.object = loc.object.invokeDrop(loc.next_part_name)>
+
+					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD) AND IsCustomFunction(loc.next_part_name)>
+
+						<cfset loc.args = {method = loc.next_part_name}>
 						<cfinvoke component="#loc.object#" method="#application.LiquidConfig.LIQUID_GET_PROPERTY_METHOD#" argumentcollection="#loc.args#" returnvariable="loc.object">
 
 					<cfelse>
@@ -213,8 +223,7 @@
 						<cfif !StructKeyExists(loc.object, loc.next_part_name)>
 							<cfreturn "">	
 						</cfif>
-						<cfset loc.object = evaluate("#loc.object#.#loc.part#()")>
-
+						<cfinvoke component="#loc.object#" method="#loc.next_part_name#" returnvariable="loc.object">
 					</cfif>
 					
 				</cfif>
@@ -224,7 +233,7 @@
 				</cfif>
 
 			</cfloop>
-
+<!--- <cfdump var="#loc.next_part_name#"><cfabort> --->
 			<cfreturn loc.object>
 			
 		<cfelse>
