@@ -73,7 +73,7 @@ YES
 	<cffunction name="render" hint="Render the tag">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-<cfdump var="#arguments.context.assigns#" label="tagIf render context">
+<!--- <cfdump var="#arguments.context.assigns#" label="tagIf render context"> --->
 		<cfset arguments.context.push()>
 		
 		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
@@ -82,11 +82,10 @@ YES
 		<cfset loc.result = "">
 
 		<cfloop array="#this._blocks#" index="loc.block">
-<!--- <cfdump var="#this._blocks#" label="_blocks">
-<cfdump var="#loc.block#" label="block"> --->
+<cfdump var="#this._blocks#" label="_blocks">
+<cfdump var="#loc.block#" label="block">
 
 			<cfif loc.block[1] eq "else">
-<!--- else block<cfdump var="#arguments.context#"> --->
 				<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 				<cfbreak>
 			</cfif>
@@ -103,13 +102,13 @@ YES
 				<cfset loc.temp = loc.logicalRegex.split(loc.block[2])>
 
 				<cfset loc.conditions = []>
-<!--- <cfdump var="#loc.temp#" label="temp split"> --->
+<cfdump var="#loc.temp#" label="temp split">
 				<cfloop array="#loc.temp#" index="loc.condition">
 					
 					<cfif loc.conditionalRegex.match(loc.condition)>
 					
 						<cfset loc.t = {}>
-<!--- <cfdump var="#loc.conditionalRegex.matches#" label="conditions"> --->
+<cfdump var="#loc.conditionalRegex.matches#" label="conditions">
 						<cfset loc.t.left = "">
 						<cfif ArrayLen(loc.conditionalRegex.matches) gte 2>
 							<cfset loc.t.left = loc.conditionalRegex.matches[2]>
@@ -126,12 +125,12 @@ YES
 						</cfif>
 
 						<cfset arrayAppend(loc.conditions, loc.t)>
-
+<cfdump var="#loc.conditions#" label="conditions">
 					<cfelse>
 						<cfthrow type="LiquidError" message="Syntax Error in tag 'if' - Valid syntax: if [condition]">
 					</cfif>
 				</cfloop>
-
+<cfdump var="#loc.logicalOperators#" label="loc.logicalOperators">
 				<cfif ArrayLen(loc.logicalOperators)>
 
 					<!--- If statement contains and/or --->
@@ -157,10 +156,10 @@ YES
 					<!--- If statement is a single condition --->
 <!--- <cfdump var="#loc.conditions[1]#" label="conditions"> --->
 					<cfset loc.display = this.interpret_condition(loc.conditions[1]['left'], loc.conditions[1]['right'], loc.conditions[1]['operator'], arguments.context)>
-<!--- <cfdump var="display: #loc.display#"> --->
+<cfdump var="display: #loc.display#">
 				</cfif>
 
-				<cfif (IsBoolean(loc.display) and loc.display) OR len(loc.display)>
+				<cfif (IsBoolean(loc.display) and loc.display)>
 					<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
 					<cfbreak>
 				</cfif>

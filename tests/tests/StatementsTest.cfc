@@ -71,7 +71,7 @@
 		
 	<cffunction name="test_var_strings_equal">
 		<cfset loc.a = {var="hello there!"}>
-		<cfset loc.tpl = " {% if var == ""hello there!\"" %} true {% else %} false {% endif %} ">
+		<cfset loc.tpl = ' {% if var == "hello there!" %} true {% else %} false {% endif %} '>
 		<cfset loc.expected = "  true  ">
 		<cfset assert_template_result(loc.expected, loc.tpl, loc.template, loc.a)>
 	</cffunction>
