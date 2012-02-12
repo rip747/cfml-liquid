@@ -1,7 +1,8 @@
 <cfcomponent output="false" extends="cfml-liquid.lib.liquid.LiquidDrop">
 
 	<cffunction name="get_array">
-		<cfreturn ListToArray('text1', 'text2')>
+		<cfset var a = ['text1','text2']>
+		<cfreturn a>
 	</cffunction>
 
 	<cffunction name="text">

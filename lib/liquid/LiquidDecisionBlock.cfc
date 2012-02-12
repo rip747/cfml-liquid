@@ -49,9 +49,9 @@
 			<cfreturn loc.value>
 		</cfif>
 		
-		<cfdump var="#arguments.context.assigns#">
+<!--- 		<cfdump var="#arguments.context.assigns#">
 		<cfdump var="#isArray(arguments.context.get(arguments.left))#">
-		<cfdump var="#arguments.context.get(arguments.left)#">
+		<cfdump var="#arguments.context.get(arguments.left)#"> --->
 		
 		<!--- values of 'empty' have a special meaning in array comparisons --->
 		<cfif arguments.right eq "empty" AND isArray(arguments.context.get(arguments.left))>

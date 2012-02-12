@@ -24,12 +24,10 @@ Your drop can either implement the methods sans any parameters or implement the 
 	<!--- LiquidContext --->
 	<cfset variables._context = "">
 
-
-	<cffunction name="beforeMethod" hint="Catch all method that is invoked before a specific method">
+	<cffunction name="_beforeMethod" hint="Catch all method that is invoked before a specific method">
 		<cfargument name="method" type="string" required="true">
 		<cfreturn "">
 	</cffunction>
-
 
 	<cffunction name="setContext" hint="sets the context of the drop">
 		<cfargument name="context" type="any" required="true">
@@ -40,10 +38,9 @@ Your drop can either implement the methods sans any parameters or implement the 
 		<cfargument name="method" type="string" required="true">
 		<cfset var loc = {}>
 
-		<cfset loc.ret = this.beforeMethod(arguments.method)>
+		<cfset loc.ret = this._beforeMethod(arguments.method)>
 		
 		<cfif !StructKeyExists(loc, "ret")>
-			here<cfabort>
 			<cfreturn "">
 		</cfif>
 
@@ -56,7 +53,7 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="hasKey" hint="Returns true if the drop supports the given method">
 		<cfargument name="name" type="string" required="true">
-		<cfreturn StructKeyExists(this, arguments.name)>
+		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="toLiquid" hint="return this drop instance">

@@ -53,8 +53,8 @@
 	<cffunction name="render" hint="Renders the variable with the data in the context">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-<cfdump var="#variables._name#" label="varaibles::render()">
-		<cfset loc.output = trim(arguments.context.get(variables._name))>
+<!--- <cfdump var="#variables._name#" label="varaibles::render()"><cfabort> --->
+		<cfset loc.output = arguments.context.get(variables._name)>
 <cfdump var="#loc.output#">
 <!--- <cfdump var="#len(loc.output)#" label="varaibles::render()"> --->
 		<cfloop array="#variables._filters#" index="loc.filter">

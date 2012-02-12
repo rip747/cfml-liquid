@@ -5,14 +5,14 @@
 	</cffunction>
 	
 	<cffunction name="test_product_drop">
-		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
+ 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
 		<cfset loc.template.parse('  ')>
 		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
 		<cfset loc.a = {product = loc.ProductDrop}>
 		<cfset loc.e = loc.template.render(loc.a)>
-        <cfset assert("loc.e eq true")>
+        <cfset assert("loc.e eq ''")>
 		
-		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
+ 		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
 		<cfset loc.template.parse(' {{ product.top_sales }} ')>
 		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
 		<cfset loc.a = {product = loc.ProductDrop}>

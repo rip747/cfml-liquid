@@ -65,6 +65,7 @@
 	<cffunction name="get" hint="Replaces []">
 		<cfargument name="key" type="string" required="true">
 <!--- <cfdump var="context::get - #arguments.key#"> --->
+<!--- 	<cfdump var="#this.resolve(arguments.key)#"> --->
 		<cfreturn this.resolve(arguments.key)>
 	</cffunction>
 
@@ -115,7 +116,7 @@
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
-
+<!--- <cfdump var="#this.scopes#"> --->
 		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
@@ -134,11 +135,11 @@
 			<cfif StructKeyExists(loc.scope, arguments.key)>
 
 				<cfset loc.obj = loc.scope[arguments.key]>
-
+<!--- <cfdump var="#loc.obj#"> --->
 				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
 					<cfset loc.obj.setContext(this)>
 				</cfif>
-
+<!--- <cfdump var="#loc.obj#"> --->
 				<cfreturn loc.obj>
 			</cfif>
 
@@ -174,9 +175,9 @@
 		</cfif>
 
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
-
+<!--- <cfdump var="#loc.parts#"> --->
 			<cfloop condition="#ArrayLen(loc.parts)# gt 0">
-<!--- <cfdump var="#loc.object#">	 --->
+
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					<cfset loc.object.setContext(this)>
 				</cfif>
@@ -184,7 +185,8 @@
 				<cfset loc.temp = array_shift(loc.parts)>
 				<cfset loc.parts = loc.temp.arr>
 				<cfset loc.next_part_name = loc.temp.value>
-				
+<!--- <cfdump var="#loc.object#">
+<cfdump var="next_part_name: #loc.next_part_name#|||"> --->
 				<cfif !IsObject(loc.object)>
 <!--- <cfdump var="#loc.object#">				
 <cfdump var="#loc.next_part_name#"> --->
@@ -199,7 +201,7 @@
 							<cfreturn StructCount(loc.object)>
 						</cfif>
 					</cfif>
-<!--- <cfdump var="#loc.object#">	 --->
+<!--- <cfdump var="#loc.object#"> --->
 					<cfif StructKeyExists(loc.object, loc.next_part_name)>
 						<cfset loc.object = loc.object[loc.next_part_name]>
 					<cfelse>
@@ -207,10 +209,11 @@
 					</cfif>
 				
 				<cfelseif isObject(loc.object)>
-
+<!--- <cfdump var="#loc.object#"><cfabort> --->
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
-
-						<cfif !method_exists(loc.object , loc.next_part_name)>
+<!--- <cfdump var="next_part_name: #loc.next_part_name#|||"> --->
+						<!--- <cfif !method_exists(loc.object , loc.next_part_name)> --->
+						<cfif !loc.object.hasKey(loc.next_part_name)>
 							<cfreturn "">
 						</cfif>
 
@@ -237,7 +240,8 @@
 				</cfif>
 
 			</cfloop>
-<!--- <cfdump var="#loc.next_part_name#"><cfabort> --->
+<!--- <cfdump var="end">
+<cfdump var="#loc.object#"><cfabort> --->
 			<cfreturn loc.object>
 			
 		<cfelse>
