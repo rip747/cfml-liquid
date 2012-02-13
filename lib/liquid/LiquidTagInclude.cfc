@@ -70,12 +70,13 @@ with each value of bar
 
 		<!--- read the source of the template and create a new sub document --->
 		<cfset loc.source = this.file_system.read_template_file(this.template_name)>
-		
+
 		<cfset this._hash = hash(loc.source)>
 
 		<cfset loc.cache = application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 
 		<cfif IsDefined("loc.cache")>
+
 <!--- 			<cfif loc.cache.exists(this._hash)>
 				<cfset this.document = loc.cache.read(this._hash)>
 			</cfif>

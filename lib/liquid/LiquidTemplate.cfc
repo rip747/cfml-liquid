@@ -89,8 +89,8 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 			<cfset ArrayAppend(loc.arr, loc.i)>
 		</cfloop>
 <!--- <cfdump var="#arguments.source#" label="tokenize">
-<cfdump var="#loc.arr#" label="tokenize"> --->
-<!--- <cfabort> --->
+<cfdump var="#loc.arr#" label="tokenize">
+<cfabort> --->
 		<cfreturn loc.arr>
 	</cffunction>
 
