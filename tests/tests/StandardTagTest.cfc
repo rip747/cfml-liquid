@@ -361,9 +361,9 @@ next
 	</cffunction>
 	
 	<cffunction name="test_capture">
-		<cfset loc.a["var"] = "content">
+		<cfset loc.a["var1"] = "content">
 		<cfset loc.e = "content foo content foo ">
-		<cfset loc.t = "{{ var2 }}{% capture var2 %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}">
+		<cfset loc.t = "{{ var3 }}{% capture var3 %}{{ var1 }} foo {% endcapture %}{{ var3 }}{{ var3 }}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
@@ -372,12 +372,12 @@ next
 		<cfset loc.e = " its 2 ">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-<!--- 
+
 		<cfset loc.a["condition"] = 1>
 		<cfset loc.e = " its 1 ">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-		
+	
 		<cfset loc.a["condition"] = 3>
 		<cfset loc.e = "">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
@@ -391,7 +391,7 @@ next
 		<cfset loc.a["condition"] = "bad string here">
 		<cfset loc.e = "">
 		<cfset loc.t = "{% case condition %}{% when ""string here"" %} hit {% endcase %}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)> --->
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 
 	<cffunction name="test_case_with_else">
