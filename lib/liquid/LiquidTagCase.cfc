@@ -39,51 +39,50 @@ A switch statememt
 		<cfset var loc = {}>
 
 		<cfset loc.when_syntax_regexp = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_QUOTED_FRAGMENT)>
-<!--- <cfdump var="#arguments#" label="liquidtagcase:unknown_tag:arguments"> --->
+
 		<cfswitch expression="#arguments.tag#">
 			<cfcase value="when">
 
 				<!--- push the current nodelist onto the stack and prepare for a new one --->
 				<cfif loc.when_syntax_regexp.match(arguments.params)>
-<!--- <cfdump var="#loc.when_syntax_regexp.matches#" label="when mataches"> --->
+
 					<cfset this.push_nodelist()>
-<!--- <cfdump var="#this._nodelist#"> --->
 					<cfset this.right = loc.when_syntax_regexp.matches[1]>
 					<cfset this._nodelist = []>
-<!--- <cfdump var="#this._nodelist#"> --->
+
 				<cfelse>
 					<cfset createObject("component", "LiquidException").init("Syntax Error in tag 'case' - Valid when condition: when [condition]")>
 				</cfif>
-<!--- <cfdump var="#this._nodelist#"> --->
+
 				<cfbreak>
 			</cfcase>
 			<cfcase value="else">
-<!--- <cfdump var="here"> --->
+
 				<!--- push the last nodelist onto the stack and prepare to recieve the else nodes --->
 				<cfset this.push_nodelist()>
 				<cfset this.right = "">
+				
 				<cfif !StructKeyExists(this, "else_nodelist")>
 					<cfset this.else_nodelist = []>
 				</cfif>
+				
 				<cfset this.else_nodelist = this._nodelist>
-<!--- <cfdump var="#this._nodelist#">
-<cfdump var="#this.else_nodelist#"> --->
 				<cfset this._nodelist = []>
+
 				<cfbreak>
 			</cfcase>
 			<cfdefaultcase>
 				<cfset super.unknown_tag(arguments.tag, arguments.params, arguments.tokens)>
 			</cfdefaultcase>
 		</cfswitch>
-
 	</cffunction>
 
 	<cffunction name="push_nodelist" hint="Pushes the current right value and nodelist into the nodelist stack">
 		<cfset var loc = {}>
+
 		<cfif len(this.right)>
 			<cfset loc.temp = [this.right, this._nodelist]>
 			<cfset ArrayAppend(this.nodelists, loc.temp)>
-
 		</cfif>
 	</cffunction>
 
@@ -93,7 +92,7 @@ A switch statememt
 
 		<cfset loc.output = "">
 		<cfset loc.run_else_block = true>
-<!--- <cfdump var="#this.nodelists#" label="liquidtagcase:render:this.nodelists"> --->
+
 		<cfloop array="#this.nodelists#" index="loc.data">
 			<cfset loc.right = loc.data[1]>
 			<cfset loc.nodelist = loc.data[2]>
@@ -106,14 +105,15 @@ A switch statememt
 				<cfset arguments.context.pop()>
 			</cfif>
 		</cfloop>
-<!--- <cfdump var="liquidtagcase:render:loc.run_else_block: #loc.run_else_block#"> --->
+
 		<cfif loc.run_else_block AND StructKeyExists(this, "else_nodelist")>
-<!--- <cfdump var="#this.else_nodelist#"> --->
+
 			<cfset arguments.context.push()>
 			<cfset loc.output &= this.render_all(this.else_nodelist, arguments.context)>
 			<cfset arguments.context.pop()>
+			
 		</cfif>
-<!--- <cfdump var="#loc.output#"> --->
+
 		<cfreturn loc.output>
 	</cffunction>
 </cfcomponent>

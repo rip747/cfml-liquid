@@ -2,7 +2,9 @@
 
 	<cffunction name="init">
 		<cfargument name="root" type="string" required="true">
+		
 		<cfset this._root = ListChangeDelims(arguments.root, "/", "\")>
+		
 		<cfreturn this>
 	</cffunction>
 
@@ -25,9 +27,7 @@
 		<cfif !loc.name_regex.match(arguments.template_path)>
 			<cfset createObject("component", "LiquidException").init("Illegal template name 'arguments.template_path'")>
 		</cfif>
-<!--- <cfdump var="#arguments.template_path#">
-<Cfdump var="#GetDirectoryFromPath(arguments.template_path)#">
-<cfdump var="#this._root#"> --->
+
 		<cfif FindNoCase('/', arguments.template_path) neq 0>
 			<cfset loc.full_path = [this._root, GetDirectoryFromPath(arguments.template_path), "#application.LiquidConfig.LIQUID_INCLUDE_PREFIX##ListLast(arguments.template_path, '/')#.#application.LiquidConfig.LIQUID_INCLUDE_SUFFIX#"]>
 		<cfelse>

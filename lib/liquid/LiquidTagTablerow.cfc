@@ -16,16 +16,15 @@ Quickly create a table from a collection
 		
 		<!--- Additional attributes --->
 		<cfset this.attributes = []>
-		
 		<cfset super.init(arguments.markup, arguments.tokens, arguments.file_system)>
-		
 		<cfset loc.syntax = createObject("component", "LiquidRegexp").init("(\w+)\s+in\s+(#application.LiquidConfig.LIQUID_ALLOWED_VARIABLE_CHARS#+)")>
 		
 		<cfif loc.syntax.match(arguments.markup)>
+			
 			<cfset this.variable_name = loc.syntax.matches[2]>
 			<cfset this.collection_name = loc.syntax.matches[3]>
-			
 			<cfset this.extract_attributes(arguments.markup)>
+			
 		<cfelse>
 			<cfset createObject("component", "LiquidException").init("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols=3")>
 		</cfif>
@@ -42,10 +41,6 @@ Quickly create a table from a collection
 		<cfif !StructKeyExists(loc, "collection") OR !IsArray(loc.collection)>
 			<cfreturn "">
 		</cfif>
-		
-		<!--- discard keys --->
-		<!--- TODO: do we even need this? doesn't look like it does anything --->
-		<!--- $collection = array_values($collection); --->
 
 		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
 			<cfset loc.limit = arguments.context.get(this.attributes['limit'])>
@@ -54,14 +49,10 @@ Quickly create a table from a collection
 		</cfif>
 		
 		<cfset loc.length = ArrayLen(loc.collection)>
-		
 		<cfset loc.cols = arguments.context.get(this.attributes['cols'])>
-		
 		<cfset loc.row = 1>
 		<cfset loc.col = 0>
-
 		<cfset loc.result = '<tr class="row1">#chr(10)#'>
-		
 		<cfset arguments.context.push()>
 		
 		<cfloop from="1" to="#loc.length#" index="loc.index">
@@ -74,21 +65,22 @@ Quickly create a table from a collection
 			<cfset loc.temp.index0 = loc.index>
 			<cfset loc.temp.rindex = loc.length - loc.index>
 			<cfset loc.temp.rindex0 = loc.length - loc.index - 1>
-			<cfset loc.temp.first = IIf(loc.index eq 1, de(true), de(false))>
-			<cfset loc.temp.last = IIF(loc.index eq (loc.length - 1), de(true), de(false))>
+			<cfset loc.temp.first = IIf(loc.index eq 1, de(1), de(0))>
+			<cfset loc.temp.last = IIF(loc.index eq (loc.length - 1), de(1), de(0))>
 			<cfset arguments.context.set('tablerowloop', loc.temp)>
 			
 			<cfset loc.result &= '<td class="col#++loc.col#">' & this.render_all(this._nodelist, arguments.context) & "</td>">
 			
 			<cfif loc.col eq loc.cols AND not (loc.index - 1 eq loc.length - 1)>
+				
 				<cfset loc.col = 0>
 				<cfset loc.result &= '</tr>#chr(10)#<tr class="row#++loc.row#">'>
+				
 			</cfif>
 			
 		</cfloop>
 		
 		<cfset arguments.context.pop()>
-		
 		<cfset loc.result &= "</tr>#chr(10)#">
 		
 		<cfreturn loc.result>

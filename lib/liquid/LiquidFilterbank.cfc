@@ -92,6 +92,7 @@
 				<cfreturn loc.ret>
 			</cfif>
 		</cfif>
+		
 		<cfreturn arguments.value>
 	</cffunction>
 	
@@ -100,6 +101,7 @@
 		<cfargument name="method" type="string" required="true">
 		<cfargument name="class" type="any" required="false">
 		<cfset var loc = {}>
+		
 		<cfset loc.ret = {}>
 
 		<cfif StructKeyExists(arguments, "class")>

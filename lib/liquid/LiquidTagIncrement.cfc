@@ -14,7 +14,6 @@ Used to increment a counter into a template
 		
 		<!--- Name of the variable to increment --->
 		<cfset this._toIncrement = "">
-		
 		<cfset loc.syntax = createObject("component", "LiquidRegexp").init("(#application.LiquidConfig.LIQUID_ALLOWED_VARIABLE_CHARS#+)")>
 
 		<cfif ($syntax->match($markup)>
@@ -29,11 +28,13 @@ Used to increment a counter into a template
 	<cffunction name="render" hint="Renders the tag">
 		<cfargument name="context" type="any" required="LiquidContext">
 		<cfset var loc = {}>
+		
 		<!--- 
 		if the value is not set in the environment check to see if it
 		exists in the context, and if not set it to -1
 		 --->
 		<cfif not IsDefined(arguments.context.environments[1][this._toIncrement])>
+		
 			<!--- check for a context value --->
 			<cfset loc.from_context = arguments.context.get(this._toIncrement)>
 			
@@ -45,6 +46,7 @@ Used to increment a counter into a template
 			</cfif>
 			
 			<cfset arguments.context.environments[1][this._toIncrement] = loc.temp>
+			
 		</cfif>
 
 		<!--- increment the value --->

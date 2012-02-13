@@ -49,10 +49,6 @@
 			<cfreturn loc.value>
 		</cfif>
 		
-<!--- 		<cfdump var="#arguments.context.assigns#">
-		<cfdump var="#isArray(arguments.context.get(arguments.left))#">
-		<cfdump var="#arguments.context.get(arguments.left)#"> --->
-		
 		<!--- values of 'empty' have a special meaning in array comparisons --->
 		<cfif arguments.right eq "empty" AND isArray(arguments.context.get(arguments.left))>
 			<cfset arguments.left = ArrayLen(arguments.context.get(arguments.left))>
@@ -98,7 +94,7 @@
 			<!--- everything else, return false; --->
 			<cfreturn false>
 		</cfif>
-<!--- <cfdump var="#arguments#" label="decisionblock::interpret_condition"> --->
+
 		<!--- regular rules --->
 		<cfswitch expression="#arguments.op#">
 			<cfcase value="==">
@@ -130,7 +126,6 @@
 				<cfthrow type="LiquidError" message="Error in tag '#arguments.this.name()#' - Unknown operator">
 			</cfdefaultcase>
 		</cfswitch>
-		
 	</cffunction>
 	
 </cfcomponent>

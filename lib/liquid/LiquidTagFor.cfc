@@ -35,10 +35,8 @@
 			<cfset this._name = loc.syntax_regexp.matches[2] & '-' & loc.syntax_regexp.matches[3]>
 			<cfset this.extract_attributes(arguments.markup)>
 			
-		<cfelse>
-		
+		<cfelse>		
 			<cfset createobject("component", "LiquidException").init("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]")>
-			
 		</cfif>
 
 		<cfreturn this>
@@ -59,42 +57,44 @@
 		</cfif>
 		
 		<cfset loc.range = [0, ArrayLen(loc.collection)]>
-<!--- <cfdump var="#loc.range#"> --->
+		
 		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
 
 			<cfset loc.offset = 0>
 			<cfset loc.limit = 0>
 			
 			<cfif StructKeyExists(this.attributes, 'offset')>
+			
 				<cfif this.attributes['offset'] eq "continue">
 					<cfset loc.offset = arguments.context.registers['for'][this._name]>
 				<cfelse>
 					<cfset loc.offset = arguments.context.get(this.attributes['offset'])>
 				</cfif>
+				
 				<cfif loc.offset GTE ArrayLen(loc.collection)>
 					<cfset loc.offset = ArrayLen(loc.collection)>
 				</cfif>
+				
 				<cfset loc.offset = abs(fix(val(loc.offset)))>
+				
 			</cfif>
 
-<!--- <cfdump var="offset start: #loc.offset#"> --->
 			<cfif StructKeyExists(this.attributes, 'limit')>
+				
 				<cfset loc.limit = arguments.context.get(this.attributes['limit'])>
 				<cfset loc.limit = abs(fix(val(loc.limit)))>
+				
 			</cfif>
 			
 			<cfif loc.limit gt 0>
 				<cfset loc.limit = loc.limit + loc.offset>
 			</cfif>
+			
 			<cfif loc.limit GTE ArrayLen(loc.collection)>
 				
 				<cfset loc.limit = ArrayLen(loc.collection)>
 			</cfif>
-<!--- <cfdump var="#loc.limit#"> --->
-<!--- <cfdump var="collection count: #ArrayLen(loc.collection)#">
-<cfdump var="offset count: #loc.offset#"> --->
 
-<!--- <cfdump var="#loc.limit#"> --->
 			<cfif loc.limit gt 0 AND loc.limit lte ArrayLen(loc.collection)>
 				<cfset loc.range_end = loc.limit>
 			<cfelse>
@@ -102,32 +102,22 @@
 			</cfif>
 			
 			<cfset loc.range = [loc.offset, loc.range_end]>
-			
 			<cfset arguments.context.registers['for'][this._name] = loc.range_end>
-
-<!--- <cfdump var="#loc.range#" label="range">
-<cfdump var="#loc.collection#" label="collection"> --->
 
 		</cfif>
 		
 		<cfset loc.result = "">
-<!--- <cfdump var="#loc.range#" label="range new"> --->
 		<cfset loc.collection = createObject("java", "java.util.ArrayList").Init(loc.collection).subList(JavaCast("int", loc.range[1]), JavaCast("int", loc.range[2]))>
-<!--- <cfdump var="#loc.collection#" label="collection new"> --->
 
 		<cfif ArrayIsEmpty(loc.collection)>
 			<cfreturn loc.result>
 		</cfif>
 		
 		<cfset arguments.context.push()>
-		
 		<cfset loc.length = ArrayLen(loc.collection)>
 
 		<cfloop from="1" to="#loc.length#" index="loc.index">
-<!--- <cfdump var="#loc.collection#">
-<cfdump var="#loc.index#">
-<cfdump var="#loc.index#">
-<cfdump var="#loc.length#"> --->
+
 			<cfset arguments.context.set(this._variableName, loc.collection[loc.index])>
 			<cfset loc.temp = {}>
 			<cfset loc.temp.name = this._name>
@@ -138,9 +128,7 @@
 			<cfset loc.temp.rindex0 = loc.length - loc.index>
 			<cfset loc.temp.first = IIf(loc.index eq 1, de(1), de(0))>
 			<cfset loc.temp.last = IIF(loc.index eq (loc.length), de(1), de(0))>
-<!--- <cfdump var="#loc.temp#"> --->
 			<cfset arguments.context.set('forloop', loc.temp)>
-<!--- <cfdump var="#arguments.context.assigns#"><cfabort> --->
 			<cfset loc.result &= this.render_all(this._nodelist, arguments.context)>
 			
 		</cfloop>

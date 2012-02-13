@@ -12,8 +12,9 @@
 
 	<cffunction name="checkIncludes" hint="check for cached includes">
 		<cfset var loc = {}>
+
 		<cfset loc.return = false>
-<cfdump var="#this._nodelist#" label="liquiddocument:checkincludes:nodelist">
+
 		<cfloop array="#this._nodelist#" index="loc.token">
 			<cfif isObject(loc.token)>
 				<cfif getMetaData(loc.token).name eq 'LiquidTagInclude'>
@@ -23,6 +24,7 @@
 				</cfif>
 			</cfif>
 		</cfloop>
+		
 		<cfreturn loc.return>
 	</cffunction>
 

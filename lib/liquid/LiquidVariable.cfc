@@ -25,21 +25,18 @@
 			<cfset loc.$filters = loc.filter_split_regexp.split(loc.filter_seperator_regexp.matches[1])>
 
 			<cfloop array="#loc.$filters#" index="loc.filter">
+				
 				<cfset loc.filter = trim(loc.filter)>
 				<cfset loc.filter_name_regexp.match(loc.filter)>
-
-<!--- 				<Cftry> --->
-					<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
-<!--- 					<cfcatch type="any">
-						error[<cfdump var="#loc.filter_name_regexp.matches#" label="error">]<Cfabort>
-				</cfcatch>
-				</Cftry> --->
+				<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
 				<cfset loc.filter_argument_regexp.match_all(loc.filter)>
-				<Cfset loc.temp = []>
+				<cfset loc.temp = []>
 				<cfset loc.matches = []>
+				
 				<cfif !ArrayIsEmpty(loc.filter_argument_regexp.matches)>
 					<cfset loc.matches = array_flatten(loc.filter_argument_regexp.matches[2])>
 				</cfif>
+
 				<cfset loc.temp = [loc.filtername, loc.matches]>
 				<cfset arrayAppend(variables._filters, loc.temp)>
 
@@ -53,25 +50,21 @@
 	<cffunction name="render" hint="Renders the variable with the data in the context">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-<!--- <cfdump var="#variables._name#" label="varaibles::render()"><cfabort> --->
+
 		<cfset loc.output = arguments.context.get(variables._name)>
-<!--- 		<cfif IsSimpleValue(loc.output)>
-			<cfset loc.output = trim(loc.output)>
-		</cfif> --->
-<!--- <cfdump var="#loc.output#"> --->
-<!--- <cfdump var="#len(loc.output)#" label="varaibles::render()"> --->
+
 		<cfloop array="#variables._filters#" index="loc.filter">
 			
 			<cfset loc.filtername = loc.filter[1]>
 			<cfset loc.filter_arg_keys = loc.filter[2]>
-			
 			<cfset loc.filter_arg_values = []>
 			
 			<cfloop array="#loc.filter_arg_keys#" index="loc.arg_keys">
 				<cfset arrayAppend(loc.filter_arg_values, arguments.context.get(loc.arg_keys))>
 			</cfloop>
-<!--- <cfdump var="#loc#"> --->
+
 			<cfset loc.output = arguments.context.invoke_method(loc.filtername, loc.output, loc.filter_arg_values)>
+
 		</cfloop>
 		
 		<cfreturn loc.output>

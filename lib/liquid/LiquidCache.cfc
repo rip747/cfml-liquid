@@ -19,9 +19,11 @@
 
 	<cffunction name="exists">
 		<cfargument name="key" type="string" required="true">
+		
 		<cfif StructKeyExists(application[application.LiquidConfig.LIQUID_CACHE_KEY], arguments.key)>
 			<cfreturn true>
 		</cfif>
+		
 		<cfreturn false>
 	</cffunction>
 

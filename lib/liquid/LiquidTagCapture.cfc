@@ -16,8 +16,10 @@ Captures the output inside a block and assigns it to a variable
 		<cfset loc.syntax_regexp = createObject("component", "LiquidRegexp").init('(\w+)')>
 		
 		<cfif loc.syntax_regexp.match(arguments.markup)>
+			
 			<cfset this._to = loc.syntax_regexp.matches[2]>
 			<cfset super.init(arguments.markup, arguments.tokens, arguments.file_system)>
+			
 		<cfelse>
 			<cfset createObject("component", "LiquidException").init("Syntax Error in 'capture' - Valid syntax: assign [var] = [source]")>
 		</cfif>
@@ -28,8 +30,9 @@ Captures the output inside a block and assigns it to a variable
 	<cffunction name="render">
 		<cfargument name="context" type="any" required="true" hint="">
 		<cfset var loc = {}>
+		
 		<cfset loc.output = super.render(arguments.context)>
-<!--- 		<cfdump var="#loc.output#"><cfabort> --->
 		<cfset arguments.context.set(this._to, loc.output)>
+		
 	</cffunction>	
 </cfcomponent>

@@ -30,29 +30,27 @@
 	<cffunction name="merge" hint="Merges the given assigns into the current assigns">
 		<cfargument name="new_assigns" type="struct" required="true">
 		<cfset StructAppend(this.scopes[1], arguments.new_assigns, true)>
-<!--- <cfdump var="#this.scopes#"> --->
 	</cffunction>
 
 	<cffunction name="push" hint="Push new local scope on the stack.">
-<!--- <cfdump var="#this.scopes#" label="context::push 1"> --->
+		
 		<cfif ArrayIsEmpty(this.scopes)>
 			<cfreturn false>
 		</cfif>
 		<cfset ArrayPrepend(this.scopes, StructNew())>
 		<cfset this.assigns = this.scopes[1]>
-<!--- <cfdump var="#this.scopes#" label="context::push 2"> --->
+		
 		<cfreturn true>
 	</cffunction>
 
 	<cffunction name="pop" hint="Pops the current scope from the stack.">
-<!--- <cfdump var="#this.scopes#" label="context::pop 1"> --->
+		
 		<cfif ArrayLen(this.scopes) eq 1>
 			<cfset createObject("component", "LiquidException").init('No elements to pop')>
 		</cfif>
 		
 		<cfset ArrayDeleteAt(this.scopes, 1)>
 		<cfset this.assigns = this.scopes[1]>
-<!--- <cfdump var="#this.scopes#" label="context::pop 2"> --->
 		<cfif StructIsEmpty(this.assigns)>
 			<cfreturn "">
 		</cfif>
@@ -62,8 +60,6 @@
 
 	<cffunction name="get" hint="Replaces []">
 		<cfargument name="key" type="string" required="true">
-<!--- <cfdump var="context::get - #arguments.key#"> --->
-<!--- 	<cfdump var="#this.resolve(arguments.key)#"> --->
 		<cfreturn this.resolve(arguments.key)>
 	</cffunction>
 
@@ -113,7 +109,7 @@
 		<cfif !ArrayIsEmpty(loc.temp)>
 			<cfreturn loc.temp[2]>
 		</cfif>
-<!--- <cfdump var="#this.scopes#"> --->
+
 		<cfreturn this.parse(arguments.key)>		
 	</cffunction>
 
@@ -132,11 +128,9 @@
 			<cfif StructKeyExists(loc.scope, arguments.key)>
 
 				<cfset loc.obj = loc.scope[arguments.key]>
-<!--- <cfdump var="#loc.obj#"> --->
 				<cfif IsInstanceof(loc.obj, "LiquidDrop")>
 					<cfset loc.obj.setContext(this)>
 				</cfif>
-<!--- <cfdump var="#loc.obj#"> --->
 				<cfreturn loc.obj>
 			</cfif>
 
@@ -148,19 +142,11 @@
 	<cffunction name="parse" returntype="any" hint="Resolved the namespaced queries gracefully.">
 		<cfargument name="key" type="string" required="true">
 		<cfset var loc = {}>
-<!--- <cfdump var="#arguments.key#"> --->
+		
 		<!--- Support [0] style array indicies --->
 		<cfif ReFindNoCase("|\[[0-9]+\]|", arguments.key)>
 			<cfset arguments.key = ReReplaceNoCase(arguments.key, "|\[([0-9]+)\]|", ".\1")>
 		</cfif>
-		
-<!--- <cfdump var="#arguments.key#"> --->
-		
-		
-<!--- 		<cfset loc.matches = preg_match("|\[[0-9]+\]|", arguments.key)>
-		<cfif !ArrayIsEmpty(loc.matches)>
-			<cfset arguments.key = ReReplace(arguments.key, "|\[([0-9]+)\]|", "\1", "all")>
-		</cfif> --->
 
 		<cfset loc.parts = ListToArray(arguments.key, application.LiquidConfig.LIQUID_VARIABLE_ATTRIBUTE_SEPARATOR)>
 		<cfset loc.temp = array_shift(loc.parts)>
@@ -175,7 +161,7 @@
 		</cfif>
 
 		<cfif !IsSimpleValue(loc.object) OR len(loc.object)>
-<!--- <cfdump var="#loc.parts#"> --->
+
 			<cfloop condition="#ArrayLen(loc.parts)# gt 0">
 
 				<cfif IsInstanceOf(loc.object, "LiquidDrop")>
@@ -185,11 +171,9 @@
 				<cfset loc.temp = array_shift(loc.parts)>
 				<cfset loc.parts = loc.temp.arr>
 				<cfset loc.next_part_name = loc.temp.value>
-<!--- <cfdump var="#loc.object#">
-<cfdump var="next_part_name: #loc.next_part_name#|||"> --->
+
 				<cfif !IsObject(loc.object)>
-<!--- <cfdump var="#loc.object#">				
-<cfdump var="#loc.next_part_name#"> --->
+				
 					<cfif
 						loc.next_part_name eq 'size'
 						AND ArrayLen(loc.parts) eq 0
@@ -207,7 +191,6 @@
 							<cfreturn StructCount(loc.object)>
 						</cfif>
 					</cfif>
-<!--- <cfdump var="#loc.object#"> --->
 					<cfif StructKeyExists(loc.object, loc.next_part_name)>
 						<cfset loc.object = loc.object[loc.next_part_name]>
 					<cfelse>
@@ -215,10 +198,9 @@
 					</cfif>
 				
 				<cfelseif isObject(loc.object)>
-<!--- <cfdump var="#loc.object#"><cfabort> --->
+				
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
-<!--- <cfdump var="next_part_name: #loc.next_part_name#|||"> --->
-						<!--- <cfif !method_exists(loc.object , loc.next_part_name)> --->
+					
 						<cfif !loc.object.hasKey(loc.next_part_name)>
 							<cfreturn "">
 						</cfif>
@@ -246,8 +228,7 @@
 				</cfif>
 
 			</cfloop>
-<!--- <cfdump var="end">
-<cfdump var="#loc.object#"><cfabort> --->
+
 			<cfreturn loc.object>
 			
 		<cfelse>
@@ -255,7 +236,6 @@
 			<cfreturn "">
 			
 		</cfif>
-<!--- <cfdump var="#loc#"><cfabort> --->
 	</cffunction>
 	
 	<cffunction name="inspect">

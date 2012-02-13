@@ -17,7 +17,6 @@
 
 		<cfset this.markup = arguments.markup>
 		<cfset this.file_system = arguments.file_system>
-<!--- <cfdump var="#arguments#" label="liquidtag init args"> --->
 
 		<cfreturn this.parse(arguments.tokens)>
 	</cffunction>
@@ -31,16 +30,12 @@
 		<cfset var loc = {}>
 	
 		<cfset loc.attribute_regexp = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_TAG_ATTRIBUTES)>
-<!--- <Cfdump var="#arguments.markup#"> --->
-
 		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
-		
 		<cfset this.attributes = {}>
-<!--- <Cfdump var="#loc.matches#"> --->
+
 		<cfloop array="#loc.matches#" index="loc.match">
 			<cfset this.attributes[loc.match[1]] = loc.match[2]>
-		</cfloop>
-	
+		</cfloop>	
 	</cffunction>
 
 	<cffunction name="name" hint="Returns the name of the tag">
