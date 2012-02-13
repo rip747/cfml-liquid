@@ -8,7 +8,6 @@
 	<cffunction name="test_empty">
 		<cfset loc.e = []>
 		<cfset loc.r = loc.regex.scan('')>
-		<cfset debug('loc.e')><cfset debug('loc.r')>
 		<cfset assert('arrayCompare(loc.e, loc.r)')>
 	</cffunction>
 	

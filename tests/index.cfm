@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.ContextTest")>
-	<cfset test.runTest("test", "TEST_LENGTH_QUERY")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardTagTest")>
+	<cfset test.runTest("test", "TEST_CAPTURE")>
 
 </cfif>
 

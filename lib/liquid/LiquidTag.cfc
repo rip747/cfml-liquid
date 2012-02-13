@@ -31,11 +31,12 @@
 		<cfset var loc = {}>
 	
 		<cfset loc.attribute_regexp = createObject("component", "LiquidRegexp").init(application.LiquidConfig.LIQUID_TAG_ATTRIBUTES)>
-		
+<!--- <Cfdump var="#arguments.markup#"> --->
+
 		<cfset loc.matches = loc.attribute_regexp.scan(arguments.markup)>
 		
 		<cfset this.attributes = {}>
-
+<!--- <Cfdump var="#loc.matches#"> --->
 		<cfloop array="#loc.matches#" index="loc.match">
 			<cfset this.attributes[loc.match[1]] = loc.match[2]>
 		</cfloop>

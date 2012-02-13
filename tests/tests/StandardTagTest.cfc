@@ -277,7 +277,7 @@
 	<cffunction name="test_pause_resume">
 		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
 		<cfset loc.a["array"] = {items = loc.temp}>
-		<cfset loc.t = "
+<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
@@ -285,20 +285,20 @@ next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 ">
 
-		<cfset loc.e = "
+<cfset loc.e = "
 123
 next
 456
 next
 789
-		">
+">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
 	<cffunction name="test_pause_resume_limit">
 		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
 		<cfset loc.a["array"] = {items = loc.temp}>
-		<cfset loc.t = "
+<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
@@ -306,55 +306,50 @@ next
 {%for i in array.items offset:continue limit: 1 %}{{i}}{%endfor%}
 ">
 
-		<cfset loc.e = "
+<cfset loc.e = "
 123
 next
 456
 next
 7
-		">
+">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
 	<cffunction name="test_pause_resume_BIG_limit">
 		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
 		<cfset loc.a["array"] = {items = loc.temp}>
-		<cfset loc.t = "
+<cfset loc.t = "
 {%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 1000 %}{{i}}{%endfor%}
 ">
-
-		<cfset loc.e = "
+<cfset loc.e = "
 123
 next
 456
 next
 7890
-		">
+">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
 	<cffunction name="test_pause_resume_BIG_offset">
 		<cfset loc.temp = [1,2,3,4,5,6,7,8,9,0]>
 		<cfset loc.a["array"] = {items = loc.temp}>
-		<cfset loc.t = "
-{%for i in array.items limit: 3 %}{{i}}{%endfor%}
+<cfset loc.t = "{%for i in array.items limit: 3 %}{{i}}{%endfor%}
 next
 {%for i in array.items offset:continue limit: 3 %}{{i}}{%endfor%}
 next
-{%for i in array.items offset:continue limit: 1000 offset:1000 %}{{i}}{%endfor%}
-">
+{%for i in array.items offset:continue limit: 1000 offset:1000 %}{{i}}{%endfor%}">
 
-		<cfset loc.e = "
-123
+<cfset loc.e = "123
 next
 456
 next
-
-		">
+">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	

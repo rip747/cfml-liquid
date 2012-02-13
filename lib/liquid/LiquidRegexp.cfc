@@ -18,7 +18,7 @@
 		<cfset loc.results = []>
 		
 		<cfset loc.matches = preg_match_all(this.pattern, arguments.str)>
-		
+<!--- <cfdump var="#loc.matches#"> --->
 		<cfif ArrayIsEmpty(loc.matches)>
 			<cfreturn loc.results>
 		</cfif>
@@ -30,16 +30,19 @@
 		<cfset loc.temp = array_shift(loc.matches)>
 		<cfset loc.matches = loc.temp.arr>
 		<cfset loc.match = loc.temp.value>
-
+<!--- <cfdump var="#loc.temp#"> --->
 		<cfloop from="1" to="#ArrayLen(loc.matches)#" index="loc.m">
+<!--- <cfdump var="#loc.matches[loc.m]#" label="outer loop"> --->
 			<cfloop from="1" to="#ArrayLen(loc.matches[loc.m])#" index="loc.i">
-				<cfif ArrayLen(loc.results) neq loc.i>
+<!--- <cfdump var="inner loop: #loc.matches[loc.m][loc.i]#"> --->
+				<cfif ArrayLen(loc.results) lt loc.i>
 					<cfset loc.results[loc.i] = []>
 				</cfif>
 				<cfset ArrayAppend(loc.results[loc.i], loc.matches[loc.m][loc.i])>
+<!--- <cfdump var="#loc.results#" label="restuls"> --->
 			</cfloop>
 		</cfloop>
-
+<!--- <cfdump var="#loc.results#"> --->
 		<cfreturn loc.results>
 	</cffunction>
 

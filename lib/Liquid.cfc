@@ -45,7 +45,7 @@
 	<cfset this.config.LIQUID_QUOTED_FRAGMENT = '"[^"]+"|''[^'']+''|[^\s,|]+'>
 	
 	<!--- Regex for recognizing tab attributes --->
-	<cfset this.config.LIQUID_TAG_ATTRIBUTES = "(\w+)\s*\:\s*(" & this.config.LIQUID_QUOTED_FRAGMENT & ")">
+	<cfset this.config.LIQUID_TAG_ATTRIBUTES = "(\w+)\s*:\s*(" & this.config.LIQUID_QUOTED_FRAGMENT & ")">
 	
 	<!--- Regex used to split tokens --->
 	<!--- <cfset this.config.LIQUID_TOKENIZATION_REGEXP = "" & this.config.LIQUID_TAG_START & "" & this.config.LIQUID_TAG_END & "|" & this.config.LIQUID_VARIABLE_START & ".*?" & this.config.LIQUID_VARIABLE_END & ""> --->

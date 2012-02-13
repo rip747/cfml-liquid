@@ -49,7 +49,7 @@
 		<cfset var loc = {}>
 		
 		<cfif !IsDefined("arguments.context.registers") OR !StructKeyExists(arguments.context.registers, "for")>
-			<cfset arguments.context.registers["for"] = []>
+			<cfset arguments.context.registers["for"] = {}>
 		</cfif>
 		
 		<cfset loc.collection = arguments.context.get(this._collectionName)>
@@ -58,12 +58,12 @@
 			<cfreturn "">
 		</cfif>
 		
-		<!--- array(0, count($collection)) --->
+		<cfset loc.range = [1, ArrayLen(loc.collection)]>
+<!--- <cfdump var="#loc.range#"> --->
 		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
-		
-			<cfset loc.range = [ArrayLen(loc.collection), 0]>
 
 			<cfset loc.offset = 0>
+			<cfset loc.limit = 0>
 			
 			<cfif StructKeyExists(this.attributes, 'offset')>
 				<cfif this.attributes['offset'] eq "continue">
@@ -71,29 +71,49 @@
 				<cfelse>
 					<cfset loc.offset = arguments.context.get(this.attributes['offset'])>
 				</cfif>
+				<cfif loc.offset GTE ArrayLen(loc.collection)>
+					<cfset loc.offset = ArrayLen(loc.collection)>
+				</cfif>
+				<cfset loc.offset = abs(fix(val(loc.offset)))>
 			</cfif>
-			
+
+<!--- <cfdump var="offset start: #loc.offset#"> --->
 			<cfif StructKeyExists(this.attributes, 'limit')>
 				<cfset loc.limit = arguments.context.get(this.attributes['limit'])>
-			<cfelse>
-				<cfset loc.limit = "">
+				<cfset loc.limit = abs(fix(val(loc.limit)))>
 			</cfif>
 			
-			<cfif IsNumeric(loc.limit)>
+			<cfif loc.limit gt 0>
+				<cfset loc.limit = loc.limit + loc.offset>
+			</cfif>
+			<cfif loc.limit GTE ArrayLen(loc.collection)>
+				
+				<cfset loc.limit = ArrayLen(loc.collection)>
+			</cfif>
+<!--- <cfdump var="#loc.limit#"> --->
+<!--- <cfdump var="collection count: #ArrayLen(loc.collection)#">
+<cfdump var="offset count: #loc.offset#"> --->
+
+<!--- <cfdump var="#loc.limit#"> --->
+			<cfif loc.limit gt 0 AND loc.limit lte ArrayLen(loc.collection)>
 				<cfset loc.range_end = loc.limit>
 			<cfelse>
-				<cfset loc.range_end = ArrayLen(loc.collection) - loc.offset>
+				<cfset loc.range_end = ArrayLen(loc.collection)>
 			</cfif>
 			
 			<cfset loc.range = [loc.offset, loc.range_end]>
 			
-			<cfset arguments.context.registers['for'][this._name] = loc.range_end + loc.offset>
-			
-			<cfset loc.collection = createObject("java", "java.util.ArrayList").Init(loc.collection).subList(JavaCast("int", loc.range[1]), JavaCast("int", loc.range[2]))>
-			
+			<cfset arguments.context.registers['for'][this._name] = loc.range_end>
+
+<!--- <cfdump var="#loc.range#" label="range">
+<cfdump var="#loc.collection#" label="collection"> --->
+
 		</cfif>
 		
 		<cfset loc.result = "">
+<!--- <cfdump var="#loc.range#" label="range new"> --->
+		<cfset loc.collection = createObject("java", "java.util.ArrayList").Init(loc.collection).subList(JavaCast("int", loc.range[1]), JavaCast("int", loc.range[2]))>
+<!--- <cfdump var="#loc.collection#" label="collection new"> --->
 
 		<cfif ArrayIsEmpty(loc.collection)>
 			<cfreturn loc.result>
