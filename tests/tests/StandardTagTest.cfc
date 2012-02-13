@@ -368,7 +368,7 @@ next
 	</cffunction>
 	
 	<cffunction name="test_case">
-		<cfset loc.a["condition"] = 2>
+ 		<cfset loc.a["condition"] = 2>
 		<cfset loc.e = " its 2 ">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
@@ -377,12 +377,12 @@ next
 		<cfset loc.e = " its 1 ">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-	
-		<cfset loc.a["condition"] = 3>
+
+ 		<cfset loc.a["condition"] = 3>
 		<cfset loc.e = "">
 		<cfset loc.t = "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-
+	
 		<cfset loc.a["condition"] = "string here">
 		<cfset loc.e = " hit ">
 		<cfset loc.t = "{% case condition %}{% when ""string here"" %} hit {% endcase %}">
