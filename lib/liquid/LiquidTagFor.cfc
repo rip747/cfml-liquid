@@ -58,7 +58,7 @@
 			<cfreturn "">
 		</cfif>
 		
-		<cfset loc.range = [1, ArrayLen(loc.collection)]>
+		<cfset loc.range = [0, ArrayLen(loc.collection)]>
 <!--- <cfdump var="#loc.range#"> --->
 		<cfif StructKeyExists(this.attributes, "limit") OR StructKeyExists(this.attributes, "offset")>
 
