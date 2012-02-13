@@ -163,8 +163,8 @@
 
 	<cffunction name="render" hint="Render the block.">
 		<cfargument name="context" type="any" required="true">
-<!--- <cfdump var="#this._nodelist#">
-<cfdump var="#arguments.context#"> --->
+<!--- <cfdump var="#this._nodelist#" label="liquidblock:render:nodelist"> --->
+<!--- <cfdump var="#arguments.context#"> --->
 		<cfreturn this.render_all(this._nodelist, arguments.context)>
 	</cffunction>
 
@@ -177,14 +177,15 @@
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 		<cfset loc.result = "">
-<!--- <cfdump var="#arguments#" label="liquidblock::render_all()"> --->
-<!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all()"> --->
-<!--- <cfdump var="#arguments.list#"> --->
+<!--- <cfdump var="#arguments#" label="liquidblock::render_all:arguments"> --->
+<!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all:context:assigns">
+<cfdump var="#arguments.list#" label="liquidblock:render_all:list"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
-<!--- <cfdump var="#loc.token#" label="token"> --->
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
+<!--- <cfdump var="#loc.token#" label="liquidblock:render_all:token"> --->
 				<cfset loc.result &= loc.token.render(arguments.context)>
 			<cfelse>
+<!--- <cfdump var="liquidblock:render_all:token: #loc.token#"> --->
 				<cfset loc.result &= loc.token>
 			</cfif>
 <!--- <cfdump var="#len(loc.result)#"> --->

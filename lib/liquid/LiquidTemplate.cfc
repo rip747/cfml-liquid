@@ -130,7 +130,7 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
 		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
 		<cfset var loc = {}>
-<!--- <cfdump var="#arguments#" label="template::render()::arguments"> --->
+<!--- <cfdump var="#arguments#" label="liquidtemplate:render:arguments"> --->
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
 <!--- <cfdump var="#arguments#">
 <cfdump var="#loc.context.assigns#">
@@ -150,9 +150,8 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 			<cfset loc.context.add_filters(loc.filter)>
 		</cfloop>
 
-<!--- <cfdump var="#this._root#" label="template::render()::root"> --->
-<!--- <cfdump var="#loc.context#" label="template::render()::context"> --->
-<!--- <cfabort> --->
+<!--- <cfdump var="#this._root#" label="liquidtemplate:render:this._root">
+<cfdump var="#loc.context#" label="liquidtemplate:render:loc.context"> --->
 		<cfreturn this._root.render(loc.context)>
 	</cffunction>
 

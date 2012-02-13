@@ -474,7 +474,7 @@ next
 	<cffunction name="test_include_tag_no_with">
 		<cfset loc.a["inner"] = "orig">
 		<cfset loc.a["var"] = [1,2,3]>
-		<cfset loc.file_system = createObject("component", "cfml-liquid.tests.tests.classes.LiquidTestFileSystem")>
+		<cfset loc.file_system = createObject("component", "classes.LiquidTestFileSystem")>
 		<cfset loc.template.setFileSystem(loc.file_system)>
 		<cfset loc.template.parse("Outer-{% include 'inner' %}-Outer-{% include 'inner' other:'23' %}")>
 		<cfset loc.r = loc.template.render(loc.a)>

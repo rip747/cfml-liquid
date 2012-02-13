@@ -12,7 +12,7 @@
 <cfelse>
 
 	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardTagTest")>
-	<cfset test.runTest("test", "TEST_INCLUDE_TAG")>
+	<cfset test.runTest("test", "TEST_CASE")>
 
 </cfif>
 
