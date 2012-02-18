@@ -8,7 +8,6 @@ Preparing for preview release
 
 What's left to do
 =================
-*  Add full support for CFML queries
 *  Add some sort of caching for compiled templates
 
 
