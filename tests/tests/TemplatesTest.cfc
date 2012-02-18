@@ -1,8 +1,7 @@
 <cfcomponent output="false" extends="cfml-liquid.tests.Test">
 	
 	<cffunction name="setup">
-		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
-		<cfset loc.obj = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
+		<cfset loc.obj = application.liquid.template()>
 	</cffunction>
 
 	<cffunction name="test_tokenize_strings">

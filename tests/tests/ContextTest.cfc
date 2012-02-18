@@ -66,8 +66,8 @@
 	</cffunction>
 	
 	<cffunction name="test_override_global_filter" hint="skip this one for now, as we haven't implemented global filters yet">
-		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
-		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
+
+		<cfset loc.template = application.liquid.template()>
 		<cfset loc.GlobalFilter = createObject("component", "classes.GlobalFilter")>
 		<cfset loc.template.registerFilter(loc.GlobalFilter)>
 		

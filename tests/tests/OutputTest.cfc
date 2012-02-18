@@ -6,8 +6,7 @@
 		<cfset loc.a['car'] = {bmw = 'good', gm = 'bad'}>
 
 		<cfset this.filters = createObject("component", "classes.FunnyFilter")>
-		<cfset loc.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
-		<cfset loc.template = createObject("component", "cfml-liquid.lib.liquid.LiquidTemplate").init()>
+		<cfset loc.template = application.liquid.template()>
 	</cffunction>
 
 	<cffunction name="test_variable">

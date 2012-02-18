@@ -68,4 +68,12 @@
 		<cfset application[application.LiquidConfig.LIQUID_CACHE_KEY] = createObject("component", "liquid.LiquidCache").init()>
 	</cffunction>
 	
+	<cffunction name="template" hint="return a template object">
+		<cfargument name="path" type="string" required="false" default="">
+		<cfset var templateObj = createObject("component", "liquid.LiquidTemplate").init(
+			path = arguments.path
+		)>
+		<cfreturn templateObj>
+	</cffunction>
+	
 </cfcomponent>

@@ -4,6 +4,9 @@
 </head>
 <body>
 
+<cfset StructClear(application)>
+<cfset application.liquid = createObject("component", "cfml-liquid.lib.Liquid").init()>
+
 <cfif !structkeyexists(url, "single")>
 
  	<cfset test = createObject("component", "Test")>
@@ -11,11 +14,11 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardTagTest")>
-	<cfset test.runTest("test", "TEST_FOR_USING_QUERY")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.LiquidFiltersInTemplate")>
+	<cfset test.runTest("test", "TEST_LOCAL_GLOBAL")>
 
 </cfif>
 
-	<cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
+<cfoutput>#test.HTMLFormatTestResults()#</cfoutput>
 </body>
 </html>
