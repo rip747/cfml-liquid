@@ -50,4 +50,22 @@
 
 	</cffunction>
 	
+	<cffunction name="test_using_queries">
+		
+		<cfset loc.q = QueryNew("firstname,lastname")>
+		<cfset QueryAddRow(loc.q)>
+		<cfset QuerySetCell(loc.q, "firstname", "Tony")>
+		<cfset QuerySetCell(loc.q, "lastname", "Petruzzi")>
+		<cfset QueryAddRow(loc.q)>
+		<cfset QuerySetCell(loc.q, "firstname", "Per")>
+		<cfset QuerySetCell(loc.q, "lastname", "Djurner")>
+		
+		<cfset loc.a = {test = {test = loc.q}}>
+		<cfset loc.e = 'tony'>
+		<cfset loc.template.parse('{{ test.test.firstname }}')>
+		<cfset loc.r = loc.template.render(loc.a)>
+		<cfset assert('loc.e eq loc.r')>
+
+	</cffunction>
+	
 </cfcomponent>

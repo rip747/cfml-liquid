@@ -181,6 +181,7 @@
 <!--- <cfdump var="#arguments.context.assigns#" label="liquidblock::render_all:context:assigns">
 <cfdump var="#arguments.list#" label="liquidblock:render_all:list"> --->
 		<cfloop array="#arguments.list#" index="loc.token">
+<!--- <cfdump var="#loc.token#"> --->
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
 <!--- <cfdump var="#loc.token#" label="liquidblock:render_all:token"> --->
 				<cfset loc.result &= loc.token.render(arguments.context)>

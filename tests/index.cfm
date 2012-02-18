@@ -11,8 +11,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.VariableResolutionTest")>
-	<cfset test.runTest("test", "TEST_SIMPLE_WITH_WHITESPACES")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardTagTest")>
+	<cfset test.runTest("test", "TEST_FOR_USING_QUERY")>
 
 </cfif>
 

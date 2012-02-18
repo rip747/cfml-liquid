@@ -105,7 +105,6 @@
 		<cfset loc.a = {}>
 		<cfset loc.a["array"] = [1,2,3,4]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
-
 		
 		<cfset loc.e = "yoyo">
 		<cfset loc.t = "{%for item in array%}yo{%endfor%}">
@@ -139,6 +138,23 @@
 		<cfset loc.a["array"] = [1,2,3]>
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 		
+	</cffunction>
+	
+	<cffunction name="test_for_using_query">
+	
+		<cfset loc.q = QueryNew("firstname,lastname")>
+		<cfset QueryAddRow(loc.q)>
+		<cfset QuerySetCell(loc.q, "firstname", "Tony")>
+		<cfset QuerySetCell(loc.q, "lastname", "Petruzzi")>
+		<cfset QueryAddRow(loc.q)>
+		<cfset QuerySetCell(loc.q, "firstname", "Per")>
+		<cfset QuerySetCell(loc.q, "lastname", "Djurner")>
+		<cfset loc.e = " Tony, Petruzzi  Per, Djurner ">
+		<cfset loc.t = "{%for item in query%} {{item.firstname}}, {{item.lastname}} {%endfor%}">
+		<cfset loc.a = {}>
+		<cfset loc.a["query"] = loc.q>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	
 	</cffunction>
 
 	<cffunction name="test_for_with_variable">

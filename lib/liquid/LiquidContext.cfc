@@ -232,7 +232,7 @@
 			<cfreturn loc.object>
 			
 		<cfelse>
-		
+
 			<cfreturn "">
 			
 		</cfif>
