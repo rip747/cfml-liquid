@@ -58,8 +58,8 @@
 
 					</cfif>
 
-					<cfset loc.tag_name_fullPath = "/liquiddir/#loc.tag_name#.cfc">
-					<cfset loc.tag_name_cfcPath = "liquiddir.#loc.tag_name#">
+					<cfset loc.tag_name_fullPath = "#application.LiquidConfig.LIQUID_DIR_PATH#/#loc.tag_name#.cfc">
+					<cfset loc.tag_name_cfcPath = "#application.LiquidConfig.LIQUID_LIB_PATH#.#loc.tag_name#">
 					
 					<cfif fileExists(ExpandPath(loc.tag_name_fullPath))>
 <!--- <cfdump var="tag name found: #loc.tag_name_cfcPath#">

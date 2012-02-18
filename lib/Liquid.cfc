@@ -1,6 +1,14 @@
 <cfcomponent output="false">
 	
 	<cfset this.config = {}>
+	
+	<!--- directory the library is in --->
+	<cfset this.config.LIQUID_DIR_PATH =  ListAppend(Replace(
+		ListChangeDelims(GetDirectoryFromPath(GetCurrentTemplatePath()), "/", "\")
+		,ListChangeDelims(GetDirectoryFromPath(ExpandPath("/")), "/", "\")
+		,""), "liquid", "/")>
+
+	<cfset this.config.LIQUID_LIB_PATH = ListChangeDelims(this.config.LIQUID_DIR_PATH, ".", "/")>
 
 	<!--- The method is called on objects when resolving variables to see if a given property exists --->
 	<cfset this.config.LIQUID_HAS_PROPERTY_METHOD = "field_exists">
