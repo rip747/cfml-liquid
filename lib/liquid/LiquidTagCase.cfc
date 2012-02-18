@@ -116,4 +116,11 @@ A switch statememt
 
 		<cfreturn loc.output>
 	</cffunction>
+	
+	<cffunction name="pushToNodeList">
+		<cfif StructKeyExists(this, "else_nodelist")>
+			<cfset this.else_nodelist = this._nodelist>
+		</cfif>
+	</cffunction>
+	
 </cfcomponent>

@@ -66,6 +66,7 @@
 <cfdump var="#this._nodelist#" label="before tag_name call"> --->
 <!--- 						<cftry> --->
 						<cfset loc.temp = createObject("component", loc.tag_name_cfcPath).init(loc.tag_regexp.matches[3], arguments.tokens, this.file_system)>
+						<cfset loc.temp.pushToNodeList()>
 <!--- 						<cfcatch type="any">
 							<cfdump var="#loc.tag_name_fullPath#">
 							<cfdump var="#loc.tag_name_cfcPath#">
@@ -76,17 +77,6 @@
 						</cfcatch>
 						</cftry> --->
 						
-						<!--- 
-						this is very fucking ugly but it's the only way i can
-						think of to work around all the referenced arrays being
-						passed around.
-						 --->
-						<cfif StructKeyExists(loc.temp, "else_nodelist")>
-							<cfset loc.temp.else_nodelist = loc.temp._nodelist>
-						</cfif>
-						<cfif StructKeyExists(loc.temp, "_blocks")>
-							<cfset loc.temp._blocks[ArrayLen(loc.temp._blocks)][3] = loc.temp._nodelist>
-						</cfif>
 						<cfset arrayAppend(this._nodelist, loc.temp)>
 <!--- <cfdump var="#this._nodelist#" label="after tag_name call"> --->
 

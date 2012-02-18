@@ -144,4 +144,8 @@ YES
 		<cfreturn loc.result>
 	</cffunction>
 
+	<cffunction name="pushToNodeList">
+		<cfset this._blocks[ArrayLen(this._blocks)][3] = this._nodelist>
+	</cffunction>
+
 </cfcomponent>

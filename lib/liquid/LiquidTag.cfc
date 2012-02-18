@@ -47,4 +47,7 @@
 		<cfreturn "">
 	</cffunction>
 
+	<cffunction name="pushToNodeList" returntype="void" hint="a way to push a value to the nodelist once parsing is done">
+	</cffunction>
+
 </cfcomponent>
