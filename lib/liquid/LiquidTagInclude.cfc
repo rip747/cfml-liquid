@@ -71,32 +71,9 @@ with each value of bar
 
 		<!--- read the source of the template and create a new sub document --->
 		<cfset loc.source = this.file_system.read_template_file(this.template_name)>
-
-		<cfset this._hash = hash(loc.source)>
-
-		<cfset loc.cache = application[application.LiquidConfig.LIQUID_CACHE_KEY]>
-
 		<cfset loc.template = createObject("component", "LiquidTemplate")>
 		<cfset loc.tokens = loc.template.tokenize(loc.source)>
 		<cfset this.document = createObject("component", "LiquidDocument").init(loc.tokens, this.file_system)>
-
-<!--- 		<cfif IsDefined("loc.cache")>
-
-<!--- 			<cfif loc.cache.exists(this._hash)>
-				<cfset this.document = loc.cache.read(this._hash)>
-			</cfif>
-		
-			<cfdump var="#this.document#"><cfabort>
-			<cfif this.document.checkIncludes() eq true> --->
-				<cfset loc.template = createObject("component", "LiquidTemplate")>
-				<cfset this.document = createObject("component", "LiquidDocument").init(loc.template.tokenize(loc.source), this.file_system)>
-				<cfset loc.s = createObject("component", "LiquidTemplate").tokenize(loc.source)>
-				<cfset loc.cache.write(this._hash, this.document)>
-			<!--- </cfif> --->
-		<cfelse>
-			<cfset this.document = createObject("component", "LiquidDocument").init(loc.s, this.file_system)>
-		</cfif> --->
-		
 	</cffunction>
 
 	<cffunction name="checkIncludes" hint="check for cached includes">

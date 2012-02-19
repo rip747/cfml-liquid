@@ -29,9 +29,6 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfelse>
 			<cfset this._fileSystem = createObject("component", "LiquidBlankFileSystem").init()>
 		</cfif>
-
-		<!--- cache --->
-		<cfset startCache()>
 		
 		<cfreturn this>
 	</cffunction>
@@ -41,23 +38,12 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfset this._fileSystem = arguments.fileSystem>
 	</cffunction>
 	
-	<cffunction name="getCache">
-		<cfreturn application[application.LiquidConfig.LIQUID_CACHE_KEY]>
-	</cffunction>
-
 	<cffunction name="getRoot">
 		<cfreturn this._root>
 	</cffunction>
 	
 	<cffunction name="getTags">
 		<cfreturn this._tags>
-	</cffunction>
-	
-	<cffunction name="startCache">
-		<cfif !StructKeyExists(application, application.LiquidConfig.LIQUID_CACHE_KEY)>
-			<cfset application[application.LiquidConfig.LIQUID_CACHE_KEY] = createObject("component", "LiquidCache").init()>
-		</cfif>
-		<cfreturn application[application.LiquidConfig.LIQUID_CACHE_KEY]>
 	</cffunction>
 	
 	<cffunction name="registerTag">
@@ -93,27 +79,11 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 
 	<cffunction name="parse" hint="Parses the given source string">
 		<cfargument name="source" type="string" required="true">
-		<cfset var loc = {}>
-		<cfset loc.key = hash(arguments.source)>
-		<cfset loc.found = false>
-		<cfset loc.cache = getCache()>
-		<!--- <cfif !structIsEmpty(loc.cache)> --->
-<!--- 			<cfif loc.cache.exists(loc.key) AND this._root.checkIncludes() neq true>
-				<cfset this._root = loc.cache.read(loc.key)>
-			<cfelse> --->
-				<cfset this._root = createObject("component", "LiquidDocument").init(
-						this.tokenize(arguments.source)
-						,this._fileSystem
-					)>
-			<!--- <cfset loc.cache.write(loc.key, this._root)> --->
-			<!--- </cfif> --->
-<!--- 		<cfelse>
-			<cfset this._root = createObject("component", "LiquidDocument").init(
-					this.tokenize(arguments.source)
-					,this._fileSystem
-				)>
-
-		</cfif> --->
+		
+		<cfset this._root = createObject("component", "LiquidDocument").init(
+				this.tokenize(arguments.source)
+				,this._fileSystem
+			)>
 
 		<cfreturn this>
 	</cffunction>
