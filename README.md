@@ -7,8 +7,11 @@ How To Use
 ```coldfusion
 <!--- make sure the liquid library is loaded in the application scope --->
 <cfif !StructKeyExists(application, "liquid")>
-  <cfset application.liquid = createObject("component", "testing.cfml-liquid.lib.Liquid").init()>
+	<cfset application.liquid = createObject("component", "testing.cfml-liquid.lib.Liquid").init()>
 </cfif>
+
+<!--- create our template object --->
+<cfset template = application.liquid.template()>
 
 <!--- create the source we want to parse --->
 <cfsavecontent variable="source">
@@ -23,9 +26,6 @@ How To Use
 <p>No records found</p>
 {% endif %}
 </cfsavecontent>
-
-<!--- parse the source --->
-<cfset template.parse(source)>
 
 <!--- lets assign some variables to the source --->
 <!--- create a mock query for showing what this thing can do --->
@@ -46,7 +46,20 @@ How To Use
 <!--- create a structure to pass in --->
 <cfset assigns = {query = q, pageTitle = "ColdFusion Frameworks on Github"}>
 
-<cfoutput>#template.render(assigns)#</cfoutput>
+<!---
+NOTE: if there are any errors in the source, a LiquidError exception will be thrown
+Always wrap the calls to Liquid in a try/catch block so you can display
+the parsing errors to the user.
+ --->
+<cftry>
+	<!--- parse the source --->
+	<cfset template.parse(source)>
+	<!--- render the output --->
+	<cfoutput>#template.render(assigns)#</cfoutput>
+	<cfcatch type="LiquidError">
+		<cfoutput>#cfcatch.message#</cfoutput>
+	</cfcatch>
+</cftry>
 ```
 would produce
 

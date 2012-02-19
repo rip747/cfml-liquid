@@ -20,9 +20,6 @@
 {% endif %}
 </cfsavecontent>
 
-<!--- parse the source --->
-<cfset template.parse(source)>
-
 <!--- lets assign some variables to the source --->
 <!--- create a mock query for showing what this thing can do --->
 <cfset q = QueryNew("project,link")>
@@ -42,4 +39,17 @@
 <!--- create a structure to pass in --->
 <cfset assigns = {query = q, pageTitle = "ColdFusion Frameworks on Github"}>
 
-<cfoutput>#template.render(assigns)#</cfoutput>
+<!---
+NOTE: if there are any errors in the source, a LiquidError exception will be thrown
+Always wrap the calls to Liquid in a try/catch block so you can display
+the parsing errors to the user.
+ --->
+<cftry>
+	<!--- parse the source --->
+	<cfset template.parse(source)>
+	<!--- render the output --->
+	<cfoutput>#template.render(assigns)#</cfoutput>
+	<cfcatch type="LiquidError">
+		<cfoutput>#cfcatch.message#</cfoutput>
+	</cfcatch>
+</cftry>
