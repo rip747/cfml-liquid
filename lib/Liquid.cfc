@@ -61,8 +61,6 @@
 
 	<cfset this.config.LIQUID_PATH = expandPath(".")>
 	
-	<cfset this.config.LIQUID_CACHE_KEY = "LiquidTemplateCache">
-	
 	<cffunction name="init">
 		<cfargument name="config" type="struct" required="false" default="#structNew()#">
 		<cfset structAppend(this.config, arguments.config)>
