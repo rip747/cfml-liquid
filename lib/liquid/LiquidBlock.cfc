@@ -53,14 +53,12 @@
 						<cfset loc.tag_name = loc.tags[loc.tag_regexp.matches[2]]>
 					<cfelse>
 						<!--- search for a defined class of the right name, instead of searching in an array --->
-						<cfset loc.tag_name = 'LiquidTag' & loc.tag_regexp.matches[2]>
-<!--- <cfdump var="tagname: #loc.tag_name#"> --->
-
+						<cfset loc.tag_name = 'LiquidTag' & rereplace(loc.tag_regexp.matches[2], "\b(\w)","\u\1", "all")>
 					</cfif>
-
+					
 					<cfset loc.tag_name_fullPath = "#application.LiquidConfig.LIQUID_DIR_PATH#/#loc.tag_name#.cfc">
 					<cfset loc.tag_name_cfcPath = "#application.LiquidConfig.LIQUID_LIB_PATH#.#loc.tag_name#">
-					
+
 					<cfif fileExists(ExpandPath(loc.tag_name_fullPath))>
 <!--- <cfdump var="tag name found: #loc.tag_name_cfcPath#">
 <cfdump var="#this._nodelist#" label="before tag_name call"> --->
