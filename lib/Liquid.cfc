@@ -3,10 +3,7 @@
 	<cfset this.config = {}>
 	
 	<!--- directory the library is in --->
-	<cfset this.config.LIQUID_DIR_PATH =  ListAppend(Replace(
-		ListChangeDelims(GetDirectoryFromPath(GetCurrentTemplatePath()), "/", "\")
-		,ListChangeDelims(GetDirectoryFromPath(ExpandPath("/")), "/", "\")
-		,""), "liquid", "/")>
+	<cfset this.config.LIQUID_DIR_PATH =  $liquidDirPath()>
 
 	<cfset this.config.LIQUID_LIB_PATH = ListChangeDelims(this.config.LIQUID_DIR_PATH, ".", "/")>
 
@@ -75,6 +72,18 @@
 			path = arguments.path
 		)>
 		<cfreturn templateObj>
+	</cffunction>
+	
+	<cffunction name="$liquidDirPath" access="private">
+		<cfset var loc = {}>
+		<!--- get paths --->
+		<cfset loc.rootPath = expandPath('/')>
+		<cfset loc.thisPath = GetDirectoryFromPath(GetCurrentTemplatePath())>
+		<!--- os file system compatability --->
+		<cfset loc.rootPath = lcase(ListChangeDelims(loc.rootPath, '/', '\'))>
+		<cfset loc.thisPath = lcase(ListChangeDelims(loc.thisPath, '/', '\'))>
+		<cfset loc.liquidDirPath = ReplaceNoCase(loc.thisPath, loc.rootPath, '', 'one')>
+		<cfreturn ListAppend(loc.liquidDirPath, 'liquid', '/')>
 	</cffunction>
 	
 </cfcomponent>
