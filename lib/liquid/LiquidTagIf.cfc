@@ -30,9 +30,9 @@ YES
 		<cfargument name="tokens" type="any" required="true">
 		<cfset var loc = {}>
 
-		<cfif arguments.tag eq 'else' OR arguments.tag eq 'elsif'>
+		<cfif arguments.tag eq 'else' OR arguments.tag eq 'elsif' OR arguments.tag eq 'elseif'>
 
-			<cfset this._blocks[ArrayLen(this._blocks)][3] = this._nodelist>
+			<cfset this._blocks[ArrayLen(this._blocks)][3] = duplicate(this._nodelist)>
 			<cfset this._nodelist = this._nodelistHolders>
 			<cfset loc.temp = [arguments.tag, arguments.params, this._nodelist]>
 			<cfset ArrayAppend(this._blocks, loc.temp)>
@@ -61,7 +61,7 @@ YES
 				
 			</cfif>
 
-			<cfif loc.block[1] eq 'if' OR loc.block[1] eq 'elsif'>
+			<cfif loc.block[1] eq 'if' OR loc.block[1] eq 'elsif'OR loc.block[1] eq 'elseif'>
 			
 				<!--- Extract logical operators --->
 				<cfset loc.logicalRegex.match(loc.block[2])>

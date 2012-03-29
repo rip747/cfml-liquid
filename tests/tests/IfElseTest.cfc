@@ -219,4 +219,22 @@
 		<cfset assert('loc.e eq loc.r.message')>
 	</cffunction>
  
+	<cffunction name="test_elsif">
+		<cfset loc.e = "Hello">
+		<cfset loc.t = "{% assign test = 'hello' %}{% if test == 'bye' %}Bye{% elsif test == 'hello' %}Hello{% elseif test == 'ciao' %}Ciao{% else %}Rude{% endif %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+		
+		<cfset loc.e = "Bye">
+		<cfset loc.t = "{% assign test = 'bye' %}{% if test == 'bye' %}Bye{% elsif test == 'hello' %}Hello{% elseif test == 'ciao' %}Ciao{% else %}Rude{% endif %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+		
+		<cfset loc.e = "Ciao">
+		<cfset loc.t = "{% assign test = 'ciao' %}{% if test == 'bye' %}Bye{% elsif test == 'hello' %}Hello{% elseif test == 'ciao' %}Ciao{% else %}Rude{% endif %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+		
+		<cfset loc.e = "Rude">
+		<cfset loc.t = "{% assign test = 'nothing' %}{% if test == 'bye' %}Bye{% elsif test == 'hello' %}Hello{% elseif test == 'ciao' %}Ciao{% else %}Rude{% endif %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+	</cffunction>
+
 </cfcomponent>
