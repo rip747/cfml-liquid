@@ -12,9 +12,21 @@
 		</cftry>	
 	</cffunction>
 	
+	<cffunction name="test_root">
+		<cfset loc.root = '/cfml-liquid/tests/tests/templates/'>
+
+		<cfset loc.file_system = createObject("component", "cfml-liquid.lib.liquid.LiquidLocalFileSystem").init(loc.root)>
+		
+		<cfset loc.root = ListChangeDelims(loc.root, "/", "\")>
+		
+		<cfset loc.r = loc.file_system.root>
+		<cfset loc.e = loc.root>
+		
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
 	
 	<cffunction name="test_local">
-		<cfset loc.root = expandPath(".") & '/templates/'>
+		<cfset loc.root = '/cfml-liquid/tests/tests/templates/'>
 		<cfset loc.root = ListChangeDelims(loc.root, "/", "\")>
 
 		<cfset loc.file_system = createObject("component", "cfml-liquid.lib.liquid.LiquidLocalFileSystem").init(loc.root)>
@@ -54,6 +66,18 @@
 			</cfcatch>
 		</cftry>
 
+	</cffunction>
+	
+	<cffunction name="test_read_local_template">
+		<cfset loc.root = '/cfml-liquid/tests/tests/templates/'>
+		<cfset loc.root = ListChangeDelims(loc.root, "/", "\")>
+
+		<cfset loc.file_system = createObject("component", "cfml-liquid.lib.liquid.LiquidLocalFileSystem").init(loc.root)>
+		
+		<cfset loc.e = "Put Liquid Markup here">
+		<cfset loc.r = loc.file_system.read_template_file('template')>
+		
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
 </cfcomponent>

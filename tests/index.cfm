@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.LiquidFiltersInTemplate")>
-	<cfset test.runTest("test", "TEST_LOCAL_GLOBAL")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.FileSystemTest")>
+	<cfset test.runTest("test", "test_read_local_template")>
 
 </cfif>
 
