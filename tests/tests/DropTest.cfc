@@ -69,4 +69,14 @@
 		
 	</cffunction>
 	
+	<cffunction name="test_should_not_access_protected_methods">
+		<cfset loc.template = application.liquid.template()>
+		<cfset loc.template.parse('{{ product.init }}{{ product._beforeMethod }}{{ product.setContext }}{{ product.invokeDrop }}{{ product.hasKey }}{{ product.toLiquid }}')>
+		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
+		<cfset loc.a = {product = loc.ProductDrop}>
+		<cfset loc.e = loc.template.render(loc.a)>
+        <cfset assert("loc.e eq ''")>
+	
+	</cffunction>
+	
 </cfcomponent>

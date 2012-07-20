@@ -23,6 +23,11 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<!--- LiquidContext --->
 	<cfset variables._context = "">
+	<cfset variables.PROTECTED_METHODS = "init,_beforeMethod,setContext,invokeDrop,hasKey,toLiquid">
+	
+	<cffunction name="init">
+		<cfreturn this>
+	</cffunction>
 
 	<cffunction name="_beforeMethod" hint="Catch all method that is invoked before a specific method">
 		<cfargument name="method" type="string" required="true">
@@ -37,6 +42,10 @@ Your drop can either implement the methods sans any parameters or implement the 
 	<cffunction name="invokeDrop" hint="Invoke a specific method">
 		<cfargument name="method" type="string" required="true">
 		<cfset var loc = {}>
+		
+		<cfif ListFindNoCase(variables.PROTECTED_METHODS, arguments.method)>
+			<cfreturn "">
+		</cfif>
 
 		<cfset loc.ret = this._beforeMethod(arguments.method)>
 		
