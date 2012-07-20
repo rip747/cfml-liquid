@@ -62,7 +62,10 @@ Your drop can either implement the methods sans any parameters or implement the 
 
 	<cffunction name="hasKey" hint="Returns true if the drop supports the given method">
 		<cfargument name="name" type="string" required="true">
-		<cfreturn true>
+		<cfif !ListFindNoCase(variables.PROTECTED_METHODS, arguments.name) && StructKeyExists(this, arguments.name)>
+			<cfreturn true>
+		</cfif>
+		<cfreturn false>
 	</cffunction>
 
 	<cffunction name="toLiquid" hint="return this drop instance">

@@ -80,4 +80,28 @@
 		
 	</cffunction>
 	
+	<cffunction name="test_haskey_should_return_false_for_protected_methods">
+		
+		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
+		<cfset loc.e = loc.ProductDrop.hasKey("beforeMethod")>
+		<cfset assert("loc.e eq false")>
+		
+	</cffunction>
+	
+	<cffunction name="test_haskey_should_return_true_if_method_exists">
+		
+		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
+		<cfset loc.e = loc.ProductDrop.hasKey("top_sales")>
+		<cfset assert("loc.e eq true")>
+		
+	</cffunction>
+	
+	<cffunction name="test_haskey_should_return_false_if_method_does_not_exists">
+		
+		<cfset loc.ProductDrop = createObject("component", "classes.ProductDrop")>
+		<cfset loc.e = loc.ProductDrop.hasKey("blahblah")>
+		<cfset assert("loc.e eq false")>
+		
+	</cffunction>
+	
 </cfcomponent>
