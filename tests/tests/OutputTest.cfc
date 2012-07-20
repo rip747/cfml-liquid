@@ -75,4 +75,16 @@
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
+	<cffunction name="test_filter_with_overloaded_arguments">
+		<cfset loc.t = " {{ car.gm | add_tag : 'span', 'bar', 'foo', 'bas'}} ">
+		<cfset loc.e = " <span id=""bar"">bad</span> ">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>			
+	</cffunction>
+	
+	<cffunction name="test_filter_with_default_arguments">
+		<cfset loc.t = " {{ car.gm | add_tag }} ">
+		<cfset loc.e = " <p id=""foo"">bad</p> ">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>			
+	</cffunction>
+	
 </cfcomponent>

@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.DropTest")>
-	<cfset test.runTest("test", "test_haskey_should_return_false_if_method_does_not_exists")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.OutputTest")>
+	<cfset test.runTest("test", "test_filter_with_default_arguments")>
 
 </cfif>
 
