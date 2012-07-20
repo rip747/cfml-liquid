@@ -17,19 +17,19 @@ class ProductDrop extends LiquidDrop {
 tmpl = Liquid::Template.parse( ' {% for product in product.top_sales %} {{ product.name }} {%endfor%} '  )
 tmpl.render('product' => ProductDrop.new ) * will invoke top_sales query. 
 
-Your drop can either implement the methods sans any parameters or implement the _beforeMethod(name) method which is a catch all
+Your drop can either implement the methods sans any parameters or implement the beforeMethod(name) method which is a catch all
 
 ">
 
 	<!--- LiquidContext --->
 	<cfset variables._context = "">
-	<cfset variables.PROTECTED_METHODS = "init,_beforeMethod,setContext,invokeDrop,hasKey,toLiquid">
+	<cfset variables.PROTECTED_METHODS = "init,beforeMethod,setContext,invokeDrop,hasKey,toLiquid">
 	
 	<cffunction name="init">
 		<cfreturn this>
 	</cffunction>
 
-	<cffunction name="_beforeMethod" hint="Catch all method that is invoked before a specific method">
+	<cffunction name="beforeMethod" hint="Catch all method that is invoked before a specific method">
 		<cfargument name="method" type="string" required="true">
 		<cfreturn "">
 	</cffunction>
@@ -47,7 +47,7 @@ Your drop can either implement the methods sans any parameters or implement the 
 			<cfreturn "">
 		</cfif>
 
-		<cfset loc.ret = this._beforeMethod(arguments.method)>
+		<cfset loc.ret = this.beforeMethod(arguments.method)>
 		
 		<cfif !StructKeyExists(loc, "ret")>
 			<cfreturn "">
