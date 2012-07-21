@@ -1,5 +1,7 @@
 <cfcomponent output="false">
 	
+	<cfset this.version = "1.1">
+	
 	<cfset this.config = {}>
 	
 	<!--- directory the library is in --->
