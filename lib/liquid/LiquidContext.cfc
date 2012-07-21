@@ -201,10 +201,6 @@
 				
 					<cfif IsInstanceOf(loc.object, "LiquidDrop")>
 					
-						<cfif !loc.object.hasKey(loc.next_part_name)>
-							<cfreturn "">
-						</cfif>
-
 						<cfset loc.object = loc.object.invokeDrop(loc.next_part_name)>
 
 					<cfelseif StructKeyExists(loc.object, application.LiquidConfig.LIQUID_HAS_PROPERTY_METHOD) AND IsCustomFunction(loc.next_part_name)>

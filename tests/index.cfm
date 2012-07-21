@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.OutputTest")>
-	<cfset test.runTest("test", "test_filter_with_default_arguments")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.DropTest")>
+	<cfset test.runTest("test", "TEST_CONTEXT_DROP")>
 
 </cfif>
 
