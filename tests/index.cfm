@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.DropTest")>
-	<cfset test.runTest("test", "TEST_CONTEXT_DROP")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.ParsingErrors")>
+	<cfset test.runTest("test", "test_specifying_filter_without_supplying_required_arguments")>
 
 </cfif>
 

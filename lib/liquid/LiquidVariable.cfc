@@ -28,17 +28,22 @@
 				
 				<cfset loc.filter = trim(loc.filter)>
 				<cfset loc.filter_name_regexp.match(loc.filter)>
-				<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
-				<cfset loc.filter_argument_regexp.match_all(loc.filter)>
-				<cfset loc.temp = []>
-				<cfset loc.matches = []>
 				
-				<cfif !ArrayIsEmpty(loc.filter_argument_regexp.matches)>
-					<cfset loc.matches = array_flatten(loc.filter_argument_regexp.matches[2])>
+				<cfif !ArrayIsEmpty(loc.filter_name_regexp.matches)>
+				
+					<cfset loc.filtername = loc.filter_name_regexp.matches[1]>
+					<cfset loc.filter_argument_regexp.match_all(loc.filter)>
+					<cfset loc.temp = []>
+					<cfset loc.matches = []>
+					
+					<cfif !ArrayIsEmpty(loc.filter_argument_regexp.matches)>
+						<cfset loc.matches = array_flatten(loc.filter_argument_regexp.matches[2])>
+					</cfif>
+	
+					<cfset loc.temp = [loc.filtername, loc.matches]>
+					<cfset arrayAppend(variables._filters, loc.temp)>
+					
 				</cfif>
-
-				<cfset loc.temp = [loc.filtername, loc.matches]>
-				<cfset arrayAppend(variables._filters, loc.temp)>
 
 			</cfloop>
 			
