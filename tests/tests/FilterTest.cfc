@@ -84,4 +84,52 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_plus_without_operand">
+		<cfset loc.v = create_var_instance("var | plus")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "5">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_minus_without_operand">
+		<cfset loc.v = create_var_instance("var | minus")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "5">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_times_without_operand">
+		<cfset loc.v = create_var_instance("var | times")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "5">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_divided_by_without_operand">
+		<cfset loc.v = create_var_instance("var | divided_by")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "5">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_divided_zero_returns_zero">
+		<cfset loc.v = create_var_instance("var | divided_by:0")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "0">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_modulo_without_operand">
+		<cfset loc.v = create_var_instance("var | modulo")>
+		<cfset loc.context.set('var', 5)>
+		<cfset loc.e = "0">
+		<cfset loc.r = loc.v.render(loc.context)>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 </cfcomponent>

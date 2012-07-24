@@ -134,7 +134,7 @@
 
 	<cffunction name="date_format" hint="Formats a date">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="format" type="any" required="true">
+		<cfargument name="format" type="any" required="false" default="mm/dd/yyyy">
 		
 		<cfif IsDate(arguments.input) AND IsSimpleValue(arguments.format)>
 			<cfreturn Dateformat(arguments.input, arguments.format)>
@@ -145,7 +145,7 @@
 	
 	<cffunction name="time_format" hint="Formats a time">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="format" type="any" required="true">
+		<cfargument name="format" type="any" required="false" default="hh:mm tt">
 		
 		<cfif IsValid("time", arguments.input) AND IsSimpleValue(arguments.format)>
 			<cfreturn Timeformat(arguments.input, arguments.format)>
@@ -156,14 +156,14 @@
 	
 	<cffunction name="datetime_format" hint="Formats a datetime. seperate format with a space">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="format" type="any" required="true">
+		<cfargument name="format" type="any" required="false" default="mm/dd/yyyy hh:mm tt">
 		
 		<cfif IsSimpleValue(arguments.input) AND IsSimpleValue(arguments.format)>
 		
 			<cfif ListLen(arguments.input, " ") eq 2>
-				<cfreturn date_format(GetToken(arguments.input, 1, " "), GetToken(arguments.format, 1, " ")) & " " & time_format(GetToken(arguments.input, 2, " "), GetToken(arguments.format, 2, " "))>
+				<cfreturn date_format(ListFirst(arguments.input, " "), ListFirst(arguments.format, " ")) & " " & time_format(ListRest(arguments.input, " "), ListRest(arguments.format, " "))>
 			<cfelse>
-				<cfreturn date_format(GetToken(arguments.input, 1, " "), GetToken(arguments.format, 1, " "))>
+				<cfreturn date_format(ListFirst(arguments.input, " "), ListFirst(arguments.format, " "))>
 			</cfif>
 			
 		</cfif>
@@ -203,32 +203,35 @@
 	</cffunction>
 
 	<cffunction name="plus" hint="addition">
-		<cfargument name="input" type="any" required="true">
-		<cfargument name="operand" type="any" required="true">
+		<cfargument name="input" type="any" required="false">
+		<cfargument name="operand" type="any" required="false" default="0">
 		<cfreturn val(arguments.input) + val(arguments.operand)>		
 	</cffunction>	
 
 	<cffunction name="minus" hint="subtraction">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="operand" type="any" required="true">
+		<cfargument name="operand" type="any" required="false" default="0">
 		<cfreturn val(arguments.input) - val(arguments.operand)>	
 	</cffunction>	
 
 	<cffunction name="times" hint="multiplication">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="operand" type="any" required="true">
+		<cfargument name="operand" type="any" required="false" default="1">
 		<cfreturn val(arguments.input) * val(arguments.operand)>		
 	</cffunction>
 
 	<cffunction name="divided_by" hint="division">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="operand" type="any" required="true">
+		<cfargument name="operand" type="any" required="false" default="1">
+		<cfif arguments.operand eq 0>
+			<cfreturn 0>
+		</cfif>
 		<cfreturn val(arguments.input) / val(arguments.operand)>	
 	</cffunction>
 
 	<cffunction name="modulo" hint="modulo">
 		<cfargument name="input" type="any" required="true">
-		<cfargument name="operand" type="any" required="true">
+		<cfargument name="operand" type="any" required="false" default="1">
 		<cfreturn val(arguments.input) % val(arguments.operand)>	
 	</cffunction>
 	
