@@ -101,7 +101,7 @@ YES
 					</cfif>
 					
 				</cfloop>
-
+				
 				<cfif ArrayLen(loc.logicalOperators)>
 
 					<!--- If statement contains and/or --->
@@ -111,8 +111,8 @@ YES
 						
 						<cfset loc.t = loc.conditions[loc.i]>
 						<cfset loc.iLeft = this.interpret_condition(loc.t['left'], loc.t['right'], loc.t['operator'], arguments.context)>
-						<cfset loc.tt = loc.conditions[IncrementValue(loc.i)]>
-						<cfset loc.iRight = this.interpret_condition(loc.t['left'], loc.t['right'], loc.t['operator'], arguments.context)>
+						<cfset loc.tt = loc.conditions[loc.i + 1]>
+						<cfset loc.iRight = this.interpret_condition(loc.tt['left'], loc.tt['right'], loc.tt['operator'], arguments.context)>
 
 						<cfif loc.logicalOperators[loc.i] eq 'and'>
 							<cfset loc.display = loc.iLeft AND loc.iRight>

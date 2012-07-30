@@ -237,4 +237,10 @@
 		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 	</cffunction>
 
+	<cffunction name="test_multiple_conditions">
+		<cfset loc.e = "no">
+		<cfset loc.t = "{% assign test1 = 'test1' %}{% assign test2 = 'test2' %}{% if test1 == 'test1' and test2 != 'test2' %}yes{% else %}no{% endif %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
+	</cffunction>
+
 </cfcomponent>
