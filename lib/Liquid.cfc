@@ -44,6 +44,9 @@
 	
 	<!--- Variable end --->
 	<cfset this.config.LIQUID_VARIABLE_END = "\}\}">
+	
+	<!--- Variable Signature --->
+	<cfset this.config.LIQUID_VARIABLE_SIGNATURE = "[\(\w\-\.\[\]\)]">
 		
 	<!--- The characters allowed in a variable --->
 	<cfset this.config.LIQUID_ALLOWED_VARIABLE_CHARS = "[a-zA-Z_.-]">

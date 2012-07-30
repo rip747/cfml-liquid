@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.FilterTest")>
-	<cfset test.runTest("test", "test_modulo_without_operand")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.AssignTest")>
+	<cfset test.runTest("test", "test_assign_with_filters")>
 
 </cfif>
 

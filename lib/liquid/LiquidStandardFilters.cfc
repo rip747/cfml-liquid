@@ -27,7 +27,7 @@
 		<cfargument name="input" type="any" required="true">
 		
 		<cfif isSimpleValue(arguments.input)>
-			<cfreturn lcase(arguments.string)>
+			<cfreturn lcase(arguments.input)>
 		</cfif>
 		
 		<cfreturn arguments.input>
