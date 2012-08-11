@@ -59,4 +59,11 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 	
+	<cffunction name="test_assign_in_condition">
+		<cfset loc.template.parse('{% assign test1 = "maybe" %}{% if test1 == "maybe" %}{% assign test1 = "yes" %}{% endif %}{{ test1 }}')>
+		<cfset loc.r = loc.template.render()>
+		<cfset loc.e = 'yes'>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+	
 </cfcomponent>
