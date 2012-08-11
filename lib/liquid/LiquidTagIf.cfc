@@ -47,7 +47,6 @@ YES
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
 
-		<cfset arguments.context.push()>
 		<cfset loc.logicalRegex = createObject("component", "LiquidRegexp").init("\s+(and|or)\s+")>
 		<cfset loc.conditionalRegex = createObject("component", "LiquidRegexp").init('(#application["LiquidConfig"]["LIQUID_QUOTED_FRAGMENT"]#)\s*([=!<>a-z_]+)?\s*(#application["LiquidConfig"]["LIQUID_QUOTED_FRAGMENT"]#)?')>
 		<cfset loc.result = "">
@@ -57,6 +56,7 @@ YES
 			<cfif loc.block[1] eq "else">
 				
 				<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
+				<cfset arguments.context.push()>
 				<cfbreak>
 				
 			</cfif>
@@ -99,6 +99,7 @@ YES
 					<cfelse>
 						<cfthrow type="LiquidError" message="Syntax Error in tag 'if' - Valid syntax: if [condition]">
 					</cfif>
+					<cfset arguments.context.push()>
 					
 				</cfloop>
 				
@@ -132,6 +133,7 @@ YES
 				<cfif (IsBoolean(loc.display) and loc.display) OR (!IsBoolean(loc.display) AND len(loc.display) AND loc.display neq "null")>
 					
 					<cfset loc.result = this.render_all(loc.block[3], arguments.context)>
+					<cfset arguments.context.push()>
 					<cfbreak>
 					
 				</cfif>
