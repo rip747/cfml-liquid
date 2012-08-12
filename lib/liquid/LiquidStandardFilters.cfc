@@ -4,22 +4,34 @@
 		<cfreturn this>
 	</cffunction>
 	
-	<cffunction name="capitalize" hint="Capitalize words in the input sentence">
+	<cffunction name="append" hint="append a string">
 		<cfargument name="input" type="any" required="true">
+		<cfargument name="str" type="any" required="false" default="">
 		
 		<cfif isSimpleValue(arguments.input)>
-			<cfreturn rereplace(arguments.input, "\b(\w)","\u\1","all")>
+			<cfreturn arguments.input & arguments.str>
 		</cfif>
 		
 		<cfreturn arguments.input>
+	</cffunction>
+	
+	<cffunction name="capitalize" hint="Capitalize words in the input sentence">
+		<cfargument name="input" type="any" required="true">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		
+		<cfreturn rereplace(arguments.input, "\b(\w)","\u\1","all")>
 	</cffunction>
 	
 	<cffunction name="date_format" hint="Formats a date">
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="format" type="any" required="false" default="mm/dd/yyyy">
 		
-		<cfif IsDate(arguments.input) AND IsSimpleValue(arguments.format) and len(arguments.format)>
-			<cfreturn Dateformat(arguments.input, arguments.format)>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.format = arguments.format.toString()>
+		
+		<cfif IsDate(arguments.input) AND len(arguments.format)>
+			<cfset arguments.input = Dateformat(arguments.input, arguments.format)>
 		</cfif>
 		
 		<cfreturn arguments.input>
@@ -28,19 +40,23 @@
 	<cffunction name="divided_by" hint="division">
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="operand" type="any" required="false" default="1">
+		
+		<cfset arguments.input = val(arguments.input)>
+		<cfset arguments.operand = val(arguments.operand)>
+		
 		<cfif arguments.operand eq 0>
 			<cfreturn 0>
 		</cfif>
-		<cfreturn val(arguments.input) / val(arguments.operand)>	
+		
+		<cfreturn arguments.input / arguments.operand>
 	</cffunction>
 	
 	<cffunction name="downcase" hint="Convert an input to lowercase">
 		<cfargument name="input" type="any" required="true">
 		
-		<cfif isSimpleValue(arguments.input)>
-			<cfreturn lcase(arguments.input)>
-		</cfif>
-		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.input = lcase(arguments.input)>
+
 		<cfreturn arguments.input>
 	</cffunction>
 	
@@ -62,8 +78,9 @@
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="glue" type="any" required="false" default=" ">
 		
-		<cfif IsArray(arguments.input) AND IsSimpleValue(arguments.glue)>
-			<cfreturn ArrayToList(arguments.input, arguments.glue)>
+		<cfif IsArray(arguments.input)>
+			<cfset arguments.glue = arguments.glue.toString()>
+			<cfset arguments.input = ArrayToList(arguments.input, arguments.glue)>
 		</cfif>
 		
 		<cfreturn arguments.input>
@@ -98,9 +115,8 @@
 	<cffunction name="newline_to_br" hint="Replace each newline (\n) with html break">
 		<cfargument name="input" type="any" required="true">
 		
-		<cfif isSimpleValue(arguments.input)>
-			<cfreturn ReReplaceNoCase(arguments.input, "\n\r|\\n\\r|\n|\\n", "<br/>", "all")>
-		</cfif>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.input = ReReplaceNoCase(arguments.input, "\n\r|\\n\\r|\n|\\n", "<br/>", "all")>
 		
 		<cfreturn arguments.input>
 	</cffunction>
@@ -129,43 +145,40 @@
 	<cffunction name="split" hint="Split input string into an array of substrings separated by given pattern.">
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="pattern" type="any" required="false" default=" ">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.pattern = arguments.pattern.toString()>
 
-		<cfif IsSimpleValue(arguments.input) AND IsSimpleValue(arguments.pattern)>
-			<cfreturn ListToArray(arguments.input, arguments.pattern)>
-		</cfif>
-
-		<cfreturn arguments.input>
+		<cfreturn ListToArray(arguments.input, arguments.pattern)>
 	</cffunction>
 
 	<cffunction name="strip_html" hint="Removes html tags from text">
-		<cfargument name="string" type="any" required="true">
+		<cfargument name="input" type="any" required="true">
 		
-		<cfif IsSimpleValue(arguments.string)>
-			
-			<cfset arguments.string = REReplaceNoCase(arguments.string, "<\ *[a-z].*?>", "", "all")>
-			<cfset arguments.string = REReplaceNoCase(arguments.string, "<\ */\ *[a-z].*?>", "", "all")>
-			
-		</cfif>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.input = REReplaceNoCase(arguments.input, "<\ *[a-z].*?>", "", "all")>
+		<cfset arguments.input = REReplaceNoCase(arguments.input, "<\ */\ *[a-z].*?>", "", "all")>
 		
-		<cfreturn arguments.string>
+		<cfreturn arguments.input>
 	</cffunction>
 
 	<cffunction name="strip_newlines" hint="Strip all newlines (\n, \r) from string">
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="replacement" type="any" required="false" default="">
 		
-		<cfif isSimpleValue(arguments.input)>
-			<cfreturn ReReplaceNoCase(arguments.input, "\n\r|\\n\\r|\n|\\n", arguments.replacement, "all")>
-		</cfif>
-		
-		<cfreturn arguments.input>
+		<cfset arguments.input = arguments.input.toString()>
+
+		<cfreturn ReReplaceNoCase(arguments.input, "\n\r|\\n\\r|\n|\\n", arguments.replacement, "all")>
 	</cffunction>
 	
 	<cffunction name="time_format" hint="Formats a time">
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="format" type="any" required="false" default="hh:mm tt">
 
-		<cfif IsValid("time", arguments.input) AND IsSimpleValue(arguments.format) and len(arguments.format)>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.format = arguments.format.toString()>
+
+		<cfif IsValid("time", arguments.input) AND len(arguments.format)>
 			<cfreturn Timeformat(arguments.input, arguments.format)>
 		</cfif>
 
@@ -183,9 +196,12 @@
 		<cfargument name="count" type="any" required="false" default="100">
 		<cfargument name="overflow" type="string" required="false" default="&hellip;">
 		
+		<cfset arguments.input = arguments.input.toString()>
 		<cfset arguments.count = fix(val(arguments.count))>
-		<cfif IsSimpleValue(arguments.input) AND Len(arguments.input) gt arguments.count>
-			<cfreturn Left(arguments.input, arguments.count) & arguments.overflow>
+		<cfset arguments.overflow = arguments.overflow.toString()>
+		
+		<cfif Len(arguments.input) gt arguments.count>
+			<cfset arguments.input = Left(arguments.input, arguments.count) & arguments.overflow>
 		</cfif>
 		
 		<cfreturn arguments.input>
@@ -196,20 +212,17 @@
 		<cfargument name="words" type="any" required="false" default="3">
 		<cfargument name="overflow" type="string" required="false" default="&hellip;">
 		
-		<cfif IsSimpleValue(arguments.input)>
-			
-			<cfset arguments.words = fix(val(arguments.words))>
-			<cfset arguments.input = ListToArray(arguments.input, " ")>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.words = fix(val(arguments.words))>
+		<cfset arguments.input = ListToArray(arguments.input, " ")>
 	
-			<cfif ArrayLen(arguments.input) gt arguments.words>
-	
-				<cfset arguments.input = arguments.input.subList(0, arguments.words)>
-				<cfset arguments.input = ArrayToList(arguments.input, " ") & arguments.overflow>
-				
-			<cfelse>
-				<cfset arguments.input = ArrayToList(arguments.input, " ")>
-			</cfif>
+		<cfif ArrayLen(arguments.input) gt arguments.words>
+
+			<cfset arguments.input = arguments.input.subList(0, arguments.words)>
+			<cfset arguments.input = ArrayToList(arguments.input, " ") & arguments.overflow>
 			
+		<cfelse>
+			<cfset arguments.input = ArrayToList(arguments.input, " ")>
 		</cfif>
 
 		<cfreturn arguments.input>
@@ -225,11 +238,8 @@
 	<cffunction name="upcase" hint="Convert an input to uppercase">
 		<cfargument name="input" type="any" required="true">
 		
-		<cfif isSimpleValue(arguments.input)>
-			<cfreturn ucase(arguments.input)>
-		</cfif>
-		
-		<cfreturn arguments.input>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfreturn ucase(arguments.input)>
 	</cffunction>
 
 </cfcomponent>

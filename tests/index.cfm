@@ -15,7 +15,7 @@
 <cfelse>
 
 	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardFilterTest")>
-	<cfset test.runTest("test", "TEST_SPLIT")>
+	<cfset test.runTest("test", "test_date_format")>
 
 </cfif>
 
