@@ -1,6 +1,5 @@
 This project aims to port the [Liquid Templating Language](https://github.com/Shopify/liquid) over to [CFML](http://www.getrailo.org/). For the port I'm using the [PHP port](https://github.com/harrydeluxe/php-liquid) of the language.
 
-
 How To Use
 ==========
 
@@ -99,3 +98,25 @@ Issues and Enhancements
 I will be taking issues requests until the project is passed to a maintainer. Please file your issues in the issue tracker for this repo.
 
 I will **not** be taking enhancement requests. If there is something that you want added to the project, please fork the project, code the enhancement and send me a pull requst.
+
+Latest Release
+==============
+
+v1.2 (08/12/2012) - [https://github.com/rip747/cfml-liquid/zipball/v1.2](https://github.com/rip747/cfml-liquid/zipball/v1.2)
+
+Changelog
+=========
+
+v1.2
+----
+
+* added RAW tag
+* added the following filters
+  * append
+  * prepend
+  * escape
+  * remove
+  * remove_first
+  * replace
+  * replace_first
+  * sort
