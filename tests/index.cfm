@@ -14,8 +14,8 @@
 
 <cfelse>
 
-	<cfset test = createObject("component", "cfml-liquid.tests.tests.StandardFilterTest")>
-	<cfset test.runTest("test", "test_remove_first")>
+	<cfset test = createObject("component", "cfml-liquid.tests.tests.RawTest")>
+	<cfset test.runTest("test", "test_output_in_raw")>
 
 </cfif>
 
