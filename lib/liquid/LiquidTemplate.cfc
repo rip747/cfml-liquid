@@ -93,7 +93,26 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
 		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
 		<cfset var loc = {}>
+		
+ 		<cftry>
+			<cfset loc.result = _render(argumentCollection=arguments)>
 
+			<cfcatch type="any">
+				<cfset loc.result = cfcatch.message>
+			</cfcatch>
+		</cftry>
+
+		<cfreturn loc.result>
+	</cffunction>
+	
+	<cffunction name="_render" hint="Renders the current template. throws errors">
+		<cfargument name="assigns" type="struct" required="false" default="#Createobject('java', 'java.util.LinkedHashMap').init()#" hint="A struct of values for the template">
+		<cfargument name="filters" type="any" required="false" default="" hint="Additional filters for the template">
+		<cfargument name="registers" type="any" required="false" default="#StructNew()#" hint="Additional registers for the template">
+		<cfset var loc = {}>
+		
+		<cfset loc.result = "">
+			
 		<cfset loc.context = createObject("component", "LiquidContext").init(arguments.assigns, arguments.registers)>
 
 		<cfif !isSimpleValue(arguments.filters)>
@@ -109,8 +128,10 @@ $tpl->render(array('foo'=>1, 'bar'=>2);
 		<cfloop array="#this._filters#" index="loc.filter">
 			<cfset loc.context.add_filters(loc.filter)>
 		</cfloop>
+		
+		<cfset loc.result = this._root.render(loc.context)>
 
-		<cfreturn this._root.render(loc.context)>
+		<cfreturn loc.result>
 	</cffunction>
 
 </cfcomponent>

@@ -51,21 +51,18 @@
 	<cfargument name="template" type="string" required="true">
 	<cfargument name="templateObj" type="any" required="true">
 	<cfargument name="assigns" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="debug" type="boolean" required="false" default="false">
 
 		<cfset loc.e = arguments.expected>
 		<cfset arguments.templateObj.parse(arguments.template)>
 
-		<cfif arguments.debug>
-			<cfset this.debug('arguments.templateObj')>
-		</cfif>
-<!--- <cfdump var="in testing">
-<cfdump var="#loc.e#">
-<cfdump var="#arguments.templateObj.render(arguments.assigns, this.filters)#"> --->
 		<cfset loc.r = arguments.templateObj.render(arguments.assigns, this.filters)>
-
-		<cfset this.assert('loc.e eq loc.r')>
+		<cfset loc.result = CompareNoCase(loc.e, loc.r)>
+		
+		<cfif loc.result neq 0>
+			<cfset this.debug('loc')>
+		</cfif>
+		
+		<cfset this.assert('loc.result eq 0')>
 </cffunction>
 	
 <cffunction name="getClassName">

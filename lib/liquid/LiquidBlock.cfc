@@ -137,23 +137,29 @@
 		<cfargument name="list" type="array" required="true">
 		<cfargument name="context" type="any" required="true">
 		<cfset var loc = {}>
-		<cfset loc.result = "">
+		<cfset loc.result = []>
 
 		<cfloop array="#arguments.list#" index="loc.token">
 
 			<cfif isObject(loc.token) AND StructKeyExists(loc.token, "render")>
-
-				<cfset loc.result &= loc.token.render(arguments.context)>
 				
-			<cfelse>
+				<cfset loc.token = loc.token.render(arguments.context)>
 
-				<cfset loc.result &= loc.token>
+			</cfif>
+			
+			<cfif StructKeyExists(loc, "token")>
+			
+				<cfif !IsSimpleValue(loc.token)>
+					<cfset loc.token = loc.token.toString()>
+				</cfif>
+				
+				<cfset ArrayAppend(loc.result, loc.token)>
 				
 			</cfif>
 
 		</cfloop>
 
-		<cfreturn loc.result>
+		<cfreturn ArrayToList(loc.result, "")>
 	</cffunction>
 	
 </cfcomponent>
