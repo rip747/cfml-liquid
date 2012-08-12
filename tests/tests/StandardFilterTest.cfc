@@ -4,6 +4,13 @@
 		<cfset loc.template = application.liquid.template()>
 	</cffunction>
 	
+	<cffunction name="test_append">
+		<cfset loc.a["var"] = "foo">
+		<cfset loc.e = "foobar">
+		<cfset loc.t = "{{ var | append:'bar' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
 	<cffunction name="test_capitalize">
 		<!--- empty string --->
 		<cfset loc.a["var"] = "">
@@ -81,6 +88,14 @@
 		<cfset loc.a["var"] = "Liquid Is Great">
 		<cfset loc.e = "liquid is great">
 		<cfset loc.t = "{{ var | downcase }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_escape">
+		<cfset loc.str = "<html><head></head><body></body></html>">
+		<cfset loc.a["var"] = loc.str>
+		<cfset loc.e = HtmlEditFormat(loc.str)>
+		<cfset loc.t = "{{ var | escape }}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
@@ -193,6 +208,41 @@
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
+	<cffunction name="test_prepend">
+		<cfset loc.a["var"] = "foo">
+		<cfset loc.e = "barfoo">
+		<cfset loc.t = "{{ var | prepend:'bar' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_remove">
+		<cfset loc.a["var"] = "foobarfoobar">
+		<cfset loc.e = "barbar">
+		<cfset loc.t = "{{ var | remove:'foo' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_remove_first">
+		<cfset loc.a["var"] = "barbar">
+		<cfset loc.e = "bar">
+		<cfset loc.t = "{{ var | remove_first:'bar' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_replace">
+		<cfset loc.a["var"] = "foofoo">
+		<cfset loc.e = "barbar">
+		<cfset loc.t = "{{ var | replace:'foo','bar' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
+	<cffunction name="test_replace_first">
+		<cfset loc.a["var"] = "foofoo">
+		<cfset loc.e = "barfoo">
+		<cfset loc.t = "{{ var | replace_first:'foo','bar' }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
 	<cffunction name="test_size">
 		<!--- array --->
 		<cfset loc.a["var"] = [1, 2, 3, 4]>
@@ -219,9 +269,35 @@
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 	</cffunction>
 	
+	<cffunction name="test_sort">
+		<!--- non array --->
+  		<cfset loc.a["var"] = "tony per chris">
+		<cfset loc.e = "tony per chris">
+		<cfset loc.t = "{{ var | sort }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<!--- default sort --->
+  		<cfset loc.a["var"] = "tony per chris">
+		<cfset loc.e = "chris">
+		<cfset loc.t = "{{ var | split | sort |first }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<!--- specify type --->
+		<cfset loc.a["var"] = "4 2 1 3">
+		<cfset loc.e = "4">
+		<cfset loc.t = "{{ var | split | sort:'numeric' | last }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		
+		<!--- specify order --->
+		<cfset loc.a["var"] = "4 2 1 3">
+		<cfset loc.e = "1">
+		<cfset loc.t = "{{ var | split | sort:'numeric','desc' | last }}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+	</cffunction>
+	
 	<cffunction name="test_split">
 		<!--- empty string --->
-<!---  		<cfset loc.a["var"] = "">
+  		<cfset loc.a["var"] = "">
 		<cfset loc.e = "">
 		<cfset loc.t = "{{ var | split | first }}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
@@ -242,7 +318,7 @@
 		<cfset loc.a["var"] = "tony per chris">
 		<cfset loc.e = "tony per chris">
 		<cfset loc.t = "{{ var | split:',' | last }}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)> --->
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 		
 		<!--- not return position returns string representation of array --->
 		<cfset loc.a["var"] = "tony per chris">

@@ -51,7 +51,7 @@
 			</cfloop>
 			<cfreturn true>
 		</cfif>
-				
+
 		<!--- if it wasn't an object an isn't a string either, it's a bad parameter --->
 		<cfif IsCustomFunction(arguments.filter)>
 			<cfset this.method_map[arguments.filter] = false>
@@ -73,7 +73,10 @@
 		<cfset ArrayPrepend(arguments.args, arguments.value)>
 
 		<!--- consult the mapping  --->
-		<cfif StructKeyExists(this.method_map, arguments.name)>
+		<cfif StructKeyExists(this.method_map, arguments.name) OR StructKeyExists(this.method_map, "_#arguments.name#")>
+			<cfif StructKeyExists(this.method_map, "_#arguments.name#")>
+				<cfset arguments.name = "_#arguments.name#">
+			</cfif>
 			<cfset loc.class = this.method_map[arguments.name]>
 
 			<!--- if we have a registered object for the class, use that instead --->

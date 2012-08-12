@@ -8,11 +8,20 @@
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="str" type="any" required="false" default="">
 		
-		<cfif isSimpleValue(arguments.input)>
-			<cfreturn arguments.input & arguments.str>
-		</cfif>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.str = arguments.str.toString()>
+
+		<cfreturn arguments.input & arguments.str>
+	</cffunction>
+	
+	<cffunction name="prepend" hint="prepend a string">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="str" type="any" required="false" default="">
 		
-		<cfreturn arguments.input>
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.str = arguments.str.toString()>
+
+		<cfreturn arguments.str & arguments.input>
 	</cffunction>
 	
 	<cffunction name="capitalize" hint="Capitalize words in the input sentence">
@@ -58,6 +67,14 @@
 		<cfset arguments.input = lcase(arguments.input)>
 
 		<cfreturn arguments.input>
+	</cffunction>
+	
+	<cffunction name="escape" hint="escape a string">
+		<cfargument name="input" type="any" required="true">
+		
+		<cfset arguments.input = arguments.input.toString()>
+
+		<cfreturn HtmlEditFormat(arguments.input)>
 	</cffunction>
 	
 	<cffunction name="first" hint="Returns the first element of an array">
@@ -126,6 +143,50 @@
 		<cfargument name="operand" type="any" required="false" default="0">
 		<cfreturn val(arguments.input) + val(arguments.operand)>		
 	</cffunction>
+	
+	<cffunction name="remove" hint="remove each occurrence">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="string" type="any" required="false" default="">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.string = arguments.string.toString()>
+		
+		<cfreturn ReplaceNoCase(arguments.input, arguments.string, "", "all")>
+	</cffunction>
+	
+	<cffunction name="remove_first" hint="remove each occurrence">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="string" type="any" required="false" default="">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.string = arguments.string.toString()>
+		
+		<cfreturn ReplaceNoCase(arguments.input, arguments.string, "", "one")>
+	</cffunction>
+	
+	<cffunction name="_replace" hint="replace each occurrence">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="string1" type="any" required="false" default="">
+		<cfargument name="string2" type="any" required="false" default="">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.string1 = arguments.string1.toString()>
+		<cfset arguments.string2 = arguments.string2.toString()>
+		
+		<cfreturn ReplaceNoCase(arguments.input, arguments.string1, arguments.string2, "all")>
+	</cffunction>
+	
+	<cffunction name="replace_first" hint="replace the first occurrence">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="string1" type="any" required="false" default="">
+		<cfargument name="string2" type="any" required="false" default="">
+		
+		<cfset arguments.input = arguments.input.toString()>
+		<cfset arguments.string1 = arguments.string1.toString()>
+		<cfset arguments.string2 = arguments.string2.toString()>
+		
+		<cfreturn ReplaceNoCase(arguments.input, arguments.string1, arguments.string2, "one")>
+	</cffunction>
 
 	<cffunction name="size" hint="Return the size of an array or of an string or hash">
 		<cfargument name="input" type="any" required="true">
@@ -140,6 +201,31 @@
 		</cfif>
 		
 		<cfreturn ret>
+	</cffunction>
+	
+	<cffunction name="sort" hint="sorts an array">
+		<cfargument name="input" type="any" required="true">
+		<cfargument name="type" type="any" required="false" default="textnocase">
+		<cfargument name="order" type="any" required="false" default="asc">
+		
+		<cfif IsArray(arguments.input)>
+		
+			<cfset arguments.type = arguments.type.toString()>
+			<cfset arguments.order = arguments.order.toString()>
+			
+			<cfif !ListFindNoCase("numeric,text,textnocase", arguments.type)>
+				<cfset arguments.type = "textnocase">
+			</cfif>
+			
+			<cfif !ListFindNoCase("asc,desc", arguments.order)>
+				<cfset arguments.order = "asc">
+			</cfif>
+			
+			<cfset ArraySort(arguments.input, arguments.type, arguments.order)>
+		
+		</cfif>
+		
+		<cfreturn arguments.input>
 	</cffunction>
 
 	<cffunction name="split" hint="Split input string into an array of substrings separated by given pattern.">
