@@ -54,7 +54,6 @@ A switch statememt
 					<cfset createObject("component", "LiquidException").init("Syntax Error in tag 'case' - Valid when condition: when [condition]")>
 				</cfif>
 
-				<cfbreak>
 			</cfcase>
 			<cfcase value="else">
 
@@ -69,7 +68,6 @@ A switch statememt
 				<cfset this.else_nodelist = this._nodelist>
 				<cfset this._nodelist = []>
 
-				<cfbreak>
 			</cfcase>
 			<cfdefaultcase>
 				<cfset super.unknown_tag(arguments.tag, arguments.params, arguments.tokens)>

@@ -432,7 +432,7 @@
 		<cfset loc.t = "{{ var | truncatewords:4 }}">
 		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
 		
- 		<!--- blank string --->
+<!---  		<!--- blank string --->
 		<cfset loc.a["var"] = "">
 		<cfset loc.e = "">
 		<cfset loc.t = "{{ var | truncate_words:4 }}">
@@ -448,7 +448,7 @@
 		<cfset loc.a["var"] = "This is a test to see if this works or not">
 		<cfset loc.e = "This is a&hellip;">
 		<cfset loc.t = "{{ var | truncate_words }}">
-		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)>
+		<cfset assert_template_result(loc.e, loc.t, loc.template, loc.a)> --->
 	</cffunction>
 
 	<cffunction name="test_upcase">

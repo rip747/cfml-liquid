@@ -297,18 +297,17 @@
 		<cfargument name="input" type="any" required="true">
 		<cfargument name="words" type="any" required="false" default="3">
 		<cfargument name="overflow" type="string" required="false" default="&hellip;">
+		<cfset var loc = {}>
+		<cfset loc.delim = " ">
 		
 		<cfset arguments.input = arguments.input.toString()>
-		<cfset arguments.words = fix(val(arguments.words))>
-		<cfset arguments.input = ListToArray(arguments.input, " ")>
-	
-		<cfif ArrayLen(arguments.input) gt arguments.words>
-
-			<cfset arguments.input = arguments.input.subList(0, arguments.words)>
-			<cfset arguments.input = ArrayToList(arguments.input, " ") & arguments.overflow>
-			
-		<cfelse>
-			<cfset arguments.input = ArrayToList(arguments.input, " ")>
+		<cfset arguments.words = abs(fix(val(arguments.words)))>
+		
+		<cfif ListLen(arguments.input, loc.delim) gt arguments.words>
+			<cfset arguments.input = ListToArray(arguments.input, loc.delim)>
+			<cfset loc.a = createObject("java", "java.util.ArrayList").Init(arguments.input)>
+			<cfset arguments.input = loc.a.subList(0, arguments.words)>
+			<cfset arguments.input = ArrayToList(arguments.input, loc.delim) & arguments.overflow>
 		</cfif>
 
 		<cfreturn arguments.input>

@@ -8,7 +8,10 @@
 		<cfset loc.a = ['  ']>
 		<cfset loc.template.parse('  ')>
 		<cfset loc.nodelist = loc.template.getRoot().getNodelist()>
-		<cfset assert("loc.a.equals(loc.nodelist)")>
+		
+		<cfset assert('IsArray(loc.a) and IsArray(loc.nodelist)')>
+		<cfset assert('ArrayLen(loc.a) eq 1 and ArrayLen(loc.nodelist) eq 1')>
+		<cfset assert('loc.a[1] eq loc.nodelist[1]')>		
 	</cffunction>
 	
 	<cffunction name="test_variable_beginning">
