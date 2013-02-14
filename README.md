@@ -1,12 +1,14 @@
 This project aims to port the [Liquid Templating Language](https://github.com/Shopify/liquid) over to [CFML](http://www.getrailo.org/). For the port I'm using the [PHP port](https://github.com/harrydeluxe/php-liquid) of the language.
 
+:heart: This project is dedicated to my wife :heart:
+
 How To Use
 ==========
 
 ```coldfusion
 <!--- make sure the liquid library is loaded in the application scope --->
 <cfif !StructKeyExists(application, "liquid")>
-	<cfset application.liquid = createObject("component", "testing.cfml-liquid.lib.Liquid").init()>
+	<cfset application.liquid = createObject("component", "lib.Liquid").init()>
 </cfif>
 
 <!--- create our template object --->
@@ -17,11 +19,11 @@ How To Use
 <h1>{{ pageTitle }}</h1>
 {% if query.size %}
 <ul>
-	{%for item in query%}
-		<li>{{item.project}} - <a href="{{ item.link }}">{{ item.link }}</a></li>
-	{%endfor%}
+	{% for item in query %}
+		<li>{{ item.project }} - <a href="{{ item.link }}">{{ item.link }}</a></li>
+	{% endfor %}
 </ul>
-{% else%}
+{% else %}
 <p>No records found</p>
 {% endif %}
 </cfsavecontent>
