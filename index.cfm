@@ -1,6 +1,6 @@
 <!--- make sure the liquid library is loaded in the application scope --->
 <cfif !StructKeyExists(application, "liquid")>
-	<cfset application.liquid = createObject("component", "testing.cfml-liquid.lib.Liquid").init()>
+	<cfset application.liquid = createObject("component", "lib.Liquid").init()>
 </cfif>
 
 <!--- create our template object --->
@@ -11,11 +11,11 @@
 <h1>{{ pageTitle }}</h1>
 {% if query.size %}
 <ul>
-	{%for item in query%}
-		<li>{{item.project}} - <a href="{{ item.link }}">{{ item.link }}</a></li>
-	{%endfor%}
+	{% for item in query %}
+		<li>{{ item.project }} - <a href="{{ item.link }}">{{ item.link }}</a></li>
+	{% endfor %}
 </ul>
-{% else%}
+{% else %}
 <p>No records found</p>
 {% endif %}
 </cfsavecontent>
