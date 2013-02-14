@@ -13,6 +13,7 @@
 	<cffunction name="test_output_in_raw">
 		<cfset loc.e = "{{ test }}">
 		<cfset loc.t = "{% raw %}{{ test }}{% endraw %}">
+		<cfset assert_template_result(loc.e, loc.t, loc.template)>
 	</cffunction>
 
 </cfcomponent>
