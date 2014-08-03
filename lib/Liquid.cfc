@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 	
-	<cfset this.version = "1.1">
+	<cfset this.version = "1.2">
 	
 	<cfset this.config = {}>
 	
