@@ -105,7 +105,7 @@ I will **not** be taking enhancement requests. If there is something that you wa
 Latest Release
 ==============
 
-v1.2 (08/12/2012) - [https://github.com/rip747/cfml-liquid/zipball/v1.2](https://github.com/rip747/cfml-liquid/zipball/v1.2)
+[Releases can be downloaded directly from Github](https://github.com/rip747/cfml-liquid/releases)
 
 Changelog
 =========
