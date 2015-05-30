@@ -1,5 +1,3 @@
-:heart: This project is dedicated to my wife, Linda. Though we are going through a difficult time, know that I love you with all the love in the world :heart:
-
 This project aims to port the [Liquid Templating Language](https://github.com/Shopify/liquid) over to [CFML](http://www.getrailo.org/). For the port I'm using the [PHP port](https://github.com/harrydeluxe/php-liquid) of the language.
 
 
